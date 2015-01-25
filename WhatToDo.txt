@@ -1,0 +1,30 @@
+
+		
+Goals:
+	Soft coded, dynamic API;
+	Follow Object-Oriented Java Programming Conventions;
+	
+Todoo:
+  Support sprites. //Started on it.
+  Use more interfaces. //Started on it.
+  Successfully use Reflection with LibGDX.
+  LevelRenderer
+	  Read pixelmap >
+  		Convert the read pixel to the different PixelObjects automaticly depending on their colors. 
+  		#Toodoo fully automaticly. Currently Semi Automatic. Needs reflection thus annonations.
+  
+Problems/Questions:
+  Should I store the level of the PixelObjects in it's class or 
+  Should I use a static field which gets set to the current Level, Null if not in the real gamescreen.
+  
+
+Fixed Problems:	
+  Problem = Boundaries for Bounceables are to much to the left:
+  	Possible solutions:
+	  	Distance check, Get the center of the rectangle, Compare distances of the possible collided block with the center location. 
+		  If one of them are nearest then call the collide on that.
+	  Possible reasons:
+	  	Not breaking out of overlap check loop. 
+	  	The boundaries starts from a direction, either left tiles or right tiles maybe messing with the order can fix the problem.
+	  	Revert to old and add a break; line.
+		
