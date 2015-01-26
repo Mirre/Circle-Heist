@@ -24,16 +24,14 @@ public class Ball extends SimpleMovingObject {
 	private float winDelay = 2;
 	private int goldCollected = 0;
 	
-	private PixelObject escapeZone = null;
-	
 	private Vector2 position = new Vector2();
 	private Vector2 acceleration = new Vector2();
 	private Vector2 velocity = new Vector2();
 	
 	private MovementManager movementManager = new MovementManager(this);
 	
-	public Ball(Level level){
-		super((int) level.getStartLocation().getFirst(), (int) level.getStartLocation().getSecond(), 0.8f, 0.8f);
+	public Ball(int x, int y){
+		super( x, y, 0.8f, 0.8f);
 		setState(BallState.SPAWNED);
 		setStateTime(0);
 	}
@@ -46,6 +44,7 @@ public class Ball extends SimpleMovingObject {
 		movementManager = mov;
 	}
 	
+	@Override
 	public void update(float deltaTime){
 		if(getBounceDelay() != 0F){
 			setBounceDelay(getBounceDelay() <= 0 ? 0 : getBounceDelay()-0.05F);
@@ -62,7 +61,7 @@ public class Ball extends SimpleMovingObject {
 			setWinDelay(getWinDelay() - 0.05F);
 			if(getWinDelay() <= 0){
 				CircleHeist game = ((CircleHeist) Level.getCurrentInstance().getGame());
-				game.setCompletedLevels(game.getCompletedLevels() + 1);
+				game.setCompletedLevels(Level.getCurrentInstance().getLevelID() + 1);
 				game.setScreen(new LevelEndScreen(game, true, Level.getCurrentInstance().getLevelID()));
 			}
 			return;
@@ -150,9 +149,7 @@ public class Ball extends SimpleMovingObject {
 
 
 	public PixelObject getEscapeZone() {
-		if(escapeZone == null)
-			escapeZone = Level.getCurrentInstance().getPixelObjects().get(Level.getCurrentInstance().getStartLocation());
-		return escapeZone;
+		return Level.getCurrentInstance().getStartLocation();
 	}
 
 	public float getWinDelay() {

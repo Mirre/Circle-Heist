@@ -1,6 +1,7 @@
 package com.mirre.ball.enums;
 
 import com.badlogic.gdx.graphics.Color;
+import com.mirre.ball.objects.Ball;
 import com.mirre.ball.objects.blocks.Bounceable;
 import com.mirre.ball.objects.blocks.CollideableTile;
 import com.mirre.ball.objects.blocks.Gold;
@@ -27,10 +28,16 @@ public enum ObjectColor {
 			return new Gold(x,y);
 		}
 	},
-	TRUCK(Color.RED) {
+	TRUCK(Color.GREEN) {
 		@Override
 		public PixelObject getObject(int x, int y) {
 			return new Truck(x,y);
+		}
+	},
+	BALL(Color.RED) {
+		@Override
+		public PixelObject getObject(int x, int y) {
+			return new Ball(x,y);
 		}
 	};
 	

@@ -1,24 +1,27 @@
 package com.mirre.ball.objects;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.mirre.ball.enums.BallState;
 import com.mirre.ball.objects.Ball;
+import com.mirre.ball.objects.blocks.Truck;
 import com.mirre.ball.objects.blocks.core.PixelObject;
+import com.mirre.ball.objects.blocks.interfaces.Moveable;
 import com.mirre.ball.utils.BiValue;
 
 public class Level {
 	
 	private static Level instance = null;
 	private Ball ball;
-	private BiValue<Integer,Integer> startLocation = null;
+	private Truck startLocation = null;
 	private int height;
 	private int width;
 	private HashMap<BiValue<Integer,Integer>, PixelObject> pixelObjects = new HashMap<BiValue<Integer,Integer>, PixelObject>();
+	private List<Moveable> movingObjects = new ArrayList<Moveable>();
 	private int levelID;
 	private Game game;
 	
@@ -28,24 +31,29 @@ public class Level {
 		Pixmap pixmap = new Pixmap(Gdx.files.internal("data/level" + i + ".png"));
 		setHeight(pixmap.getHeight());
 		setWidth(pixmap.getWidth());
+		setInstance(this);
 		for (int y = 0; y < pixmap.getHeight(); y++) {
 			for (int x = 0; x < pixmap.getWidth(); x++) {
 				int pix = pixmap.getPixel(x, y);
-				if(Color.rgba8888(Color.RED) == pix && startLocation == null){
-					setStartLocation(new BiValue<Integer,Integer>(x, pixmap.getHeight() - y));
-					setBall(new Ball(this));
-				}
-				addPixelObject(PixelObject.colorToPixelObject(pix, x, pixmap.getHeight() - y));
+				PixelObject pixelObject = PixelObject.colorToPixelObject(pix, x, pixmap.getHeight() - y);
+				
+				//Instead of checking the instanceof Maybe call a onCreate(Level level) from the PixelObject.
+				if(pixelObject instanceof Moveable){
+					addMovingObject((Moveable)pixelObject);
+				}if(pixelObject instanceof Truck)
+					setStartLocation(((Truck)pixelObject));
+				if(pixelObject instanceof Ball)
+					setBall((Ball)pixelObject);
+				addPixelObject(pixelObject);
 			}
 		}
-		setInstance(this);
 	}
 	
 	
-	public BiValue<Integer,Integer> getStartLocation() {
+	public Truck getStartLocation() {
 		return startLocation;
 	}
-	public void setStartLocation(BiValue<Integer,Integer> startLocation) {
+	public void setStartLocation(Truck startLocation) {
 		this.startLocation = startLocation;
 	}
 	public Ball getBall() {
@@ -56,9 +64,9 @@ public class Level {
 	}
 	
 	public void update(float deltaTime) {
-		getBall().update(deltaTime);
-		if (getBall().getState() == BallState.DEAD)
-			setBall(new Ball(this));
+		for(Moveable m : getMovingObjects()){
+			m.update(deltaTime);
+		}
 	}
 
 	public int getHeight() {
@@ -116,6 +124,14 @@ public class Level {
 
 	public static void setInstance(Level instance) {
 		Level.instance = instance;
+	}
+	
+	public List<Moveable> getMovingObjects() {
+		return movingObjects;
+	}
+
+	public void addMovingObject(Moveable movingObject) {
+		movingObjects.add(movingObject);
 	}
 
 }

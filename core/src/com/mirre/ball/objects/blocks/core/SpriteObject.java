@@ -26,4 +26,8 @@ public abstract class SpriteObject extends TextureObject {
 		b.draw(getSprite(), getSprite().getX(), getSprite().getY());
 	}
 
+	@Override
+	public boolean canCache() {
+		return false;
+	}
 }

@@ -55,11 +55,6 @@ public class Gold extends TextureObject implements Collideable {
 	public static void clearAmountOfGold(){
 		Gold.amountOfGold = 0;
 	}
-	
-	public void dispose(){
-		Gold.texture.getTexture().dispose();
-		Gold.amountOfGold = 0;
-	}
 
 	@Override
 	public void onCollideX(SimpleMovingObject mto) {

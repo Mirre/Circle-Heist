@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteCache;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.mirre.ball.objects.Ball;
 import com.mirre.ball.objects.Level;
@@ -36,7 +37,8 @@ public class LevelRenderer {
 	public LevelRenderer(Level level){
 		setLevel(level);
 		setCam(new OrthographicCamera(24, 16));
-		getCam().position.set(level.getStartLocation().getFirst(), level.getStartLocation().getSecond(), 0);
+		Rectangle r = level.getStartLocation().getBounds();
+		getCam().position.set(r.getX(), r.getY(), 0);
 		setCache(new SpriteCache(getLevel().getHeight() * getLevel().getWidth(), false));
 		createBlocks();
 	}
@@ -90,7 +92,7 @@ public class LevelRenderer {
 		getBatch().setProjectionMatrix(getCam().combined);
 		getBatch().begin();
 		for(TextureObject tile : getUncachedObjects()){
-			if(tile.hasTexture())
+			if(tile.hasTexture() && !(tile instanceof Ball))
 				getBatch().draw(tile.getTexture(), tile.getBounds().x, tile.getBounds().y, tile.getBounds().width, tile.getBounds().height);
 		}
 		getBatch().draw(getLevel().getBall().getTexture(), getLevel().getBall().getPosition().x, getLevel().getBall().getPosition().y, 1, 1);
@@ -98,6 +100,7 @@ public class LevelRenderer {
 
 		getFpsLogger().log();
 	}
+	
 	
 	public void reset(){
 		Gold.clearAmountOfGold();
@@ -182,4 +185,5 @@ public class LevelRenderer {
 	public void addUncachedObject(TextureObject p) {
 		uncachedObjects.add(p);
 	}
+	
 }
