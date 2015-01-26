@@ -54,7 +54,7 @@ public class LevelRenderer {
 				getCache().beginCache();
 				isCaching = true;
 			}
-			if(tile.canCache()){
+			if(tile.canCache() && tile.hasTexture()){
 				getCache().add(((TextureObject)tile).getTexture(), x, y, tile.getBounds().getWidth(), tile.getBounds().getHeight());
 				i++;
 			}else if(tile instanceof TextureObject){

@@ -4,10 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mirre.ball.objects.Ball;
-import com.mirre.ball.objects.blocks.core.MovingTextureObject;
+import com.mirre.ball.objects.blocks.core.SimpleMovingObject;
 import com.mirre.ball.objects.blocks.core.TextureObject;
+import com.mirre.ball.objects.blocks.interfaces.Collideable;
 
-public class Gold extends TextureObject {
+public class Gold extends TextureObject implements Collideable {
 
 	public static TextureRegion texture = null;
 	private boolean collected = false;
@@ -29,30 +30,14 @@ public class Gold extends TextureObject {
 	public boolean hasTexture(){
 		return !isCollected();
 	}
-	
-	@Override
-	public boolean isCollideable(){
-		return true;
-	}
-	
-	@Override
-	public void onCollideX(MovingTextureObject mto){
-		if(mto instanceof Ball && !isCollected()){
-			((Ball)mto).addGold();
-			setCollected(true);
-		}
-	}
-	
-	@Override
-	public void onCollideY(MovingTextureObject mto){
-		if(mto instanceof Ball && !isCollected()){
-			((Ball)mto).addGold();
-			setCollected(true);
-		}
-	}
 
 	public boolean isCollected() {
 		return collected;
+	}
+	
+	@Override
+	public boolean canCache() {
+		return false;
 	}
 
 	public void setCollected(boolean collected) {
@@ -74,5 +59,21 @@ public class Gold extends TextureObject {
 	public void dispose(){
 		Gold.texture.getTexture().dispose();
 		Gold.amountOfGold = 0;
+	}
+
+	@Override
+	public void onCollideX(SimpleMovingObject mto) {
+		if(mto instanceof Ball && !isCollected()){
+			((Ball)mto).addGold();
+			setCollected(true);
+		}
+	}
+
+	@Override
+	public void onCollideY(SimpleMovingObject mto) {
+		if(mto instanceof Ball && !isCollected()){
+			((Ball)mto).addGold();
+			setCollected(true);
+		}
 	}
 }

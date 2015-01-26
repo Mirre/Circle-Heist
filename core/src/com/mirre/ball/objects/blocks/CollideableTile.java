@@ -3,10 +3,12 @@ package com.mirre.ball.objects.blocks;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.mirre.ball.objects.blocks.core.MovingTextureObject;
+import com.mirre.ball.objects.Ball;
+import com.mirre.ball.objects.blocks.core.SimpleMovingObject;
 import com.mirre.ball.objects.blocks.core.TextureObject;
+import com.mirre.ball.objects.blocks.interfaces.Collideable;
 
-public class CollideableTile extends TextureObject {
+public class CollideableTile extends TextureObject implements Collideable {
 
 	
 	public static TextureRegion texture = null;
@@ -21,14 +23,18 @@ public class CollideableTile extends TextureObject {
 	
 	
 	@Override
-	public void onCollideX(MovingTextureObject mto){
-		mto.getVelocity().x = 0;
-		mto.getAcceleration().x = mto.getMovementManager().getDirection().getReverse().getDir();
+	public void onCollideX(SimpleMovingObject mto){
+		if(mto instanceof Ball){
+			Ball b = ((Ball)mto);
+			b.getVelocity().x = 0;
+			b.getAcceleration().x = b.getMovementManager().getDirection().getReverse().getDir();
+		}
 	}
 	
 	@Override
-	public void onCollideY(MovingTextureObject mto){
-		mto.getVelocity().y = 0;
+	public void onCollideY(SimpleMovingObject mto){
+		if(mto instanceof Ball)
+			((Ball)mto).getVelocity().y = 0;
 	}
 	
 	

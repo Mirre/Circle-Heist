@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mirre.ball.objects.Ball;
-import com.mirre.ball.objects.blocks.core.MovingTextureObject;
+import com.mirre.ball.objects.blocks.core.SimpleMovingObject;
 
 public class Bounceable extends CollideableTile {
 
@@ -19,23 +19,25 @@ public class Bounceable extends CollideableTile {
 	public static int POWER = 8;
 
 	@Override
-	public void onCollideX(MovingTextureObject mto){
+	public void onCollideX(SimpleMovingObject mto){
 		if(mto instanceof Ball){
-			if(((Ball)mto).getBounceDelay() == 0F){
-				((Ball)mto).setBounceDelay(0.5F);
-				mto.getVelocity().x = mto.getMovementManager().getDirection().getReverse().getDir();
-				mto.getVelocity().y = 0.07F + (mto.getVelocity().y);
+			Ball b = ((Ball)mto);
+			if(b.getBounceDelay() == 0F){
+				b.setBounceDelay(0.5F);
+				b.getVelocity().x = ((Ball)mto).getMovementManager().getDirection().getReverse().getDir();
+				b.getVelocity().y = 0.07F + (((Ball)mto).getVelocity().y);
 			}
-			mto.getAcceleration().x = mto.getMovementManager().getDirection().getReverse().getDir();
+			b.getAcceleration().x = ((Ball)mto).getMovementManager().getDirection().getReverse().getDir();
 		}
 	}
 	
 	@Override
-	public void onCollideY(MovingTextureObject mto){
+	public void onCollideY(SimpleMovingObject mto){
 		if(mto instanceof Ball){
-			if(((Ball)mto).getBounceDelay() == 0F){
-				((Ball)mto).setBounceDelay(0.5F);
-				mto.getVelocity().y = 0.2F + (-0.2F * mto.getVelocity().y);
+			Ball b = ((Ball)mto);
+			if(b.getBounceDelay() == 0F){
+				b.setBounceDelay(0.5F);
+				b.getVelocity().y = 0.2F + (-0.2F * ((Ball)mto).getVelocity().y);
 			}
 		}
 	}
@@ -47,9 +49,4 @@ public class Bounceable extends CollideableTile {
 		return texture;
 	}
 
-	
-	@Override
-	public boolean canCache(){
-		return true;
-	}
 }

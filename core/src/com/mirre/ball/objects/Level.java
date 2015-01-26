@@ -13,6 +13,7 @@ import com.mirre.ball.utils.BiValue;
 
 public class Level {
 	
+	private static Level instance = null;
 	private Ball ball;
 	private BiValue<Integer,Integer> startLocation = null;
 	private int height;
@@ -37,6 +38,7 @@ public class Level {
 				addPixelObject(PixelObject.colorToPixelObject(pix, x, pixmap.getHeight() - y));
 			}
 		}
+		setInstance(this);
 	}
 	
 	
@@ -104,6 +106,16 @@ public class Level {
 
 	public void setGame(Game game) {
 		this.game = game;
+	}
+
+	public static Level getCurrentInstance() {
+		if(instance == null)
+			throw new NullPointerException();
+		return instance;
+	}
+
+	public static void setInstance(Level instance) {
+		Level.instance = instance;
 	}
 
 }

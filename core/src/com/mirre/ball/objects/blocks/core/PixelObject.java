@@ -4,54 +4,42 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
 import com.mirre.ball.enums.ObjectColor;
 import com.mirre.ball.objects.blocks.interfaces.Collideable;
+import com.mirre.ball.objects.blocks.interfaces.LevelObject;
 
+public class PixelObject implements LevelObject {
 
-public class PixelObject {
-
-	
 	private Rectangle bounds;
 	
-	public PixelObject(Rectangle bounds){
-		setBounds(bounds);
-	}
-	
 	public PixelObject(int x, int y){
-		setBounds(new Rectangle(x,y,1F,1F));
+		setBounds(new Rectangle(x,y,1,1));
 	}
 	
 	public PixelObject(int x, int y, float width, float height){
 		setBounds(new Rectangle(x,y,width,height));
 	}
-
+	
 	public Rectangle getBounds() {
 		return bounds;
 	}
-
+	
 	public void setBounds(Rectangle bounds) {
 		this.bounds = bounds;
 	}
-	
-	
-	public boolean isCollideable(){
+
+	@Override
+	public boolean canCache() {
+		return true;
+	}
+
+	@Override
+	public boolean hasTexture() {
+		return false;
+	}
+
+	public boolean isCollideable() {
 		return this instanceof Collideable;
 	}
-	
-	public void onCollideX(MovingTextureObject mto){
 
-	}
-	
-	public void onCollideY(MovingTextureObject mto){
-
-	}
-	
-	public boolean hasTexture(){
-		return false;
-	}
-	
-	public boolean canCache(){
-		return false;
-	}
-	
 	public static PixelObject colorToPixelObject(int pixColor, int x, int y){
 		for(ObjectColor ob : ObjectColor.values()){
 			if(Color.rgba8888(ob.getColor()) == pixColor)
@@ -60,5 +48,4 @@ public class PixelObject {
 		return new PixelObject(x,y);
 			
 	}
-	
 }

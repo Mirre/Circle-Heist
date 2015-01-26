@@ -4,15 +4,17 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.mirre.ball.enums.BallState;
 import com.mirre.ball.enums.Direction;
+import com.mirre.ball.managers.MovementManager;
 import com.mirre.ball.objects.blocks.Gold;
-import com.mirre.ball.objects.blocks.core.MovingTextureObject;
 import com.mirre.ball.objects.blocks.core.PixelObject;
+import com.mirre.ball.objects.blocks.core.SimpleMovingObject;
 import com.mirre.ball.screens.LevelEndScreen;
 import com.mirre.ball.CircleHeist;
 
-public class Ball extends MovingTextureObject {
+public class Ball extends SimpleMovingObject {
 
 	
 	public static TextureRegion texture = null;
@@ -24,10 +26,24 @@ public class Ball extends MovingTextureObject {
 	
 	private PixelObject escapeZone = null;
 	
+	private Vector2 position = new Vector2();
+	private Vector2 acceleration = new Vector2();
+	private Vector2 velocity = new Vector2();
+	
+	private MovementManager movementManager = new MovementManager(this);
+	
 	public Ball(Level level){
-		super(level, (int) level.getStartLocation().getFirst(), (int) level.getStartLocation().getSecond(), 0.8f, 0.8f);
+		super((int) level.getStartLocation().getFirst(), (int) level.getStartLocation().getSecond(), 0.8f, 0.8f);
 		setState(BallState.SPAWNED);
 		setStateTime(0);
+	}
+	
+	public MovementManager getMovementManager(){
+		return movementManager;
+	}
+	
+	public void setMovementManager(MovementManager mov){
+		movementManager = mov;
 	}
 	
 	public void update(float deltaTime){
@@ -45,9 +61,9 @@ public class Ball extends MovingTextureObject {
 		if(getState() == BallState.WON){
 			setWinDelay(getWinDelay() - 0.05F);
 			if(getWinDelay() <= 0){
-				CircleHeist game = ((CircleHeist) getLevel().getGame());
+				CircleHeist game = ((CircleHeist) Level.getCurrentInstance().getGame());
 				game.setCompletedLevels(game.getCompletedLevels() + 1);
-				game.setScreen(new LevelEndScreen(game, true, getLevel().getLevelID()));
+				game.setScreen(new LevelEndScreen(game, true, Level.getCurrentInstance().getLevelID()));
 			}
 			return;
 		}
@@ -135,7 +151,7 @@ public class Ball extends MovingTextureObject {
 
 	public PixelObject getEscapeZone() {
 		if(escapeZone == null)
-			escapeZone = getLevel().getPixelObjects().get(getLevel().getStartLocation());
+			escapeZone = Level.getCurrentInstance().getPixelObjects().get(Level.getCurrentInstance().getStartLocation());
 		return escapeZone;
 	}
 
@@ -145,6 +161,30 @@ public class Ball extends MovingTextureObject {
 
 	public void setWinDelay(float winDelay) {
 		this.winDelay = winDelay;
+	}
+
+	public Vector2 getPosition() {
+		return position;
+	}
+
+	public void setPosition(Vector2 position) {
+		this.position = position;
+	}
+
+	public Vector2 getAcceleration() {
+		return acceleration;
+	}
+
+	public void setAcceleration(Vector2 acceleration) {
+		this.acceleration = acceleration;
+	}
+
+	public Vector2 getVelocity() {
+		return velocity;
+	}
+
+	public void setVelocity(Vector2 velocity) {
+		this.velocity = velocity;
 	}
 
 }
