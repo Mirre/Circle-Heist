@@ -1,5 +1,7 @@
 package com.mirre.ball.objects.blocks.core;
 
+import com.badlogic.gdx.Gdx;
+import com.mirre.ball.objects.Level;
 import com.mirre.ball.objects.blocks.interfaces.Moveable;
 
 public abstract class SimpleMovingObject extends SpriteObject implements Moveable {
@@ -12,4 +14,9 @@ public abstract class SimpleMovingObject extends SpriteObject implements Moveabl
 		super(x, y);
 	}
 
+	@Override
+	public void onObjectCreation(Level level) {
+		level.addMovingObject(this);
+		Gdx.app.log("Create", "Moving");
+	}
 }

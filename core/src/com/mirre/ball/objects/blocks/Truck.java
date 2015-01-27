@@ -3,6 +3,7 @@ package com.mirre.ball.objects.blocks;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.mirre.ball.objects.Level;
 import com.mirre.ball.objects.blocks.core.TextureObject;
 
 public class Truck extends TextureObject {
@@ -23,6 +24,12 @@ public class Truck extends TextureObject {
 	@Override
 	public boolean canCache(){
 		return false;
+	}
+	
+	@Override
+	public void onObjectCreation(Level level) {
+		level.setStartLocation(this);
+		Gdx.app.log("Create", "Truck");
 	}
 	
 }

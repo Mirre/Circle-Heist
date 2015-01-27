@@ -9,5 +9,4 @@ public interface LevelObject {
 	public boolean hasTexture();
 	public boolean isCollideable();
 	
-	
 }

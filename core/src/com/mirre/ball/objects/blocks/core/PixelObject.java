@@ -3,6 +3,7 @@ package com.mirre.ball.objects.blocks.core;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
 import com.mirre.ball.enums.ObjectColor;
+import com.mirre.ball.objects.Level;
 import com.mirre.ball.objects.blocks.interfaces.Collideable;
 import com.mirre.ball.objects.blocks.interfaces.LevelObject;
 
@@ -47,5 +48,14 @@ public class PixelObject implements LevelObject {
 		}
 		return new PixelObject(x,y);
 			
+	}
+
+	public void onLevelCreation(Level level) {
+		level.addPixelObject(this);
+		onObjectCreation(level);
+	}
+
+	public void onObjectCreation(Level level) {
+		
 	}
 }

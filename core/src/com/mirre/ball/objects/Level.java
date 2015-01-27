@@ -32,23 +32,18 @@ public class Level {
 		setHeight(pixmap.getHeight());
 		setWidth(pixmap.getWidth());
 		setInstance(this);
+		setObjects(pixmap);
+	}
+	
+	public void setObjects(Pixmap pixmap){
 		for (int y = 0; y < pixmap.getHeight(); y++) {
 			for (int x = 0; x < pixmap.getWidth(); x++) {
 				int pix = pixmap.getPixel(x, y);
 				PixelObject pixelObject = PixelObject.colorToPixelObject(pix, x, pixmap.getHeight() - y);
-				
-				//Instead of checking the instanceof Maybe call a onCreate(Level level) from the PixelObject.
-				if(pixelObject instanceof Moveable){
-					addMovingObject((Moveable)pixelObject);
-				}if(pixelObject instanceof Truck)
-					setStartLocation(((Truck)pixelObject));
-				if(pixelObject instanceof Ball)
-					setBall((Ball)pixelObject);
-				addPixelObject(pixelObject);
+				pixelObject.onLevelCreation(this);
 			}
 		}
 	}
-	
 	
 	public Truck getStartLocation() {
 		return startLocation;

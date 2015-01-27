@@ -184,4 +184,10 @@ public class Ball extends SimpleMovingObject {
 		this.velocity = velocity;
 	}
 
+	@Override
+	public void onObjectCreation(Level level) {
+		super.onObjectCreation(level);
+		level.setBall(this);
+		Gdx.app.log("Create", "Ball");
+	}
 }
