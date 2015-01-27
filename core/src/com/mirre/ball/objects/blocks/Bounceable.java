@@ -35,7 +35,10 @@ public class Bounceable extends CollideableTile {
 	public void onCollideY(SimpleMovingObject mto){
 		if(mto instanceof Ball){
 			Ball b = ((Ball)mto);
-			if(b.getBounceDelay() == 0F){
+			if(b.getBounds().getY() <= getBounds().getY()){
+				b.getVelocity().y = 0;
+				return;
+			}if(b.getBounceDelay() == 0F){
 				b.setBounceDelay(0.5F);
 				b.getVelocity().y = 0.2F + (-0.2F * ((Ball)mto).getVelocity().y);
 			}

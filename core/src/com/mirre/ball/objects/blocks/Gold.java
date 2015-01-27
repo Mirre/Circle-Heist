@@ -22,7 +22,7 @@ public class Gold extends TextureObject implements Collideable {
 	@Override
 	public TextureRegion getTexture() {
 		if(texture == null)
-			texture = new TextureRegion(new Texture(Gdx.files.internal("data/gold.png")), 0, 0, 20, 20);
+			texture = new TextureRegion(new Texture(Gdx.files.internal("data/gold.png")), 0, 0, 225, 224);
 		return texture;
 	}
 
