@@ -23,7 +23,7 @@ public abstract class SpriteObject extends TextureObject {
 	}
 	
 	public void draw(SpriteBatch b){
-		b.draw(getSprite(), getSprite().getX(), getSprite().getY());
+		b.draw(getSprite().getTexture(), getSprite().getX(), getSprite().getY());
 	}
 
 	@Override

@@ -24,10 +24,10 @@ public class Bounceable extends CollideableTile {
 			Ball b = ((Ball)mto);
 			if(b.getBounceDelay() == 0F){
 				b.setBounceDelay(0.5F);
-				b.getVelocity().x = ((Ball)mto).getMovementManager().getDirection().getReverse().getDir();
+				b.getVelocity().x = ((Ball)mto).getDirection().getReverse().getDir();
 				b.getVelocity().y = 0.07F + (((Ball)mto).getVelocity().y);
 			}
-			b.getAcceleration().x = ((Ball)mto).getMovementManager().getDirection().getReverse().getDir();
+			b.getAcceleration().x = ((Ball)mto).getDirection().getReverse().getDir();
 		}
 	}
 	

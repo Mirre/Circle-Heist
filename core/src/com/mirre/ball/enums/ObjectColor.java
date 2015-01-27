@@ -5,6 +5,7 @@ import com.mirre.ball.objects.Ball;
 import com.mirre.ball.objects.blocks.Bounceable;
 import com.mirre.ball.objects.blocks.CollideableTile;
 import com.mirre.ball.objects.blocks.Gold;
+import com.mirre.ball.objects.blocks.Guard;
 import com.mirre.ball.objects.blocks.Truck;
 import com.mirre.ball.objects.blocks.core.PixelObject;
 
@@ -38,6 +39,12 @@ public enum ObjectColor {
 		@Override
 		public PixelObject getObject(int x, int y) {
 			return new Ball(x,y);
+		}
+	},
+	GUARD(Color.CYAN) {
+		@Override
+		public PixelObject getObject(int x, int y) {
+			return new Guard(x,y);
 		}
 	};
 	

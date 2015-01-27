@@ -27,7 +27,7 @@ public class CollideableTile extends TextureObject implements Collideable {
 		if(mto instanceof Ball){
 			Ball b = ((Ball)mto);
 			b.getVelocity().x = 0;
-			b.getAcceleration().x = b.getMovementManager().getDirection().getReverse().getDir();
+			b.getAcceleration().x = b.getDirection().getReverse().getDir();
 		}
 	}
 	
