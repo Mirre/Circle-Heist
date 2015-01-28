@@ -13,8 +13,9 @@ import com.mirre.ball.utils.BiValue;
 public abstract class SimpleMovingObject extends SpriteObject implements Moveable {
 	
 	
-	private Direction direction = Direction.STILL;
+	private Direction direction;
 	private List<PixelObject> boundaries = new ArrayList<PixelObject>();
+	private boolean onGround = true;
 	
 	public SimpleMovingObject(int x, int y, float width, float height) {
 		super(x, y, width, height);
@@ -80,7 +81,10 @@ public abstract class SimpleMovingObject extends SpriteObject implements Moveabl
 		}
 			
 		//OnGround Listener.
-		//setOnGround(bottomLeft.isCollideable() && bottomRight.isCollideable());
+		if(bottomLeft != null && bottomRight != null)
+			setOnGround(bottomLeft.isCollideable() && bottomRight.isCollideable());
+		else
+			setOnGround(false);
 
 	}
 
@@ -102,6 +106,14 @@ public abstract class SimpleMovingObject extends SpriteObject implements Moveabl
 
 	public void setDirection(Direction direction) {
 		this.direction = direction;
+	}
+
+	public boolean isOnGround() {
+		return onGround;
+	}
+
+	public void setOnGround(boolean onGround) {
+		this.onGround = onGround;
 	}
 	
 	

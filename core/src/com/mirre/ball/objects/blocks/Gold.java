@@ -84,4 +84,9 @@ public class Gold extends TextureObject implements Collideable {
 	public void setTypeOfGold(int typeOfGold) {
 		this.typeOfGold = typeOfGold;
 	}
+
+	@Override
+	public boolean passThroughAble() {
+		return true;
+	}
 }

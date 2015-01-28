@@ -19,8 +19,10 @@ import com.mirre.ball.objects.blocks.Bounceable;
 import com.mirre.ball.objects.blocks.CollideableTile;
 import com.mirre.ball.objects.blocks.Gold;
 import com.mirre.ball.objects.blocks.Truck;
+import com.mirre.ball.objects.blocks.core.AdvancedMovingObject;
 import com.mirre.ball.objects.blocks.core.PixelObject;
 import com.mirre.ball.objects.blocks.core.TextureObject;
+import com.mirre.ball.objects.blocks.interfaces.Moveable;
 import com.mirre.ball.utils.BiValue;
 
 public class LevelRenderer {
@@ -92,8 +94,15 @@ public class LevelRenderer {
 		getBatch().setProjectionMatrix(getCam().combined);
 		getBatch().begin();
 		for(TextureObject tile : getUncachedObjects()){
-			if(tile.hasTexture() && !(tile instanceof Ball))
+			if(tile.hasTexture() && !(tile instanceof AdvancedMovingObject))
 				getBatch().draw(tile.getTexture(), tile.getBounds().x, tile.getBounds().y, tile.getBounds().width, tile.getBounds().height);
+		}
+		//Toodoo Automaticly make moving objects draw themself after moving.
+		for(Moveable m : getLevel().getMovingObjects()){
+			if(m instanceof AdvancedMovingObject){
+				AdvancedMovingObject amo = (AdvancedMovingObject) m;
+				getBatch().draw(amo.getTexture().getTexture(), amo.getBounds().getX(), amo.getBounds().getY(), amo.getBounds().width, amo.getBounds().height);
+			}
 		}
 		getBatch().draw(getLevel().getBall().getTexture(), getLevel().getBall().getPosition().x, getLevel().getBall().getPosition().y, 1, 1);
 		getBatch().end();

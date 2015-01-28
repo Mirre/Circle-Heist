@@ -8,4 +8,5 @@ public interface Collideable {
 	
 	public void onCollideY(SimpleMovingObject mto);
 	
+	public boolean passThroughAble();
 }

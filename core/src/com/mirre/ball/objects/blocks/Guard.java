@@ -5,11 +5,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mirre.ball.enums.Direction;
 import com.mirre.ball.objects.Ball;
-import com.mirre.ball.objects.blocks.core.PixelObject;
+import com.mirre.ball.objects.blocks.core.AdvancedMovingObject;
 import com.mirre.ball.objects.blocks.core.SimpleMovingObject;
 import com.mirre.ball.objects.blocks.interfaces.Collideable;
 
-public class Guard extends SimpleMovingObject implements Collideable {
+public class Guard extends AdvancedMovingObject implements Collideable {
 
 	public static TextureRegion textureLeft = null;
 	public static TextureRegion textureRight = null;
@@ -29,16 +29,7 @@ public class Guard extends SimpleMovingObject implements Collideable {
 		if(getDirectionDelay() != 0F){
 			setDirectionDelay(getDirectionDelay() <= 0 ? 0 : getDirectionDelay()-0.05F);
 		}
-		
-		fetchBoundaries();
-		
-		//Make on collide automatic for SimpleMovingObjects!!!!
-		PixelObject pix = getClosest();
-		if(pix != null){
-			((Collideable) pix).onCollideX(this);
-		}
-		
-		getBounds().setX((float) (getBounds().getX() + (0.05 * getDirection().getDir())));
+		super.update(deltaTime);
 	}
 
 	@Override
@@ -68,6 +59,41 @@ public class Guard extends SimpleMovingObject implements Collideable {
 
 	public void setDirectionDelay(float directionDelay) {
 		this.directionDelay = directionDelay;
+	}
+
+	@Override
+	public void changeDirection() {
+		getAcceleration().x = (getStandardAcceleration() * getDirection().getDir());
+	}
+
+	@Override
+	public float getGravity() {
+		return 20f;
+	}
+
+	@Override
+	public float getStandardAcceleration() {
+		return 30f;
+	}
+
+	@Override
+	public float getJumpVelocity() {
+		return 10f;
+	}
+
+	@Override
+	public float getMaxVelocity() {
+		return 10f;
+	}
+
+	@Override
+	public float getDampening() {
+		return 0.95f;
+	}
+
+	@Override
+	public boolean passThroughAble() {
+		return false;
 	}
 
 
