@@ -52,7 +52,8 @@ public class Ball extends SimpleMovingObject {
 		if(getEscapeZone().getBounds().contains(getBounds()) && getGoldCollected() >= Gold.getAmountOfGold()/2)
 			setState(BallState.WON);
 			
-		processKeysAndMove(deltaTime);
+		processKeys();
+		move(deltaTime);
 		
 		if(getState() == BallState.WON){
 			setWinDelay(getWinDelay() - 0.05F);
@@ -77,7 +78,7 @@ public class Ball extends SimpleMovingObject {
 
 		stateTime = stateTime + deltaTime;
 	}
-	private void processKeysAndMove(float deltaTime){
+	private void processKeys(){
 		if (getState() == BallState.SPAWNED || getState() == BallState.DYING || getState() == BallState.WON)
 			return;
 
@@ -102,6 +103,9 @@ public class Ball extends SimpleMovingObject {
 				direction(Direction.STILL);
 		}
 		
+	}
+	
+	public void move(float deltaTime){
 		getAcceleration().y = -GRAVITY;
 		getAcceleration().scl(deltaTime);
 		getVelocity().add(getAcceleration());

@@ -30,24 +30,21 @@ public class Guard extends SimpleMovingObject implements Collideable {
 			setDirectionDelay(getDirectionDelay() <= 0 ? 0 : getDirectionDelay()-0.05F);
 		}
 		
-		getBounds().setX((float) (getBounds().getX() + (0.05 * getDirection().getDir())));
 		fetchBoundaries();
 		
 		//Make on collide automatic for SimpleMovingObjects!!!!
 		PixelObject pix = getClosest();
 		if(pix != null){
-			onCollideX(this);
+			((Collideable) pix).onCollideX(this);
 		}
+		
+		getBounds().setX((float) (getBounds().getX() + (0.05 * getDirection().getDir())));
 	}
 
 	@Override
 	public void onCollideX(SimpleMovingObject mto) {
 		if(mto instanceof Ball){
 			Gdx.app.log("Loss", "Test");
-		}
-		if(getDirectionDelay() <= 0){
-			setDirection(getDirection().getReverse());
-			setDirectionDelay(10);
 		}
 	}
 

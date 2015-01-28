@@ -28,6 +28,13 @@ public class CollideableTile extends TextureObject implements Collideable {
 			Ball b = ((Ball)mto);
 			b.getVelocity().x = 0;
 			b.getAcceleration().x = b.getDirection().getReverse().getDir();
+		}if(mto instanceof Guard){
+			Gdx.app.log("Guard", "XD");
+			Guard g = ((Guard)mto);
+			if(g.getDirectionDelay() <= 0){
+				g.setDirection(g.getDirection().getReverse());
+				g.setDirectionDelay(2);
+			}
 		}
 	}
 	

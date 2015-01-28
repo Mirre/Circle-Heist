@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteCache;
-import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.mirre.ball.objects.Ball;
 import com.mirre.ball.objects.Level;
@@ -37,8 +37,7 @@ public class LevelRenderer {
 	public LevelRenderer(Level level){
 		setLevel(level);
 		setCam(new OrthographicCamera(24, 16));
-		Rectangle r = level.getStartLocation().getBounds();
-		getCam().position.set(r.getX(), r.getY(), 0);
+		getCam().position.set(level.getStartLocation().getBounds().getPosition(new Vector2()), 0);
 		setCache(new SpriteCache(getLevel().getHeight() * getLevel().getWidth(), false));
 		createBlocks();
 	}
@@ -81,6 +80,7 @@ public class LevelRenderer {
 		getCam().position.lerp(getLerpTarget().set(getLevel().getBall().getPosition().x, getLevel().getBall().getPosition().y, 0), 2f * deltaTime);
 		getCam().update();
 
+		
 		getCache().setProjectionMatrix(getCam().combined);
 		Gdx.gl.glDisable(GL20.GL_BLEND);
 		getCache().begin();

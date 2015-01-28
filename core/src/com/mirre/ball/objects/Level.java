@@ -31,11 +31,6 @@ public class Level {
 		Pixmap pixmap = new Pixmap(Gdx.files.internal("data/level" + i + ".png"));
 		setHeight(pixmap.getHeight());
 		setWidth(pixmap.getWidth());
-		setInstance(this);
-		setObjects(pixmap);
-	}
-	
-	public void setObjects(Pixmap pixmap){
 		for (int y = 0; y < pixmap.getHeight(); y++) {
 			for (int x = 0; x < pixmap.getWidth(); x++) {
 				int pix = pixmap.getPixel(x, y);
@@ -43,7 +38,9 @@ public class Level {
 				pixelObject.onLevelCreation(this);
 			}
 		}
+		setInstance(this);
 	}
+	
 	
 	public Truck getStartLocation() {
 		return startLocation;

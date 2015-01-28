@@ -74,9 +74,9 @@ public abstract class SimpleMovingObject extends SpriteObject implements Moveabl
 		//On Collide Add
 		clearBoundaries();
 		for(PixelObject p : tileArray){
-			if(p.isCollideable() && p.hasTexture()){
-				addBoundary(p);
-			}
+			if(p != null)
+				if(p.isCollideable() && p.hasTexture())
+					addBoundary(p);
 		}
 			
 		//OnGround Listener.
