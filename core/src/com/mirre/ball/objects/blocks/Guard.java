@@ -83,7 +83,7 @@ public class Guard extends AdvancedMovingObject implements Collideable {
 
 	@Override
 	public float getMaxVelocity() {
-		return 10f;
+		return 5f;
 	}
 
 	@Override

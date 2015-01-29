@@ -8,7 +8,6 @@ import com.mirre.ball.objects.blocks.core.AdvancedMovingObject;
 import com.mirre.ball.objects.blocks.core.SimpleMovingObject;
 import com.mirre.ball.objects.blocks.core.TextureObject;
 import com.mirre.ball.objects.blocks.interfaces.Collideable;
-import com.mirre.ball.utils.RandomGenerator;
 
 public class CollideableTile extends TextureObject implements Collideable {
 
@@ -36,12 +35,8 @@ public class CollideableTile extends TextureObject implements Collideable {
 			Guard g = ((Guard)mto);
 			g.getAcceleration().x = g.getDirection().getDir();
 			if(g.getDirectionDelay() <= 0){
-				if(RandomGenerator.getRandom().nextInt(3) == 2)
-					g.getVelocity().y = 0.15f;
-				else{
-					g.setDirection(g.getDirection().getReverse());
-					g.setDirectionDelay(5);
-				}
+				g.setDirection(g.getDirection().getReverse());
+				g.setDirectionDelay(5);
 			}
 		}
 	}
