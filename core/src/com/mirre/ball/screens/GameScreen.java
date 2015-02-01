@@ -2,39 +2,102 @@ package com.mirre.ball.screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
-import com.mirre.ball.CircleHeist;
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.mirre.ball.managers.LevelRenderer;
+import com.mirre.ball.objects.Level;
 
-public abstract class GameScreen implements Screen {
+public class GameScreen extends AbstractScreen {
+
+	private Stage stage = new Stage();
+	private Table table = new Table();
+	private Level level;
+	private LevelRenderer renderer;
+	private int levelID;
 	
-	private Game game;
-
-	public GameScreen(Game game){
-		setGame(game);
+	public GameScreen(Game game, int level) {
+		super(game);
+		Gdx.input.setInputProcessor(getStage());
+		
+		getStage().setViewport(new ExtendViewport(24, 18, getStage().getCamera()));
+		
+		TextureRegion region = new TextureRegion(new Texture(Gdx.files.internal("data/ui.png")));
+		TextureRegionDrawable drawable = new TextureRegionDrawable(region); 
+		getTable().setBackground(drawable);
+		getStage().addActor(getTable());
+		
+		setLevel(new Level(game, level));
+		setRenderer(new LevelRenderer(getLevel(), getStage()));
 	}
 
-	public Game getGame() {
-		return game;
-	}
-
-	public void setGame(Game game) {
-		this.game = game;
-	}
-	
-	public static boolean isCursorInside(int x1, int y1, int x2, int y2){
-		if(Gdx.input.getX() >= x1 && Gdx.input.getX() <= x2 && Gdx.input.getY() >= y1 && Gdx.input.getY() <= y2){
-			return true;
+	@Override
+	public void render(float delta) {
+		delta = Math.min(0.2F, delta); //Change the 0.2F if you feel lag.
+		if(Gdx.input.isKeyJustPressed(Keys.ESCAPE)){
+			getGame().setScreen(new StartScreen(getGame()));
+			return;
 		}
-		return false;
+		
+		
+		getLevel().update(delta);
+		Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		getRenderer().render(delta);
+		
+		getTable().setBounds(getStage().getCamera().position.x - getStage().getCamera().viewportWidth/2, getStage().getCamera().position.y - getStage().getCamera().viewportHeight/2, getStage().getCamera().viewportWidth, getStage().getCamera().viewportHeight);
+		getStage().act();
+		getStage().draw();
 	}
-	
-	public void setScreen(Screen screen, int levelExists){
-		if(levelExists(levelExists) && ((CircleHeist)getGame()).getCompletedLevels() >= levelExists)
-			getGame().setScreen(screen);
+
+	@Override
+	public void resize(int width, int height) {
+		getStage().getViewport().update(width, height);
 	}
-	
-	public boolean levelExists(int i){
-		return Gdx.files.internal("data/level" + i + ".png").exists();
+
+	public Level getLevel() {
+		return level;
+	}
+
+	public void setLevel(Level level) {
+		this.level = level;
+	}
+
+	public LevelRenderer getRenderer() {
+		return renderer;
+	}
+
+	public void setRenderer(LevelRenderer renderer) {
+		this.renderer = renderer;
+	}
+
+	public int getLevelID() {
+		return levelID;
+	}
+
+	public void setLevelID(int levelID) {
+		this.levelID = levelID;
+	}
+
+	public Stage getStage() {
+		return stage;
+	}
+
+	public void setStage(Stage stage) {
+		this.stage = stage;
+	}
+
+	public Table getTable() {
+		return table;
+	}
+
+	public void setTable(Table table) {
+		this.table = table;
 	}
 
 }

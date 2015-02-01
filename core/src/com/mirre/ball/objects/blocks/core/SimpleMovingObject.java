@@ -5,24 +5,26 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
 import com.mirre.ball.enums.Direction;
+import com.mirre.ball.enums.ObjectColor;
 import com.mirre.ball.objects.Level;
 import com.mirre.ball.objects.blocks.interfaces.Moveable;
 import com.mirre.ball.utils.BiValue;
 
-public abstract class SimpleMovingObject extends SpriteObject implements Moveable {
+public abstract class SimpleMovingObject extends TextureObject implements Moveable {
 	
 	
 	private Direction direction;
 	private List<PixelObject> boundaries = new ArrayList<PixelObject>();
 	private boolean onGround = true;
 	
-	public SimpleMovingObject(int x, int y, float width, float height) {
-		super(x, y, width, height);
+	public SimpleMovingObject(int x, int y, float width, float height, ObjectColor color) {
+		super(x, y, width, height, color);
 	}
 
-	public SimpleMovingObject(int x, int y) {
-		super(x, y);
+	public SimpleMovingObject(int x, int y, ObjectColor color) {
+		super(x, y, color);
 	}
 
 	@Override
@@ -38,8 +40,8 @@ public abstract class SimpleMovingObject extends SpriteObject implements Moveabl
 				if(closest == null)
 					closest = p;
 				else{
-					float distance1 = Math.abs(getBounds().getX() - p.getBounds().getX());
-					float distance2 = Math.abs(getBounds().getX() - closest.getBounds().getX());
+					float distance1 = Math.abs(getBounds().getCenter(new Vector2()).x - p.getBounds().getCenter(new Vector2()).x);
+					float distance2 = Math.abs(getBounds().getCenter(new Vector2()).x - closest.getBounds().getCenter(new Vector2()).x);
 					if(distance1 < distance2){ //Is less than distance2
 						closest = p;
 					}
@@ -71,13 +73,14 @@ public abstract class SimpleMovingObject extends SpriteObject implements Moveabl
 		
 		PixelObject[] tileArray = new PixelObject[]{ bottomRight, bottomLeft, topRight, topLeft };
 		
-		
 		//On Collide Add
 		clearBoundaries();
 		for(PixelObject p : tileArray){
-			if(p != null)
-				if(p.isCollideable() && p.hasTexture())
+			if(p != null){
+				if(p.isCollideable() && p.hasTexture()){
 					addBoundary(p);
+				}
+			}
 		}
 			
 		//OnGround Listener.
@@ -116,5 +119,8 @@ public abstract class SimpleMovingObject extends SpriteObject implements Moveabl
 		this.onGround = onGround;
 	}
 	
-	
+	@Override
+	public boolean canCache() {
+		return false;
+	}
 }

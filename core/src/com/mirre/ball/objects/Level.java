@@ -7,10 +7,11 @@ import java.util.List;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.mirre.ball.objects.Ball;
+import com.badlogic.gdx.math.Rectangle;
 import com.mirre.ball.objects.blocks.Truck;
 import com.mirre.ball.objects.blocks.core.PixelObject;
 import com.mirre.ball.objects.blocks.interfaces.Moveable;
+import com.mirre.ball.objects.moving.Ball;
 import com.mirre.ball.utils.BiValue;
 
 public class Level {
@@ -21,6 +22,7 @@ public class Level {
 	private int height;
 	private int width;
 	private HashMap<BiValue<Integer,Integer>, PixelObject> pixelObjects = new HashMap<BiValue<Integer,Integer>, PixelObject>();
+	private HashMap<BiValue<Integer,Integer>, PixelObject> collideTiles = new HashMap<BiValue<Integer,Integer>, PixelObject>();
 	private List<Moveable> movingObjects = new ArrayList<Moveable>();
 	private int levelID;
 	private Game game;
@@ -84,6 +86,10 @@ public class Level {
 	public HashMap<BiValue<Integer,Integer>, PixelObject> getPixelObjects() {
 		return pixelObjects;
 	}
+	
+	public PixelObject getPixelObject(int x, int y) {
+		return pixelObjects.get(new BiValue<Integer,Integer>(x,y));
+	}
 
 
 	public void addPixelObject(PixelObject object) {
@@ -126,4 +132,21 @@ public class Level {
 		movingObjects.add(movingObject);
 	}
 
+
+	public HashMap<BiValue<Integer,Integer>, PixelObject> getCollideTiles() {
+		return collideTiles;
+	}
+	
+	public PixelObject getCollideTile(int x, int y) {
+		BiValue<Integer,Integer> key = new BiValue<Integer,Integer>(x,y);
+		if(collideTiles.containsKey(key))
+			return collideTiles.get(key);
+		return null;
+	}
+
+	public void addCollideTile(PixelObject tile) {
+		Rectangle r = tile.getBounds();
+		collideTiles.put(new BiValue<Integer, Integer>((int)r.x, (int)r.y), tile);
+	}
+	
 }

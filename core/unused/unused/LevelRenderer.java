@@ -1,4 +1,4 @@
-package com.mirre.ball.managers;
+package com.mirre.ball.unused;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -8,10 +8,12 @@ import java.util.Map.Entry;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteCache;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.mirre.ball.objects.Ball;
 import com.mirre.ball.objects.Level;
 import com.mirre.ball.objects.blocks.Bounceable;
 import com.mirre.ball.objects.blocks.CollideableTile;
@@ -21,33 +23,29 @@ import com.mirre.ball.objects.blocks.core.AdvancedMovingObject;
 import com.mirre.ball.objects.blocks.core.PixelObject;
 import com.mirre.ball.objects.blocks.core.TextureObject;
 import com.mirre.ball.objects.blocks.interfaces.Moveable;
-import com.mirre.ball.objects.moving.Ball;
 import com.mirre.ball.utils.BiValue;
 
 public class LevelRenderer {
-
 	private Level level;
-	private SpriteCache cache;
-	private Stage stage;
+	private OrthographicCamera cam;
+	private SpriteCache cache = null;
+	private SpriteBatch batch = new SpriteBatch(5460);
 	private FPSLogger fpsLogger = new FPSLogger();
 	private List<Integer> cacheIDs = new ArrayList<Integer>();
 	private List<TextureObject> uncachedObjects = new ArrayList<TextureObject>();
 	private float stateTime = 0;
 	private Vector3 lerpTarget = new Vector3();
-	
-	
-	
-	public LevelRenderer(Level level, Stage stage){
+
+	public LevelRenderer(Level level){
 		setLevel(level);
-		setStage(stage);
-		stage.getCamera().position.set(level.getStartLocation().getBounds().getPosition(new Vector2()), 0);
+		setCam(new OrthographicCamera(24, 16));
+		getCam().position.set(level.getStartLocation().getBounds().getPosition(new Vector2()), 0);
 		setCache(new SpriteCache(getLevel().getHeight() * getLevel().getWidth(), false));
-		createTiles();
+		createBlocks();
 	}
 	
-	public void createTiles(){
+	private void createBlocks() {
 		Iterator<Entry<BiValue<Integer, Integer>, PixelObject>> iterator = getLevel().getPixelObjects().entrySet().iterator();
-		
 		int i = 0;
 		boolean isCaching = false;
 		while(iterator.hasNext()){
@@ -74,91 +72,57 @@ public class LevelRenderer {
 		if(isCaching)
 			addCachedID(getCache().endCache());
 	}
-	
+
+
+
 	public void render(float deltaTime) {
 		
 		if(getCache() == null)
 			return;
-		getStage().getCamera().position.lerp(getLerpTarget().set(getLevel().getBall().getPosition().x, getLevel().getBall().getPosition().y, 0), 2f * deltaTime);
-		getStage().getCamera().update();
+		getCam().position.lerp(getLerpTarget().set(getLevel().getBall().getPosition().x, getLevel().getBall().getPosition().y, 0), 2f * deltaTime);
+		getCam().update();
 
 		
-		getCache().setProjectionMatrix(getStage().getCamera().combined);
+		getCache().setProjectionMatrix(getCam().combined);
 		Gdx.gl.glDisable(GL20.GL_BLEND);
 		getCache().begin();
-		for(int i : getCacheIDs()){
+		for(int i : getCachedIDs()){
 			getCache().draw(i);
 		}
 		getCache().end();
 		setStateTime(getStateTime() + deltaTime);
-		getStage().getBatch().setProjectionMatrix(getStage().getCamera().combined);
-		getStage().getBatch().begin();
+		getBatch().setProjectionMatrix(getCam().combined);
+		getBatch().begin();
 		for(TextureObject tile : getUncachedObjects()){
-			if(tile.hasTexture() && !(tile instanceof AdvancedMovingObject)){
-				tile.draw(getStage().getBatch());
-			}
+			if(tile.hasTexture() && !(tile instanceof AdvancedMovingObject))
+				tile.draw(getBatch());
 		}
+		//Toodoo Automaticly make moving objects draw themself after moving?.
 		for(Moveable m : getLevel().getMovingObjects()){
 			if(m instanceof AdvancedMovingObject){
 				AdvancedMovingObject amo = (AdvancedMovingObject) m;
-				amo.draw(getStage().getBatch());			
+				amo.draw(getBatch());			
 			}
 		}
-		getStage().getBatch().end();
+		getBatch().end();
 
 		getFpsLogger().log();
-	}	
-
+	}
+	
+	
 	public void reset(){
 		Gold.clearAmountOfGold();
 		Gdx.app.log("Test", "" + Gold.getAmountOfGold());
 	}
-	
+
 	public void dispose() {
 		getCache().dispose();
+		getBatch().dispose();
 		CollideableTile.texture.getTexture().dispose();
 		if(Bounceable.texture != null)
 			Bounceable.texture.getTexture().dispose();
-		Ball.textureLeft.getTexture().dispose();
-		Ball.textureRight.getTexture().dispose();
-		Ball.textureStealth.getTexture().dispose();
+		Ball.texture.getTexture().dispose();
 		Truck.texture.getTexture().dispose();
-	}
-	
-	public Level getLevel() {
-		return level;
-	}
-
-	public void setLevel(Level level) {
-		this.level = level;
-	}
-
-	public SpriteCache getCache() {
-		return cache;
-	}
-
-	public void setCache(SpriteCache cache) {
-		this.cache = cache;
-	}
-
-	public FPSLogger getFpsLogger() {
-		return fpsLogger;
-	}
-
-	public List<Integer> getCacheIDs() {
-		return cacheIDs;
-	}
-
-	public void addCachedID(int i){
-		cacheIDs.add(i);
-	}
-
-	public List<TextureObject> getUncachedObjects() {
-		return uncachedObjects;
-	}
-
-	public void addUncachedObject(TextureObject p) {
-		uncachedObjects.add(p);
 	}
 
 	public float getStateTime() {
@@ -169,19 +133,65 @@ public class LevelRenderer {
 		this.stateTime = stateTime;
 	}
 
+	public OrthographicCamera getCam() {
+		return cam;
+	}
+
+	public void setCam(OrthographicCamera cam) {
+		this.cam = cam;
+	}
+
+	public SpriteCache getCache() {
+		return cache;
+	}
+
+	public void setCache(SpriteCache cache) {
+		this.cache = cache;
+	}
+
+	public SpriteBatch getBatch() {
+		return batch;
+	}
+
+	public FPSLogger getFpsLogger() {
+		return fpsLogger;
+	}
+
+
+	public List<Integer> getCacheIDs() {
+		return cacheIDs;
+	}
+
+	public void setCacheIDs(List<Integer> cacheIDs) {
+		this.cacheIDs = cacheIDs;
+	}
+
 	public Vector3 getLerpTarget() {
 		return lerpTarget;
 	}
-
-	public void setLerpTarget(Vector3 lerpTarget) {
-		this.lerpTarget = lerpTarget;
+	
+	public List<Integer> getCachedIDs(){
+		return cacheIDs;
+	}
+	
+	public void addCachedID(int i){
+		cacheIDs.add(i);
+	}
+	
+	public Level getLevel() {
+		return level;
 	}
 
-	public Stage getStage() {
-		return stage;
+	public void setLevel(Level level) {
+		this.level = level;
 	}
 
-	public void setStage(Stage stage) {
-		this.stage = stage;
+	public List<TextureObject> getUncachedObjects() {
+		return uncachedObjects;
 	}
+
+	public void addUncachedObject(TextureObject p) {
+		uncachedObjects.add(p);
+	}
+	
 }

@@ -4,7 +4,9 @@ public enum Direction {
 	
 	LEFT(-1),
 	RIGHT(1),
-	UP(10),
+	UP(1),
+	CLIMBDOWN(-1),
+	CLIMBUP(1),
 	STILL(0);
 	
 	private int dir;
@@ -20,6 +22,7 @@ public enum Direction {
 	public void setDir(int dir) {
 		this.dir = dir;
 	}
+
 	
 	public Direction getReverse(){
 		if(this == LEFT)

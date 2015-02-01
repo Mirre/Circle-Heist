@@ -1,6 +1,7 @@
 package com.mirre.ball.objects.blocks.core;
 
 import com.badlogic.gdx.math.Vector2;
+import com.mirre.ball.enums.ObjectColor;
 import com.mirre.ball.objects.blocks.interfaces.Collideable;
 
 public abstract class AdvancedMovingObject extends SimpleMovingObject {
@@ -9,20 +10,23 @@ public abstract class AdvancedMovingObject extends SimpleMovingObject {
 	private Vector2 acceleration = new Vector2();
 	private Vector2 velocity = new Vector2();
 	
-	public AdvancedMovingObject(int x, int y) {
-		super(x, y);
+	public AdvancedMovingObject(int x, int y, ObjectColor color) {
+		super(x, y, color);
 	}
 
-	public AdvancedMovingObject(int x, int y, float width, float height) {
-		super(x, y, width, height);
+	public AdvancedMovingObject(int x, int y, float width, float height, ObjectColor color) {
+		super(x, y, width, height, color);
 	}
 	
 	public abstract void changeDirection();
 	public abstract float getGravity();
 	public abstract float getStandardAcceleration();
-	public abstract float getJumpVelocity();
 	public abstract float getMaxVelocity();
 	public abstract float getDampening();
+	public abstract void onCollideXY(PixelObject collideX, PixelObject collideY);
+	public abstract void onCollideX(PixelObject collideX, boolean yCollided);
+	public abstract void onCollideY(PixelObject collideY, boolean xCollided);
+	public abstract void onNoCollide();
 	
 	
 	@Override
@@ -32,7 +36,8 @@ public abstract class AdvancedMovingObject extends SimpleMovingObject {
 	}
 	
 	public void move(float deltaTime){
-		getAcceleration().y = -getGravity();
+		
+		getAcceleration().y = !isOnGround() ? -getGravity() : 0;
 		getAcceleration().scl(deltaTime);
 		getVelocity().add(getAcceleration());
 		
@@ -51,29 +56,49 @@ public abstract class AdvancedMovingObject extends SimpleMovingObject {
 	public void attemptMove() {
 
 		getBounds().x += getVelocity().x;
+		
+		
 		fetchBoundaries();
-		PixelObject pix = getClosest();
-		if(pix != null){
-			Collideable coll = (Collideable) pix;
-			if(getVelocity().x < 0 && !coll.passThroughAble())
-				getBounds().x = pix.getBounds().x + pix.getBounds().width + 0.01f;
-			else if(!coll.passThroughAble())
-				getBounds().x = pix.getBounds().x - getBounds().width - 0.01f;
-			coll.onCollideX(this);
+		PixelObject pixX = getClosest();
+		boolean x = pixX != null;
+		for(PixelObject pix : getBoundaries()){
+			if(pix.getBounds().overlaps(getBounds())){
+				Collideable coll = (Collideable) pix;
+				if(getVelocity().x < 0 && !coll.passThroughAble())
+					getBounds().x = pix.getBounds().x + pix.getBounds().width + 0.01f;
+				else if(!coll.passThroughAble())
+					getBounds().x = pix.getBounds().x - getBounds().width - 0.01f;
+				if(!coll.passThroughAble())
+					getVelocity().x = 0;
+			}
 		}
 			
 		getBounds().y += getVelocity().y;
 		fetchBoundaries();
-		pix = getClosest();
-		if(pix != null){ //There is 100% chance that it is a collideable.
-			Collideable coll = (Collideable) pix;
+		PixelObject pixY = getClosest();
+		boolean y = pixY != null;
+		if(y){
+			Collideable coll = (Collideable) pixY;
 			if(getVelocity().y < 0 && !coll.passThroughAble()) {
-				getBounds().setY(pix.getBounds().y + pix.getBounds().height + 0.01f);
+				getBounds().setY(pixY.getBounds().y + pixY.getBounds().height + 0.01f);
 				setOnGround(true);
 			}else if(!coll.passThroughAble())
-				getBounds().setY(pix.getBounds().y - getBounds().height - 0.01f);
-			coll.onCollideY(this);
+				getBounds().setY(pixY.getBounds().y - getBounds().height - 0.01f);
+			getVelocity().y = 0;
 		}
+		
+		if(x && y){
+			onCollideXY(pixX, pixY);
+		}else if(!x && !y){
+			onNoCollide();
+		}
+		if(x){
+			onCollideX(pixX, y);
+		}if(y){
+			onCollideY(pixY, x);
+		}
+			
+			
 		getPosition().set(getBounds().getX(), getBounds().getY());
 	}	
 	

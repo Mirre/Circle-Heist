@@ -3,6 +3,7 @@ package com.mirre.ball.objects.blocks;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.mirre.ball.enums.ObjectColor;
 import com.mirre.ball.objects.Level;
 import com.mirre.ball.objects.blocks.core.TextureObject;
 
@@ -11,7 +12,7 @@ public class Truck extends TextureObject {
 	public static TextureRegion texture = null;
 	
 	public Truck(int x, int y) {
-		super(x, y, 5, 3);
+		super(x, y, 5, 3, ObjectColor.TRUCK);
 	}
 
 	@Override

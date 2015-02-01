@@ -5,8 +5,7 @@ import java.util.Random;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.mirre.ball.objects.Ball;
-import com.mirre.ball.objects.blocks.core.SimpleMovingObject;
+import com.mirre.ball.enums.ObjectColor;
 import com.mirre.ball.objects.blocks.core.TextureObject;
 import com.mirre.ball.objects.blocks.interfaces.Collideable;
 
@@ -18,7 +17,7 @@ public class Gold extends TextureObject implements Collideable {
 	private int typeOfGold;
 	
 	public Gold(int x, int y) {
-		super(x, y);
+		super(x, y, ObjectColor.GOLD);
 		addGold();
 		setTypeOfGold(new Random().nextInt(2) + 1);
 	}
@@ -61,22 +60,6 @@ public class Gold extends TextureObject implements Collideable {
 		Gold.amountOfGold = 0;
 	}
 
-	@Override
-	public void onCollideX(SimpleMovingObject mto) {
-		if(mto instanceof Ball && !isCollected()){
-			((Ball)mto).addGold();
-			setCollected(true);
-		}
-	}
-
-	@Override
-	public void onCollideY(SimpleMovingObject mto) {
-		if(mto instanceof Ball && !isCollected()){
-			((Ball)mto).addGold();
-			setCollected(true);
-		}
-	}
-
 	public int getTypeOfGold() {
 		return typeOfGold;
 	}
@@ -89,4 +72,5 @@ public class Gold extends TextureObject implements Collideable {
 	public boolean passThroughAble() {
 		return true;
 	}
+
 }

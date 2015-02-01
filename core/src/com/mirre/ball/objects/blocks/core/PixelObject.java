@@ -10,13 +10,16 @@ import com.mirre.ball.objects.blocks.interfaces.LevelObject;
 public class PixelObject implements LevelObject {
 
 	private Rectangle bounds;
+	private ObjectColor type;
 	
-	public PixelObject(int x, int y){
+	public PixelObject(int x, int y, ObjectColor color){
 		setBounds(new Rectangle(x,y,1,1));
+		setType(color);
 	}
 	
-	public PixelObject(int x, int y, float width, float height){
+	public PixelObject(int x, int y, float width, float height, ObjectColor color){
 		setBounds(new Rectangle(x,y,width,height));
+		setType(color);
 	}
 	
 	public Rectangle getBounds() {
@@ -46,7 +49,7 @@ public class PixelObject implements LevelObject {
 			if(Color.rgba8888(ob.getColor()) == pixColor)
 				return ob.getObject(x, y);
 		}
-		return new PixelObject(x,y);
+		return new PixelObject(x,y, ObjectColor.PIXEL);
 			
 	}
 
@@ -57,5 +60,13 @@ public class PixelObject implements LevelObject {
 
 	public void onObjectCreation(Level level) {
 		
+	}
+
+	public ObjectColor getType() {
+		return type;
+	}
+
+	public void setType(ObjectColor type) {
+		this.type = type;
 	}
 }
