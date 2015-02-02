@@ -77,13 +77,15 @@ public class Ball extends BallData {
 		}else if(collideX instanceof Bounceable){
 			if(getBounceDelay() <= 0F){
 				setBounceDelay(0.5F);
-				getVelocity().x = getDirection().getReverse().getDir();
+				
+				getVelocity().x = getBounds().getX() > collideX.getBounds().x ? 1 : -1;
 				getVelocity().y = 0.07F + getVelocity().y;
 			}
 			getAcceleration().x = getDirection().getReverse().getDir();
 		}else if(collideX instanceof CollideableTile){
-			//getVelocity().x = 0;
-			//getAcceleration().x = getDirection().getReverse().getDir();
+			//Code below not making a noticeable difference if enabled or disabled..
+			getVelocity().x = 0;
+			getAcceleration().x = getDirection().getReverse().getDir();
 		}
 	}
 
@@ -102,7 +104,14 @@ public class Ball extends BallData {
 				getVelocity().y = 0;
 			}else if(getBounceDelay() == 0F){
 				setBounceDelay(0.5F);
-				getVelocity().y = 0.2F + (-0.2F * getVelocity().y);
+				
+				
+				float vY = 0.18F + (0.2F * Math.abs(getVelocity().y));
+				
+				//Limit bounce velocity to 3.
+				getVelocity().y = vY >= 3 ? 3 : vY;  
+					
+				
 			}
 		}
 		else if(collideY instanceof CollideableTile)
@@ -114,6 +123,7 @@ public class Ball extends BallData {
 		Gdx.app.log("XY", "Collided");
 		if(collideX instanceof Stair || collideY instanceof Stair){
 			setOnStairs(true);
+			getVelocity().y = 0;
 		}else if(isOnStairs())
 			setOnStairs(false);
 	}

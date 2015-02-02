@@ -84,7 +84,8 @@ public abstract class AdvancedMovingObject extends SimpleMovingObject {
 				setOnGround(true);
 			}else if(!coll.passThroughAble())
 				getBounds().setY(pixY.getBounds().y - getBounds().height - 0.01f);
-			getVelocity().y = 0;
+			//if(!coll.passThroughAble())
+				//getVelocity().y = 0;
 		}
 		
 		if(x && y){
