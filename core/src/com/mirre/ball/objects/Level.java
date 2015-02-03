@@ -9,8 +9,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.math.Rectangle;
 import com.mirre.ball.objects.blocks.Truck;
-import com.mirre.ball.objects.blocks.core.PixelObject;
-import com.mirre.ball.objects.blocks.interfaces.Moveable;
+import com.mirre.ball.objects.core.PixelObject;
+import com.mirre.ball.objects.interfaces.Moveable;
 import com.mirre.ball.objects.moving.Ball;
 import com.mirre.ball.utils.BiValue;
 

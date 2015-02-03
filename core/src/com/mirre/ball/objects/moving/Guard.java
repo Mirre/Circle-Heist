@@ -9,9 +9,9 @@ import com.mirre.ball.enums.BallState;
 import com.mirre.ball.enums.Direction;
 import com.mirre.ball.enums.ObjectColor;
 import com.mirre.ball.objects.Level;
-import com.mirre.ball.objects.blocks.core.AdvancedMovingObject;
-import com.mirre.ball.objects.blocks.core.PixelObject;
-import com.mirre.ball.objects.blocks.interfaces.Collideable;
+import com.mirre.ball.objects.core.AdvancedMovingObject;
+import com.mirre.ball.objects.core.PixelObject;
+import com.mirre.ball.objects.interfaces.Collideable;
 import com.mirre.ball.utils.BiValue;
 import com.mirre.ball.utils.Logger;
 

@@ -6,7 +6,7 @@ import com.mirre.ball.objects.blocks.CollideableTile;
 import com.mirre.ball.objects.blocks.Gold;
 import com.mirre.ball.objects.blocks.Stair;
 import com.mirre.ball.objects.blocks.Truck;
-import com.mirre.ball.objects.blocks.core.PixelObject;
+import com.mirre.ball.objects.core.PixelObject;
 import com.mirre.ball.objects.moving.Ball;
 import com.mirre.ball.objects.moving.Guard;
 

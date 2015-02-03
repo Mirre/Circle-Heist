@@ -17,10 +17,10 @@ import com.mirre.ball.objects.blocks.Bounceable;
 import com.mirre.ball.objects.blocks.CollideableTile;
 import com.mirre.ball.objects.blocks.Gold;
 import com.mirre.ball.objects.blocks.Truck;
-import com.mirre.ball.objects.blocks.core.AdvancedMovingObject;
-import com.mirre.ball.objects.blocks.core.PixelObject;
-import com.mirre.ball.objects.blocks.core.TextureObject;
-import com.mirre.ball.objects.blocks.interfaces.Moveable;
+import com.mirre.ball.objects.core.AdvancedMovingObject;
+import com.mirre.ball.objects.core.PixelObject;
+import com.mirre.ball.objects.core.TextureObject;
+import com.mirre.ball.objects.interfaces.Moveable;
 import com.mirre.ball.objects.moving.Ball;
 import com.mirre.ball.utils.BiValue;
 

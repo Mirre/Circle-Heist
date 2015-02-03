@@ -6,8 +6,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mirre.ball.enums.ObjectColor;
-import com.mirre.ball.objects.blocks.core.TextureObject;
-import com.mirre.ball.objects.blocks.interfaces.Collideable;
+import com.mirre.ball.objects.core.TextureObject;
+import com.mirre.ball.objects.interfaces.Collideable;
 
 public class Gold extends TextureObject implements Collideable {
 
