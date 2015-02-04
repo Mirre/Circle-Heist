@@ -79,7 +79,7 @@ public class LevelRenderer {
 		
 		if(getCache() == null)
 			return;
-		getStage().getCamera().position.lerp(getLerpTarget().set(getLevel().getBall().getPosition().x, getLevel().getBall().getPosition().y, 0), 2f * deltaTime);
+		getStage().getCamera().position.lerp(getLerpTarget().set(getLevel().getBall().getPosition().x, getLevel().getBall().getPosition().y, 0), 3F * deltaTime);
 		getStage().getCamera().update();
 
 		

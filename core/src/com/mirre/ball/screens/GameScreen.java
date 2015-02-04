@@ -26,17 +26,22 @@ public class GameScreen extends AbstractScreen {
 	
 	public GameScreen(Game game, int level) {
 		super(game);
-		TextureRegionDrawable bar = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("data/progressbar.png")), 6, 3));
-		TextureRegionDrawable knob = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("data/knob.png")), 1, 1));
+		TextureRegionDrawable bar = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("data/progressbar.png")), 100, 50));
+		TextureRegionDrawable knob = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("data/knob.png")), 20, 20));
+		bar.setMinHeight(1);
+		bar.setMinWidth(10);
+		knob.setMinHeight(1);
+		knob.setMinWidth(1);
+		
 		ProgressBarStyle style = new ProgressBarStyle(bar, knob);
-		style.knobBefore = knob;
-		style.disabledBackground = bar;
-		style.knobAfter = knob;
-		setBar(new ProgressBar(0, 10, 0.5f, true, style));
+		//style.knobBefore = knob;
+		//style.disabledBackground = bar;
+		//style.knobAfter = bar;
+		setBar(new ProgressBar(0, 10, 1F, false, style));
 
-		getBar().setSize(1, 1);
+		getBar().setBounds(0, 0, 10F, 1F);
 		getBar().setValue(10F);
-		getBar().setAnimateDuration(0.1F);
+		getBar().setAnimateDuration(1);
 		
 		Gdx.input.setInputProcessor(getStage());
 		
@@ -61,17 +66,17 @@ public class GameScreen extends AbstractScreen {
 			return;
 		}
 		
-		
+	
 		getLevel().update(delta);
 		Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		getRenderer().render(delta);
-		
-		Gdx.app.log("Bar", ""+ getBar().getValue());
-		Gdx.app.log("Visual", ""+ getBar().getVisualValue());
 		getTable().setBounds(getStage().getCamera().position.x - getStage().getCamera().viewportWidth/2, getStage().getCamera().position.y - getStage().getCamera().viewportHeight/2, getStage().getCamera().viewportWidth, getStage().getCamera().viewportHeight);
-		getBar().setX(getStage().getCamera().position.x - getStage().getCamera().viewportWidth/3);
-		getBar().setY(getStage().getCamera().position.y - getStage().getCamera().viewportHeight/2);
+		
+		getBar().setX((getStage().getCamera().position.x) - getStage().getCamera().viewportWidth/3);
+		getBar().setY((getStage().getCamera().position.y - getStage().getCamera().viewportHeight/2));
+
+		
 		getStage().act();
 		getStage().draw();
 	}
