@@ -15,7 +15,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mirre.ball.objects.Level;
 import com.mirre.ball.objects.blocks.Bounceable;
 import com.mirre.ball.objects.blocks.CollideableTile;
-import com.mirre.ball.objects.blocks.Gold;
 import com.mirre.ball.objects.blocks.Truck;
 import com.mirre.ball.objects.core.AdvancedMovingObject;
 import com.mirre.ball.objects.core.PixelObject;
@@ -38,6 +37,7 @@ public class LevelRenderer {
 	
 	
 	public LevelRenderer(Level level, Stage stage){
+		
 		setLevel(level);
 		setStage(stage);
 		stage.getCamera().position.set(level.getStartLocation().getBounds().getPosition(new Vector2()), 0);
@@ -108,11 +108,6 @@ public class LevelRenderer {
 
 		getFpsLogger().log();
 	}	
-
-	public void reset(){
-		Gold.clearAmountOfGold();
-		Gdx.app.log("Test", "" + Gold.getAmountOfGold());
-	}
 	
 	public void dispose() {
 		getCache().dispose();

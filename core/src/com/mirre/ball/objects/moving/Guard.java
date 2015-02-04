@@ -121,7 +121,7 @@ public class Guard extends AdvancedMovingObject {
 	@Override
 	public TextureRegion getTexture() {
 		if(texture == null){
-			texture = new TextureRegion(new Texture(Gdx.files.internal("data/lelRight.png")), 0, 0, 66, 78);
+			texture = new TextureRegion(new Texture(Gdx.files.internal("data/guard.png")), 0, 0, 66, 78);
 		}
 		return texture;
 	}

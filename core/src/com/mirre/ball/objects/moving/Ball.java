@@ -29,7 +29,7 @@ public class Ball extends BallController {
 			setEndDelay(getEndDelay() - 0.05F);
 			if(getEndDelay() <= 0){
 				CircleHeist game = ((CircleHeist) Level.getCurrentInstance().getGame());
-				if(getState() != BallState.SEEN)
+				if(getState() != BallState.SEEN && game.getCompletedLevels() < Level.getCurrentInstance().getLevelID() + 1)
 					game.setCompletedLevels(Level.getCurrentInstance().getLevelID() + 1);
 				game.setScreen(new LevelEndScreen(game, getState() == BallState.WON, Level.getCurrentInstance().getLevelID()));
 			}
@@ -49,7 +49,9 @@ public class Ball extends BallController {
 		if(getBounceDelay() != 0F){
 			setBounceDelay(getBounceDelay() <= 0 ? 0 : getBounceDelay()-0.04F);
 		}	
-	
+		
+		Gdx.app.log("Gold", "" + getGoldCollected() + " " + Gold.getAmountOfGold());
+		
 		if(getEscapeZone().getBounds().contains(getBounds()) && getGoldCollected() >= Gold.getAmountOfGold())
 			setState(BallState.WON);
 

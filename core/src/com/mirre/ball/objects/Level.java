@@ -8,6 +8,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.math.Rectangle;
+import com.mirre.ball.objects.blocks.Gold;
 import com.mirre.ball.objects.blocks.Truck;
 import com.mirre.ball.objects.core.PixelObject;
 import com.mirre.ball.objects.interfaces.Moveable;
@@ -28,6 +29,7 @@ public class Level {
 	private Game game;
 	
 	public Level(Game game, int i){
+		resetLevel();
 		setGame(game);
 		setLevelID(i);
 		Pixmap pixmap = new Pixmap(Gdx.files.internal("data/level" + i + ".png"));
@@ -148,5 +150,9 @@ public class Level {
 		Rectangle r = tile.getBounds();
 		collideTiles.put(new BiValue<Integer, Integer>((int)r.x, (int)r.y), tile);
 	}
-	
+
+	//Resets the static level variables.
+	public void resetLevel(){
+		Gold.clearAmountOfGold();
+	}
 }

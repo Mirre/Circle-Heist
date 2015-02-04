@@ -50,6 +50,7 @@ public class GameScreen extends AbstractScreen {
 		
 		setLevel(new Level(game, level));
 		setRenderer(new LevelRenderer(getLevel(), getStage()));
+		
 	}
 
 	@Override
@@ -79,6 +80,11 @@ public class GameScreen extends AbstractScreen {
 	@Override
 	public void resize(int width, int height) {
 		getStage().getViewport().update(width, height);
+	}
+	
+	@Override
+	public void dispose() {
+		getRenderer().dispose();
 	}
 
 	public Level getLevel() {
