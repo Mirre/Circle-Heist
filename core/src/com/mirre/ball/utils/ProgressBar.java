@@ -5,34 +5,35 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 
-public class ProgressBar {
+public class ProgressBar extends Actor {
 
+	private TextureRegion[] barTextures;
 	private Rectangle barBounds;
-	private Rectangle knobBounds;
-	private float progress = 10;
+	private float progress = 5;
 	
 	public ProgressBar(Rectangle r){
 		setBarBounds(r);
+		TextureRegion bar = new TextureRegion(new Texture(Gdx.files.internal("data/progressbar.png")), 100, 50);
+		addBarTextures(bar, bar, bar, bar, bar);
 	}
+	
 	
 	public void update(float x, float y){
 		getBarBounds().setX(x);
 		getBarBounds().setY(y);
-		getKnobBounds().setX(x - (int) progress);
 	}
 	
-	public void draw(Batch batch){
-		TextureRegion bar = new TextureRegion(new Texture(Gdx.files.internal("data/progressbar.png")), 100, 50);
-		TextureRegion knob = new TextureRegion(new Texture(Gdx.files.internal("data/knob.png")), 20, 20);
-		batch.begin();
-		batch.draw(bar.getTexture(), getBarBounds().x, getBarBounds().y, 10, 1);
-		batch.draw(knob.getTexture(), getKnobBounds().x, getKnobBounds().y, 1, 1);
-		batch.begin();
+	
+	@Override
+	public void draw(Batch batch, float parentAlpha){
+		batch.draw(getBarTexture(getProgress() - 1), getBarBounds().x, getBarBounds().y, 5, 1);
+		super.draw(batch, parentAlpha);
 	}
 
-	public float getProgress() {
-		return progress;
+	public int getProgress() {
+		return (int) progress;
 	}
 
 	public void setProgress(float progress) {
@@ -47,11 +48,12 @@ public class ProgressBar {
 		this.barBounds = barBounds;
 	}
 
-	public Rectangle getKnobBounds() {
-		return knobBounds;
+	public TextureRegion getBarTexture(int i) {
+		return barTextures[i];
 	}
 
-	public void setKnobBounds(Rectangle knobBounds) {
-		this.knobBounds = knobBounds;
+	public void addBarTextures(TextureRegion... barTextures) {
+		this.barTextures = barTextures;
 	}
+
 }

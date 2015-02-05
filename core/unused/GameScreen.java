@@ -1,4 +1,4 @@
-package com.mirre.ball.screens;
+package com.mirre.ball.utils;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -6,41 +6,55 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar.ProgressBarStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.mirre.ball.managers.LevelRenderer;
 import com.mirre.ball.objects.Level;
-import com.mirre.ball.utils.ProgressBar;
 
 public class GameScreen extends AbstractScreen {
 
 	private Stage stage = new Stage();
 	private Table table = new Table();
-	private ProgressBar progressBar;
+	private ProgressBar bar;
 	private Level level;
 	private LevelRenderer renderer;
 	private int levelID;
 	
 	public GameScreen(Game game, int level) {
 		super(game);
+		TextureRegionDrawable bar = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("data/progressbar.png")), 100, 50));
+		TextureRegionDrawable knob = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("data/knob.png")), 20, 20));
+		bar.setMinHeight(1);
+		bar.setMinWidth(1);
+		knob.setMinHeight(1);
+		knob.setMinWidth(1);
+		
+		ProgressBarStyle style = new ProgressBarStyle(bar, knob);
+		//style.knobBefore = knob;
+		//style.disabledBackground = bar;
+		//style.knobAfter = bar;
+		setBar(new ProgressBar(0, 10, 1F, false, style));
+
+		getBar().setBounds(0, 0, 1F, 1F);
+		getBar().setValue(10F);
+		getBar().setAnimateDuration(0);
 		
 		Gdx.input.setInputProcessor(getStage());
 		
 		getStage().setViewport(new ExtendViewport(24, 18, getStage().getCamera())); //24, 18
-		
-		
-		setProgressBar(new ProgressBar(new Rectangle(0,0,5,1)));
 		
 		TextureRegion region = new TextureRegion(new Texture(Gdx.files.internal("data/ui.png")));
 		TextureRegionDrawable drawable = new TextureRegionDrawable(region); 
 		getTable().setBackground(drawable);
 		getTable().setFillParent(true);
 		
+		
+		getTable().add(getBar()).maxWidth(10).padTop(10);
 		getStage().addActor(getTable());
-		getStage().addActor(getProgressBar());
 		
 		
 		setLevel(new Level(game, level));
@@ -62,9 +76,12 @@ public class GameScreen extends AbstractScreen {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		getRenderer().render(delta);
 		
+		Gdx.app.log("Bar", "X" + getBar().getX() + " Y" + getBar().getY());
+		Gdx.app.log("Ball", "X" + getLevel().getBall().getBounds().getX() + " Y" + getLevel().getBall().getBounds().getY()); 
+		Gdx.app.log("Camera", "X" + getStage().getCamera().position.x + " Y" + getStage().getCamera().position.y);
+
 		getTable().setBounds(getStage().getCamera().position.x - getStage().getCamera().viewportWidth/2, getStage().getCamera().position.y - getStage().getCamera().viewportHeight/2, getStage().getCamera().viewportWidth, getStage().getCamera().viewportHeight);
 		
-		getProgressBar().update(getStage().getCamera().position.x, getStage().getCamera().position.y);
 		//getBar().setX((getStage().getCamera().position.x));
 		//getBar().setY(getStage().getCamera().position.y);
 
@@ -124,12 +141,12 @@ public class GameScreen extends AbstractScreen {
 		this.table = table;
 	}
 
-	public ProgressBar getProgressBar() {
-		return progressBar;
+	public ProgressBar getBar() {
+		return bar;
 	}
 
-	public void setProgressBar(ProgressBar progressBar) {
-		this.progressBar = progressBar;
+	public void setBar(ProgressBar bar) {
+		this.bar = bar;
 	}
 
 }
