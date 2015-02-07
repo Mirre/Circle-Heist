@@ -64,9 +64,7 @@ public class GameScreen extends AbstractScreen {
 		
 		getTable().setBounds(getStage().getCamera().position.x - getStage().getCamera().viewportWidth/2, getStage().getCamera().position.y - getStage().getCamera().viewportHeight/2, getStage().getCamera().viewportWidth, getStage().getCamera().viewportHeight);
 		
-		getProgressBar().update(getStage().getCamera().position.x, getStage().getCamera().position.y);
-		//getBar().setX((getStage().getCamera().position.x));
-		//getBar().setY(getStage().getCamera().position.y);
+		getProgressBar().update(getStage().getCamera().position.x - getStage().getCamera().viewportWidth/8, getStage().getCamera().position.y - getStage().getCamera().viewportHeight/2);
 
 		
 		getStage().act();
@@ -82,6 +80,7 @@ public class GameScreen extends AbstractScreen {
 	@Override
 	public void dispose() {
 		getRenderer().dispose();
+		getProgressBar().dispose();
 	}
 
 	public Level getLevel() {

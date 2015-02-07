@@ -4,11 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.mirre.ball.CircleHeist;
 import com.mirre.ball.enums.BallState;
 import com.mirre.ball.enums.ObjectColor;
 import com.mirre.ball.objects.Level;
 import com.mirre.ball.objects.core.AdvancedMovingObject;
 import com.mirre.ball.objects.core.PixelObject;
+import com.mirre.ball.screens.GameScreen;
 
 public abstract class BallData extends AdvancedMovingObject {
 
@@ -134,9 +136,8 @@ public abstract class BallData extends AdvancedMovingObject {
 
 	public void setStealthMeter(float stealthMeter) {
 		this.stealthMeter = stealthMeter >= 10 ? 10 : stealthMeter;
-		//CircleHeist game = ((CircleHeist)Gdx.app.getApplicationListener());
-		//GameScreen screen = (GameScreen) game.getScreen();
-		//screen.getBar().setValue(stealthMeter);
-		//Gdx.app.log("Fire", "" + stealthMeter);
+		CircleHeist game = ((CircleHeist)Gdx.app.getApplicationListener());
+		GameScreen screen = (GameScreen) game.getScreen();
+		screen.getProgressBar().setProgress(stealthMeter);
 	}
 }
