@@ -13,8 +13,8 @@ public class Bounceable extends TextureObject implements Collideable {
 	
 	public static TextureRegion texture = null;
 	
-	public Bounceable(int x, int y) {
-		super(x, y, 1F, 1F, ObjectColor.BOUNCEABLE);
+	public Bounceable(int x, int y, ObjectColor color) {
+		super(x, y, 1F, 1F, color);
 	}
 
 	@Override

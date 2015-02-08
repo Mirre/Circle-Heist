@@ -3,16 +3,20 @@ package com.mirre.ball.screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.mirre.ball.managers.LevelRenderer;
 import com.mirre.ball.objects.Level;
+import com.mirre.ball.objects.blocks.Gold;
 import com.mirre.ball.utils.ProgressBar;
 
 public class GameScreen extends AbstractScreen {
@@ -20,6 +24,7 @@ public class GameScreen extends AbstractScreen {
 	private Stage stage = new Stage();
 	private Table table = new Table();
 	private ProgressBar progressBar;
+	private Label labelXYGold;
 	private Level level;
 	private LevelRenderer renderer;
 	private int levelID;
@@ -31,16 +36,30 @@ public class GameScreen extends AbstractScreen {
 		
 		getStage().setViewport(new ExtendViewport(24, 18, getStage().getCamera())); //24, 18
 		
+	
+		ProgressBar bar = new ProgressBar(5, 1).setProgress(10);
+		for(int i = 10 ; i != -1 ; i--){
+			TextureRegion region = new TextureRegion(new Texture(Gdx.files.internal("data/progressbar" + i + ".png")), 100, 50);
+			bar.addBarTextures(region);
+		}
+		setProgressBar(bar);
 		
-		setProgressBar(new ProgressBar(new Rectangle(0,0,5,1)));
+		BitmapFont font = new BitmapFont();
+		font.setUseIntegerPositions(false);
+		LabelStyle textStyle = new LabelStyle(font, Color.RED);
+		
+		setLabelXYGold(new Label("X / Y", textStyle));
+		getLabelXYGold().setFontScaleX(getLabelXYGold().getFontScaleX()/10);
+		getLabelXYGold().setFontScaleY(getLabelXYGold().getFontScaleY()/10);
 		
 		TextureRegion region = new TextureRegion(new Texture(Gdx.files.internal("data/ui.png")));
 		TextureRegionDrawable drawable = new TextureRegionDrawable(region); 
+		
 		getTable().setBackground(drawable);
 		getTable().setFillParent(true);
-		
 		getStage().addActor(getTable());
 		getStage().addActor(getProgressBar());
+		getStage().addActor(getLabelXYGold());
 		
 		
 		setLevel(new Level(game, level));
@@ -64,10 +83,14 @@ public class GameScreen extends AbstractScreen {
 		
 		getTable().setBounds(getStage().getCamera().position.x - getStage().getCamera().viewportWidth/2, getStage().getCamera().position.y - getStage().getCamera().viewportHeight/2, getStage().getCamera().viewportWidth, getStage().getCamera().viewportHeight);
 		
+		getLabelXYGold().setX(getStage().getCamera().position.x + getStage().getCamera().viewportWidth/3);
+		getLabelXYGold().setY(getStage().getCamera().position.y - 2.2F);
+		getLabelXYGold().setText(getLevel().getBall().getGoldCollected() + " / " + Gold.getAmountOfGold());
+				
 		getProgressBar().update(getStage().getCamera().position.x - getStage().getCamera().viewportWidth/8, getStage().getCamera().position.y - getStage().getCamera().viewportHeight/2);
 
 		
-		getStage().act();
+		getStage().act(delta / 10);
 		getStage().draw();
 	}
 
@@ -81,6 +104,7 @@ public class GameScreen extends AbstractScreen {
 	public void dispose() {
 		getRenderer().dispose();
 		getProgressBar().dispose();
+		getStage().dispose();
 	}
 
 	public Level getLevel() {
@@ -129,6 +153,14 @@ public class GameScreen extends AbstractScreen {
 
 	public void setProgressBar(ProgressBar progressBar) {
 		this.progressBar = progressBar;
+	}
+
+	public Label getLabelXYGold() {
+		return labelXYGold;
+	}
+
+	public void setLabelXYGold(Label labelXYGold) {
+		this.labelXYGold = labelXYGold;
 	}
 
 }

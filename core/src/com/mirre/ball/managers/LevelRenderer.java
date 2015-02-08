@@ -16,7 +16,7 @@ import com.mirre.ball.objects.Level;
 import com.mirre.ball.objects.blocks.Bounceable;
 import com.mirre.ball.objects.blocks.CollideableTile;
 import com.mirre.ball.objects.blocks.Truck;
-import com.mirre.ball.objects.core.AdvancedMovingObject;
+import com.mirre.ball.objects.core.SimpleMovingObject;
 import com.mirre.ball.objects.core.PixelObject;
 import com.mirre.ball.objects.core.TextureObject;
 import com.mirre.ball.objects.interfaces.Moveable;
@@ -94,13 +94,13 @@ public class LevelRenderer {
 		getStage().getBatch().setProjectionMatrix(getStage().getCamera().combined);
 		getStage().getBatch().begin();
 		for(TextureObject tile : getUncachedObjects()){
-			if(tile.hasTexture() && !(tile instanceof AdvancedMovingObject)){
+			if(tile.hasTexture() && !(tile instanceof SimpleMovingObject)){
 				tile.draw(getStage().getBatch());
 			}
 		}
 		for(Moveable m : getLevel().getMovingObjects()){
-			if(m instanceof AdvancedMovingObject){
-				AdvancedMovingObject amo = (AdvancedMovingObject) m;
+			if(m instanceof SimpleMovingObject){
+				SimpleMovingObject amo = (SimpleMovingObject) m;
 				amo.draw(getStage().getBatch());			
 			}
 		}

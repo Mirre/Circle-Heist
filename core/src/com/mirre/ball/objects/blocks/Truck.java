@@ -11,8 +11,8 @@ public class Truck extends TextureObject {
 
 	public static TextureRegion texture = null;
 	
-	public Truck(int x, int y) {
-		super(x, y, 5, 3, ObjectColor.TRUCK);
+	public Truck(int x, int y, ObjectColor color) {
+		super(x, y, 5, 3, color);
 	}
 
 	@Override

@@ -16,8 +16,8 @@ public class Gold extends TextureObject implements Collideable {
 	private static int amountOfGold = 0;
 	private int typeOfGold;
 	
-	public Gold(int x, int y) {
-		super(x, y, ObjectColor.GOLD);
+	public Gold(int x, int y, ObjectColor color) {
+		super(x, y, color);
 		addGold();
 		setTypeOfGold(new Random().nextInt(2) + 1);
 	}

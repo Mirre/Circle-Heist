@@ -4,11 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.mirre.ball.enums.BallState;
 import com.mirre.ball.enums.Direction;
+import com.mirre.ball.enums.ObjectColor;
 
 public abstract class BallController extends BallData {
 
-	public BallController(int x, int y, float width, float height) {
-		super(x, y, width, height);
+	public BallController(int x, int y, float width, float height, ObjectColor color) {
+		super(x, y, width, height, color);
 	}
 	
 	public void direction(Direction dir){

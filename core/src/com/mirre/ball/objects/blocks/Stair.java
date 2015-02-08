@@ -11,8 +11,8 @@ public class Stair extends TextureObject implements Collideable {
 
 	public static TextureRegion texture = null;
 	
-	public Stair(int x, int y) {
-		super(x, y, 1, 1, ObjectColor.STAIR);
+	public Stair(int x, int y, ObjectColor color) {
+		super(x, y, 1, 1, color);
 	}
 
 	@Override

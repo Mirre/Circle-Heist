@@ -3,6 +3,7 @@ package com.mirre.ball.objects.moving;
 import com.badlogic.gdx.Gdx;
 import com.mirre.ball.enums.BallState;
 import com.mirre.ball.enums.Direction;
+import com.mirre.ball.enums.ObjectColor;
 import com.mirre.ball.objects.Level;
 import com.mirre.ball.objects.blocks.Bounceable;
 import com.mirre.ball.objects.blocks.CollideableTile;
@@ -14,8 +15,8 @@ import com.mirre.ball.CircleHeist;
 
 public class Ball extends BallController {
 	
-	public Ball(int x, int y){
-		super(x, y, 1F, 1F);
+	public Ball(int x, int y, ObjectColor color){
+		super(x, y, 1F, 1F, color);
 		setStateTime(0);
 		setDirection(Direction.RIGHT);
 		setState(BallState.NOTHING);

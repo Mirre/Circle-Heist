@@ -1,126 +1,128 @@
 package com.mirre.ball.objects.core;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
-import com.mirre.ball.enums.Direction;
 import com.mirre.ball.enums.ObjectColor;
-import com.mirre.ball.objects.Level;
-import com.mirre.ball.objects.interfaces.Moveable;
-import com.mirre.ball.utils.BiValue;
+import com.mirre.ball.objects.interfaces.Collideable;
 
-public abstract class SimpleMovingObject extends TextureObject implements Moveable {
-	
-	
-	private Direction direction;
-	private List<PixelObject> boundaries = new ArrayList<PixelObject>();
-	private boolean onGround = true;
-	
-	public SimpleMovingObject(int x, int y, float width, float height, ObjectColor color) {
-		super(x, y, width, height, color);
-	}
+public abstract class SimpleMovingObject extends MovingObject {
 
+	private Vector2 position = new Vector2();
+	private Vector2 acceleration = new Vector2();
+	private Vector2 velocity = new Vector2();
+	
 	public SimpleMovingObject(int x, int y, ObjectColor color) {
 		super(x, y, color);
 	}
 
-	@Override
-	public void onObjectCreation(Level level) {
-		level.addMovingObject(this);
-		Gdx.app.log("Create", "Moving");
+	public SimpleMovingObject(int x, int y, float width, float height, ObjectColor color) {
+		super(x, y, width, height, color);
 	}
 	
-	public PixelObject getClosest(){
-		PixelObject closest = null;
-		for(PixelObject p : getBoundaries()){
-			if(p.getBounds().overlaps(getBounds())){
-				if(closest == null)
-					closest = p;
-				else{
-					float distance1 = Math.abs(getBounds().getCenter(new Vector2()).x - p.getBounds().getCenter(new Vector2()).x);
-					float distance2 = Math.abs(getBounds().getCenter(new Vector2()).x - closest.getBounds().getCenter(new Vector2()).x);
-					if(distance1 < distance2){ //Is less than distance2
-						closest = p;
-					}
-				}
-			}
-		}
-		
-		return closest;
-	}	
+	public abstract void changeDirection();
+	public abstract float getGravity();
+	public abstract float getStandardAcceleration();
+	public abstract float getMaxVelocity();
+	public abstract float getDampening();
+	public abstract void onCollideXY(PixelObject collideX, PixelObject collideY);
+	public abstract void onCollideX(PixelObject collideX, boolean yCollided);
+	public abstract void onCollideY(PixelObject collideY, boolean xCollided);
+	public abstract void onNoCollide();
 	
 	
-	public void fetchBoundaries() {
+	@Override
+	public void update(float deltaTime) {
+		move(deltaTime);
+		changeDirection();
+	}
+	
+	public void move(float deltaTime){
 		
-		int bottomLeftX = (int)getBounds().getX(); //Left side of Ball, Checks below Ball also
-		int bottomLeftY = (int)Math.floor(getBounds().getY()); //Left side of Ball, Checks below Ball also
-		int bottomRightX = (int)(getBounds().getX() + getBounds().getWidth()); //Right side of Ball, Checks below Ball also
-		int bottomRightY = (int)Math.floor(getBounds().getY()); //Right side of Ball Checks below Ball also
-		int topRightX = (int)(getBounds().getX() + getBounds().getWidth()); //Right side of Ball, Checks above Ball also
-		int topRightY = (int)(getBounds().getY() + getBounds().getHeight()); //Right side of Ball, Checks above Ball also
-		int topLeftX = (int)getBounds().getX(); //Left side of Ball, Checks above Ball also
-		int topLeftY = (int)(getBounds().getY() + getBounds().getHeight()); //Left side of Ball, Checks above Ball also
+		getAcceleration().y = !isOnGround() ? -getGravity() : 0;
+		getAcceleration().scl(deltaTime);
+		getVelocity().add(getAcceleration());
 		
-		HashMap<BiValue<Integer,Integer>,PixelObject> tiles = Level.getCurrentInstance().getPixelObjects();
+		if (getAcceleration().x == 0) 
+			getVelocity().x *= getDampening();
+		if (getVelocity().x > getMaxVelocity())
+			getVelocity().x = getMaxVelocity();
+		if (getVelocity().x < -getMaxVelocity()) 
+			getVelocity().x = -getMaxVelocity();
 		
-		PixelObject bottomLeft = tiles.get(new BiValue<Integer,Integer>(bottomLeftX, bottomLeftY));
-		PixelObject bottomRight = tiles.get(new BiValue<Integer,Integer>(bottomRightX, bottomRightY));
-		PixelObject topRight = tiles.get(new BiValue<Integer,Integer>(topRightX, topRightY));
-		PixelObject topLeft = tiles.get(new BiValue<Integer,Integer>(topLeftX, topLeftY));
+		getVelocity().scl(deltaTime);
+		attemptMove();
+		getVelocity().scl(1.0F / deltaTime);
+	}
+
+	public void attemptMove() {
+
+		getBounds().x += getVelocity().x;
 		
-		PixelObject[] tileArray = new PixelObject[]{ bottomRight, bottomLeft, topRight, topLeft };
 		
-		//On Collide Add
-		clearBoundaries();
-		for(PixelObject p : tileArray){
-			if(p != null){
-				if(p.isCollideable() && p.hasTexture()){
-					addBoundary(p);
-				}
+		fetchBoundaries();
+		PixelObject pixX = getClosest();
+		boolean x = pixX != null;
+		for(PixelObject pix : getBoundaries()){
+			if(pix.getBounds().overlaps(getBounds())){
+				Collideable coll = (Collideable) pix;
+				if(getVelocity().x < 0 && !coll.passThroughAble())
+					getBounds().x = pix.getBounds().x + pix.getBounds().width + 0.01f;
+				else if(!coll.passThroughAble())
+					getBounds().x = pix.getBounds().x - getBounds().width - 0.01f;
+				if(!coll.passThroughAble())
+					getVelocity().x = 0;
 			}
 		}
 			
-		//OnGround Listener.
-		if(bottomLeft != null && bottomRight != null)
-			setOnGround(bottomLeft.isCollideable() && bottomRight.isCollideable());
-		else
-			setOnGround(false);
-
-	}
-
-	public void clearBoundaries() {
-		boundaries.clear();
+		getBounds().y += getVelocity().y;
+		fetchBoundaries();
+		PixelObject pixY = getClosest();
+		boolean y = pixY != null;
+		if(y){
+			Collideable coll = (Collideable) pixY;
+			if(getVelocity().y < 0 && !coll.passThroughAble()) {
+				getBounds().setY(pixY.getBounds().y + pixY.getBounds().height + 0.01f);
+				setOnGround(true);
+			}else if(!coll.passThroughAble())
+				getBounds().setY(pixY.getBounds().y - getBounds().height - 0.01f);
+		}
+		
+		if(x && y){
+			onCollideXY(pixX, pixY);
+		}else if(!x && !y){
+			onNoCollide();
+		}
+		if(x){
+			onCollideX(pixX, y);
+		}if(y){
+			onCollideY(pixY, x);
+		}
+			
+			
+		getPosition().set(getBounds().getX(), getBounds().getY());
 	}	
 	
-	public List<PixelObject> getBoundaries() {
-		return boundaries;
+	public Vector2 getPosition() {
+		return position;
 	}
 
-	public void addBoundary(PixelObject pixel) {
-		boundaries.add(pixel);
+	public void setPosition(Vector2 position) {
+		this.position = position;
 	}
 
-	public Direction getDirection() {
-		return direction;
+	public Vector2 getAcceleration() {
+		return acceleration;
 	}
 
-	public void setDirection(Direction direction) {
-		this.direction = direction;
+	public void setAcceleration(Vector2 acceleration) {
+		this.acceleration = acceleration;
 	}
 
-	public boolean isOnGround() {
-		return onGround;
+	public Vector2 getVelocity() {
+		return velocity;
 	}
 
-	public void setOnGround(boolean onGround) {
-		this.onGround = onGround;
+	public void setVelocity(Vector2 velocity) {
+		this.velocity = velocity;
 	}
-	
-	@Override
-	public boolean canCache() {
-		return false;
-	}
+
 }

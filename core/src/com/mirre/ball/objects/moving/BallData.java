@@ -8,11 +8,11 @@ import com.mirre.ball.CircleHeist;
 import com.mirre.ball.enums.BallState;
 import com.mirre.ball.enums.ObjectColor;
 import com.mirre.ball.objects.Level;
-import com.mirre.ball.objects.core.AdvancedMovingObject;
+import com.mirre.ball.objects.core.SimpleMovingObject;
 import com.mirre.ball.objects.core.PixelObject;
 import com.mirre.ball.screens.GameScreen;
 
-public abstract class BallData extends AdvancedMovingObject {
+public abstract class BallData extends SimpleMovingObject {
 
 	private BallState state;
 	private float stateTime = 0;
@@ -28,8 +28,8 @@ public abstract class BallData extends AdvancedMovingObject {
 	public static TextureRegion textureRight = null;
 	public static TextureRegion textureStealth = null;
 	
-	public BallData(int x, int y, float width, float height) {
-		super(x, y, width, height, ObjectColor.BALL);
+	public BallData(int x, int y, float width, float height, ObjectColor color) {
+		super(x, y, width, height, color);
 	}
 
 	@Override
@@ -50,6 +50,8 @@ public abstract class BallData extends AdvancedMovingObject {
 
 	@Override
 	public float getDampening() {
+		if(isStealth())
+			return 0.8F;
 		return 0.95f;
 	}	
 	

@@ -20,43 +20,43 @@ public enum ObjectColor {
 	BOUNCEABLE(Color.YELLOW) {
 		@Override
 		public PixelObject getObject(int x, int y) {
-			return new Bounceable(x,y);
+			return new Bounceable(x,y, this);
 		}
 	},
 	COLLIDEABLE(Color.WHITE) {
 		@Override
 		public PixelObject getObject(int x, int y) {
-			return new CollideableTile(x,y);
+			return new CollideableTile(x,y, this);
 		}
 	},
 	GOLD(Color.BLUE) {
 		@Override
 		public PixelObject getObject(int x, int y) {
-			return new Gold(x,y);
+			return new Gold(x,y, this);
 		}
 	},
 	TRUCK(Color.GREEN) {
 		@Override
 		public PixelObject getObject(int x, int y) {
-			return new Truck(x,y);
+			return new Truck(x,y, this);
 		}
 	},
 	BALL(Color.RED) {
 		@Override
 		public PixelObject getObject(int x, int y) {
-			return new Ball(x,y);
+			return new Ball(x,y, this);
 		}
 	},
 	GUARD(Color.CYAN) {
 		@Override
 		public PixelObject getObject(int x, int y) {
-			return new Guard(x,y);
+			return new Guard(x,y, this);
 		}
 	},
 	STAIR(Color.MAGENTA) {
 		@Override
 		public PixelObject getObject(int x, int y) {
-			return new Stair(x,y);
+			return new Stair(x,y, this);
 		}
 	};
 	

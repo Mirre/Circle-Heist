@@ -13,8 +13,8 @@ public class CollideableTile extends TextureObject implements Collideable {
 	
 	public static TextureRegion texture = null;
 	
-	public CollideableTile(int x, int y) {
-		super(x, y, ObjectColor.COLLIDEABLE);
+	public CollideableTile(int x, int y, ObjectColor color) {
+		super(x, y, color);
 	}
 	
 	@Override
@@ -32,11 +32,6 @@ public class CollideableTile extends TextureObject implements Collideable {
 		if(texture == null)
 			texture = new TextureRegion(new Texture(Gdx.files.internal("data/tile.png")), 0, 0, 50, 50);
 		return texture;
-	}
-	
-	@Override
-	public boolean canCache(){
-		return true;
 	}
 
 	@Override

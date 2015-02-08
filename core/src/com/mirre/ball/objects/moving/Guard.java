@@ -9,19 +9,21 @@ import com.mirre.ball.enums.BallState;
 import com.mirre.ball.enums.Direction;
 import com.mirre.ball.enums.ObjectColor;
 import com.mirre.ball.objects.Level;
-import com.mirre.ball.objects.core.AdvancedMovingObject;
+import com.mirre.ball.objects.core.SimpleMovingObject;
 import com.mirre.ball.objects.core.PixelObject;
 import com.mirre.ball.objects.interfaces.Collideable;
 import com.mirre.ball.utils.BiValue;
 import com.mirre.ball.utils.Logger;
 
-public class Guard extends AdvancedMovingObject {
+public class Guard extends SimpleMovingObject {
 
-	public static TextureRegion texture = null;
+	public TextureRegion texture = null;
+	public static TextureRegion textureLeft = null;
+	public static TextureRegion textureRight = null;
 	private float directionDelay = 0;
 	
-	public Guard(int x, int y) {
-		super(x, y, 1, 1, ObjectColor.GUARD);
+	public Guard(int x, int y, ObjectColor color) {
+		super(x, y, 1, 1, color);
 		setDirection(Direction.LEFT);
 	}
 	
@@ -61,12 +63,11 @@ public class Guard extends AdvancedMovingObject {
 	@Override
 	public void update(float deltaTime) {
 		Ball b = Level.getCurrentInstance().getBall();
-		//Gdx.app.log("Guard Bounds", getBounds().toString());
-		//Gdx.app.log("Ball Bounds", b.getBounds().toString());
+		
 		
 		float xDistance = Math.abs(b.getBounds().getX() - getBounds().getX());
 		float yDistance = Math.abs(b.getBounds().getY() - getBounds().getY());
-		//Gdx.app.log("Distance", "" + distance);
+		
 		if(xDistance <= 5 && yDistance <= 3){
 			
 			Boolean seen = null;
@@ -121,8 +122,14 @@ public class Guard extends AdvancedMovingObject {
 	@Override
 	public TextureRegion getTexture() {
 		if(texture == null){
-			texture = new TextureRegion(new Texture(Gdx.files.internal("data/guard.png")), 0, 0, 66, 78);
+			textureRight = new TextureRegion(new Texture(Gdx.files.internal("data/guardRight.png")), 0, 0, 66, 78);
+			textureLeft = new TextureRegion(new Texture(Gdx.files.internal("data/guardLeft.png")), 0, 0, 66, 78);
+			//texture = textureRight;
 		}
+		if(getDirection() == Direction.RIGHT)
+			texture = textureRight;
+		else
+			texture = textureLeft;
 		return texture;
 	}
 
@@ -135,7 +142,7 @@ public class Guard extends AdvancedMovingObject {
 	}
 
 	@Override
-	public void changeDirection() {
+	public void changeDirection() { 
 		getAcceleration().x = (getStandardAcceleration() * getDirection().getDir());
 	}
 
