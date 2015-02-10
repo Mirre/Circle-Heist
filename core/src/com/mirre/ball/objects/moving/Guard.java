@@ -1,10 +1,10 @@
 package com.mirre.ball.objects.moving;
 
+import java.util.Random;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.mirre.ball.enums.BallState;
 import com.mirre.ball.enums.Direction;
 import com.mirre.ball.enums.ObjectColor;
@@ -13,7 +13,7 @@ import com.mirre.ball.objects.core.SimpleMovingObject;
 import com.mirre.ball.objects.core.PixelObject;
 import com.mirre.ball.objects.interfaces.Collideable;
 import com.mirre.ball.utils.BiValue;
-import com.mirre.ball.utils.Logger;
+import com.mirre.ball.utils.DistanceUtil;
 
 public class Guard extends SimpleMovingObject {
 
@@ -21,10 +21,13 @@ public class Guard extends SimpleMovingObject {
 	public static TextureRegion textureLeft = null;
 	public static TextureRegion textureRight = null;
 	private float directionDelay = 0;
+	private float maxVelocity;
 	
 	public Guard(int x, int y, ObjectColor color) {
 		super(x, y, 1, 1, color);
 		setDirection(Direction.LEFT);
+		int i = new Random().nextInt(2);
+		setMaxVelocity(4 +(2 * i));
 	}
 	
 	@Override
@@ -64,7 +67,11 @@ public class Guard extends SimpleMovingObject {
 	public void update(float deltaTime) {
 		Ball b = Level.getCurrentInstance().getBall();
 		
-		
+		if(!DistanceUtil.ballInSight(b, this, 5, 3) && !b.isStealth()){
+			b.setState(BallState.SEEN);
+		}
+		//FIX THIS
+		/*
 		float xDistance = Math.abs(b.getBounds().getX() - getBounds().getX());
 		float yDistance = Math.abs(b.getBounds().getY() - getBounds().getY());
 		
@@ -111,7 +118,7 @@ public class Guard extends SimpleMovingObject {
 			}else{
 				Logger.getInstance().logTag("TBall", "was not seen");
 			}
-		}
+		}*/
 		
 		if(getDirectionDelay() != 0F){
 			setDirectionDelay(getDirectionDelay() <= 0 ? 0 : getDirectionDelay()-0.05F);
@@ -158,12 +165,16 @@ public class Guard extends SimpleMovingObject {
 
 	@Override
 	public float getMaxVelocity() {
-		return 5f;
+		return maxVelocity;
 	}
 
 	@Override
 	public float getDampening() {
 		return 0.95f;
+	}
+
+	public void setMaxVelocity(float maxVelocity) {
+		this.maxVelocity = maxVelocity;
 	}
 
 
