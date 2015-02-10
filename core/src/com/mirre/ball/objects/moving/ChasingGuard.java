@@ -24,10 +24,10 @@ public class ChasingGuard extends SimpleMovingObject {
 	public void update(float deltaTime) {
 		
 		Ball b = Level.getCurrentInstance().getBall();
-		if(DistanceUtil.ballInSight(b, this, 10, 4) && !b.isStealth()){
+		if(DistanceUtil.inSight(b, this, 10, 4)){
 			setChasing(true);
-		}else{
-			setChasing(false);
+		//}else{
+		//	setChasing(false);
 		}
 		
 		super.update(deltaTime);
@@ -37,14 +37,20 @@ public class ChasingGuard extends SimpleMovingObject {
 	public void changeDirection() {
 		if(isChasing()){
 			Ball b = Level.getCurrentInstance().getBall();
-			getAcceleration().set(b.getAcceleration());
-			setDirection(b.getDirection());
+			if(DistanceUtil.isLeftOf(b, this)){
+				setDirection(Direction.LEFT);
+				getAcceleration().set(b.getAcceleration());
+			}
+			else if(DistanceUtil.isRightOf(b, this)){
+				setDirection(Direction.RIGHT);
+				getAcceleration().set(b.getAcceleration());
+			}
 		}
 	}
 
 	@Override
 	public float getGravity() {
-		return 20F;
+		return 0F;
 	}
 
 	@Override
@@ -54,7 +60,7 @@ public class ChasingGuard extends SimpleMovingObject {
 
 	@Override
 	public float getMaxVelocity() {
-		return 5F;
+		return 10F;
 	}
 
 	@Override

@@ -17,7 +17,6 @@ import com.mirre.ball.utils.DistanceUtil;
 
 public class Guard extends SimpleMovingObject {
 
-	public TextureRegion texture = null;
 	public static TextureRegion textureLeft = null;
 	public static TextureRegion textureRight = null;
 	private float directionDelay = 0;
@@ -67,58 +66,9 @@ public class Guard extends SimpleMovingObject {
 	public void update(float deltaTime) {
 		Ball b = Level.getCurrentInstance().getBall();
 		
-		if(!DistanceUtil.ballInSight(b, this, 5, 3) && !b.isStealth()){
+		if(DistanceUtil.inSight(b, this, 6, 3) && !b.isStealth()){
 			b.setState(BallState.SEEN);
 		}
-		//FIX THIS
-		/*
-		float xDistance = Math.abs(b.getBounds().getX() - getBounds().getX());
-		float yDistance = Math.abs(b.getBounds().getY() - getBounds().getY());
-		
-		if(xDistance <= 5 && yDistance <= 3){
-			
-			Boolean seen = null;
-			if(b.getBounds().getX() <= getBounds().getX() && getDirection() == Direction.LEFT){
-				seen = true;
-				Rectangle r = new Rectangle(getBounds());
-				Vector2 guard = r.getPosition(new Vector2());
-				Vector2 ball = b.getBounds().getPosition(new Vector2());
-				guard.add(ball);
-				guard.nor();
-				guard.x = -guard.x;
-				while(!r.overlaps(b.getBounds())){
-					Vector2 position = r.getPosition(new Vector2()).add(guard);
-					r.setPosition(position);
-					if(Level.getCurrentInstance().getCollideTile((int)r.getX(), (int) r.getY()) != null){
-						seen = false;
-						break;
-					}
-				}
-			}else if(b.getBounds().getX() > getBounds().getX() && getDirection() == Direction.RIGHT){
-				seen = true;
-				Rectangle r = new Rectangle(getBounds());
-				Vector2 guard = r.getPosition(new Vector2());
-				Vector2 ball = b.getBounds().getPosition(new Vector2());
-				guard.add(ball);
-				guard.nor();
-				while(!r.overlaps(b.getBounds())){
-					Vector2 position = r.getPosition(new Vector2()).add(guard);
-					r.setPosition(position);
-					if(Level.getCurrentInstance().getCollideTile((int)r.getX(), (int) r.getY()) != null){
-						seen = false;
-						break;
-					}
-				}
-			}
-			if(seen != null && seen){
-				if(!b.isStealth()){
-					Logger.getInstance().logTag("Ball", "is seen" + getDirection().toString());
-					b.setState(BallState.SEEN);
-				}
-			}else{
-				Logger.getInstance().logTag("TBall", "was not seen");
-			}
-		}*/
 		
 		if(getDirectionDelay() != 0F){
 			setDirectionDelay(getDirectionDelay() <= 0 ? 0 : getDirectionDelay()-0.05F);
@@ -128,16 +78,14 @@ public class Guard extends SimpleMovingObject {
 
 	@Override
 	public TextureRegion getTexture() {
-		if(texture == null){
+		if(textureRight == null || textureLeft == null){
 			textureRight = new TextureRegion(new Texture(Gdx.files.internal("data/guardRight.png")), 0, 0, 66, 78);
 			textureLeft = new TextureRegion(new Texture(Gdx.files.internal("data/guardLeft.png")), 0, 0, 66, 78);
-			//texture = textureRight;
 		}
 		if(getDirection() == Direction.RIGHT)
-			texture = textureRight;
+			return textureRight;
 		else
-			texture = textureLeft;
-		return texture;
+			return textureLeft;
 	}
 
 	public float getDirectionDelay() {

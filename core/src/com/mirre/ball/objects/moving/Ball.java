@@ -51,7 +51,6 @@ public class Ball extends BallController {
 			setBounceDelay(getBounceDelay() <= 0 ? 0 : getBounceDelay()-0.04F);
 		}	
 		
-		Gdx.app.log("Gold", "" + getGoldCollected() + " " + Gold.getAmountOfGold());
 		
 		if(getEscapeZone().getBounds().contains(getBounds()) && getGoldCollected() >= Gold.getAmountOfGold())
 			setState(BallState.WON);
