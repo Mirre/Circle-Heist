@@ -3,6 +3,8 @@ package com.mirre.ball.objects.moving;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.mirre.ball.enums.Direction;
 import com.mirre.ball.enums.ObjectColor;
 import com.mirre.ball.objects.Level;
@@ -24,11 +26,11 @@ public class ChasingGuard extends SimpleMovingObject {
 	public void update(float deltaTime) {
 		
 		Ball b = Level.getCurrentInstance().getBall();
-		if(DistanceUtil.inSight(b, this, 10, 4)){
+		if(DistanceUtil.inSight(b, this, 15, 5, false)){
 			setChasing(true);
-		} //else{
-			//setChasing(false);
-		//}
+		}else if(isChasing() && DistanceUtil.inSight(b, this, 15, 5, true)){ //Is chasing and is in sight with facing checks.
+			setChasing(false);
+		}
 		
 		super.update(deltaTime);
 	}
@@ -37,12 +39,19 @@ public class ChasingGuard extends SimpleMovingObject {
 	public void changeDirection() {
 		if(isChasing()){
 			Ball b = Level.getCurrentInstance().getBall();
-			if(DistanceUtil.isLeftOf(b, this)){
+			Rectangle r = new Rectangle(getBounds());
+			Vector2 guard = r.getPosition(new Vector2());
+			Vector2 ball = b.getBounds().getPosition(new Vector2());
+			guard.add(ball);
+			guard.nor();
+			guard.x = guard.x * getStandardAcceleration();
+			if(isLeftOf(b.getBounds())){
+				getAcceleration().sub(guard);
 				setDirection(Direction.LEFT);
-			}else if(DistanceUtil.isRightOf(b, this)){
+			}else if(isRightOf(b.getBounds())){
+				getAcceleration().add(guard);
 				setDirection(Direction.RIGHT);
 			}
-			getAcceleration().x = (getStandardAcceleration() * getDirection().getDir());
 		}
 	}
 
@@ -53,7 +62,7 @@ public class ChasingGuard extends SimpleMovingObject {
 
 	@Override
 	public float getStandardAcceleration() {
-		return 30F;
+		return 10F;
 	}
 
 	@Override

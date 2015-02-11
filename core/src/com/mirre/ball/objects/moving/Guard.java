@@ -66,7 +66,7 @@ public class Guard extends SimpleMovingObject {
 	public void update(float deltaTime) {
 		Ball b = Level.getCurrentInstance().getBall();
 		
-		if(DistanceUtil.inSight(b, this, 6, 3) && !b.isStealth()){
+		if(DistanceUtil.inSight(b, this, 6, 3, true) && !b.isStealth()){
 			b.setState(BallState.SEEN);
 		}
 		

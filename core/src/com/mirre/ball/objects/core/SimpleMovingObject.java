@@ -36,7 +36,6 @@ public abstract class SimpleMovingObject extends MovingObject {
 	}
 	
 	public void move(float deltaTime){
-		
 		getAcceleration().y = !isOnGround() ? -getGravity() : 0;
 		getAcceleration().scl(deltaTime);
 		getVelocity().add(getAcceleration());
@@ -54,10 +53,7 @@ public abstract class SimpleMovingObject extends MovingObject {
 	}
 
 	public void attemptMove() {
-
 		getBounds().x += getVelocity().x;
-		
-		
 		fetchBoundaries();
 		PixelObject pixX = getClosest();
 		boolean x = pixX != null;

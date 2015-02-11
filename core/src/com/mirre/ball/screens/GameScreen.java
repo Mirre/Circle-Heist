@@ -14,10 +14,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.mirre.ball.CircleHeist;
 import com.mirre.ball.managers.LevelRenderer;
 import com.mirre.ball.objects.Level;
 import com.mirre.ball.objects.blocks.Gold;
-import com.mirre.ball.utils.DistanceUtil;
 import com.mirre.ball.utils.ProgressBar;
 
 public class GameScreen extends AbstractScreen {
@@ -33,7 +33,7 @@ public class GameScreen extends AbstractScreen {
 	public GameScreen(Game game, int level) {
 		super(game);
 		
-		DistanceUtil.rgbaToRGB(Color.PINK);
+		CircleHeist.rgbaToRGB(Color.PINK);
 		Gdx.input.setInputProcessor(getStage());
 		
 		getStage().setViewport(new ExtendViewport(24, 18, getStage().getCamera())); //24, 18

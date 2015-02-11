@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.mirre.ball.enums.Direction;
 import com.mirre.ball.enums.ObjectColor;
@@ -122,5 +123,13 @@ public abstract class MovingObject extends TextureObject implements Moveable {
 	@Override
 	public boolean canCache() {
 		return false;
+	}
+	
+	public boolean isLeftOf(Rectangle target){
+		return (target.getX() <= getBounds().getX());
+	}
+	
+	public boolean isRightOf(Rectangle target){
+		return (target.getX() > getBounds().getX());
 	}
 }
