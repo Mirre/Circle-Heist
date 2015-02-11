@@ -26,9 +26,9 @@ public class ChasingGuard extends SimpleMovingObject {
 		Ball b = Level.getCurrentInstance().getBall();
 		if(DistanceUtil.inSight(b, this, 10, 4)){
 			setChasing(true);
-		//}else{
-		//	setChasing(false);
-		}
+		} //else{
+			//setChasing(false);
+		//}
 		
 		super.update(deltaTime);
 	}
@@ -39,12 +39,10 @@ public class ChasingGuard extends SimpleMovingObject {
 			Ball b = Level.getCurrentInstance().getBall();
 			if(DistanceUtil.isLeftOf(b, this)){
 				setDirection(Direction.LEFT);
-				getAcceleration().set(b.getAcceleration());
-			}
-			else if(DistanceUtil.isRightOf(b, this)){
+			}else if(DistanceUtil.isRightOf(b, this)){
 				setDirection(Direction.RIGHT);
-				getAcceleration().set(b.getAcceleration());
 			}
+			getAcceleration().x = (getStandardAcceleration() * getDirection().getDir());
 		}
 	}
 
