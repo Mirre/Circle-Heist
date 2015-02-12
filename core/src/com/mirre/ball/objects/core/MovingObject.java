@@ -126,7 +126,8 @@ public abstract class MovingObject extends TextureObject implements Moveable {
 	}
 	
 	public boolean isLeftOf(Rectangle target){
-		return (target.getX() <= getBounds().getX());
+		return (target.getX() < getBounds().getX());
+		//10 is bigger than 5 : target is right of targeter
 	}
 	
 	public boolean isRightOf(Rectangle target){

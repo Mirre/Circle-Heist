@@ -57,22 +57,22 @@ public class ChasingGuard extends SimpleMovingObject {
 
 	@Override
 	public float getGravity() {
-		return 0F;
+		return 20F;
 	}
 
 	@Override
 	public float getStandardAcceleration() {
-		return 10F;
+		return 30F;
 	}
 
 	@Override
 	public float getMaxVelocity() {
-		return 10F;
+		return 9F;
 	}
 
 	@Override
 	public float getDampening() {
-		return 0.95F;
+		return 0.90F;
 	}
 
 	@Override

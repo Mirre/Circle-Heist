@@ -40,7 +40,7 @@ public class Guard extends SimpleMovingObject {
 	public void onCollideY(PixelObject collideY, boolean xCollided) {
 		if(collideY.isCollideable()){
 			getVelocity().y = 0;
-			int x = (int) collideY.getBounds().x + getDirection().getDir();
+			int x = (int) (collideY.getBounds().x + (getDirection().getDir() * 1.2));
 			int y = (int) (collideY.getBounds().y);
 			if(!xCollided && !(Level.getCurrentInstance().getPixelObjects().get(new BiValue<Integer,Integer>(x,y)) instanceof Collideable)){
 				setDirection(getDirection().getReverse());
@@ -66,7 +66,7 @@ public class Guard extends SimpleMovingObject {
 	public void update(float deltaTime) {
 		Ball b = Level.getCurrentInstance().getBall();
 		
-		if(DistanceUtil.inSight(b, this, 6, 3, true) && !b.isStealth()){
+		if(DistanceUtil.inSight(b, this, 5, 3, true) && !b.isStealth()){
 			b.setState(BallState.SEEN);
 		}
 		
@@ -118,7 +118,7 @@ public class Guard extends SimpleMovingObject {
 
 	@Override
 	public float getDampening() {
-		return 0.95f;
+		return 0.90f;
 	}
 
 	public void setMaxVelocity(float maxVelocity) {

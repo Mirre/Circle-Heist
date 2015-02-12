@@ -40,11 +40,11 @@ public abstract class SimpleMovingObject extends MovingObject {
 		getAcceleration().scl(deltaTime);
 		getVelocity().add(getAcceleration());
 		
-		if (getAcceleration().x == 0) 
+		if(getAcceleration().x == 0) 
 			getVelocity().x *= getDampening();
-		if (getVelocity().x > getMaxVelocity())
+		if(getVelocity().x > getMaxVelocity())
 			getVelocity().x = getMaxVelocity();
-		if (getVelocity().x < -getMaxVelocity()) 
+		if(getVelocity().x < -getMaxVelocity()) 
 			getVelocity().x = -getMaxVelocity();
 		
 		getVelocity().scl(deltaTime);
