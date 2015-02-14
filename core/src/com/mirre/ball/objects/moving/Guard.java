@@ -5,6 +5,8 @@ import java.util.Random;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.mirre.ball.enums.BallState;
 import com.mirre.ball.enums.Direction;
 import com.mirre.ball.enums.ObjectColor;
@@ -13,7 +15,7 @@ import com.mirre.ball.objects.core.SimpleMovingObject;
 import com.mirre.ball.objects.core.PixelObject;
 import com.mirre.ball.objects.interfaces.Collideable;
 import com.mirre.ball.utils.BiValue;
-import com.mirre.ball.utils.DistanceUtil;
+import com.mirre.ball.utils.MovementUtils;
 
 public class Guard extends SimpleMovingObject {
 
@@ -66,8 +68,8 @@ public class Guard extends SimpleMovingObject {
 	public void update(float deltaTime) {
 		Ball b = Level.getCurrentInstance().getBall();
 		
-		if(DistanceUtil.inSight(b, this, 5, 3, true) && !b.isStealth()){
-			b.setState(BallState.SEEN);
+		if(isFacing(b) && MovementUtils.inSightV3(b, this, new Rectangle(0,0,7,3).setCenter(getBounds().getCenter(new Vector2())), false) && !b.isStealth()){
+			b.setState(BallState.LOSS);
 		}
 		
 		if(getDirectionDelay() != 0F){
@@ -97,7 +99,7 @@ public class Guard extends SimpleMovingObject {
 	}
 
 	@Override
-	public void changeDirection() { 
+	public void changeMovement() { 
 		getAcceleration().x = (getStandardAcceleration() * getDirection().getDir());
 	}
 

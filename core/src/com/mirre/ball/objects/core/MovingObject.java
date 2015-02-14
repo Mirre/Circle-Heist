@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.mirre.ball.enums.Direction;
 import com.mirre.ball.enums.ObjectColor;
 import com.mirre.ball.objects.Level;
+import com.mirre.ball.objects.interfaces.Collideable;
 import com.mirre.ball.objects.interfaces.Moveable;
 import com.mirre.ball.utils.BiValue;
 
@@ -86,7 +87,7 @@ public abstract class MovingObject extends TextureObject implements Moveable {
 			
 		//OnGround Listener.
 		if(bottomLeft != null && bottomRight != null)
-			setOnGround(bottomLeft.isCollideable() && bottomRight.isCollideable());
+			setOnGround(bottomLeft.isCollideable() && bottomRight.isCollideable() && !((Collideable)bottomLeft).passThroughAble() && !((Collideable)bottomRight).passThroughAble() );
 		else
 			setOnGround(false);
 
@@ -125,12 +126,27 @@ public abstract class MovingObject extends TextureObject implements Moveable {
 		return false;
 	}
 	
+	public boolean isAbove(Rectangle target){
+		return (target.getY() < getBounds().getY());
+	}
+	
+	public boolean isBelow(Rectangle target){
+		return (target.getY() > getBounds().getY());
+	}
+	
 	public boolean isLeftOf(Rectangle target){
 		return (target.getX() < getBounds().getX());
-		//10 is bigger than 5 : target is right of targeter
 	}
 	
 	public boolean isRightOf(Rectangle target){
 		return (target.getX() > getBounds().getX());
+	}
+	
+	public boolean isFacing(MovingObject moving){
+		if(isRightOf(moving.getBounds()) && getDirection() == Direction.RIGHT)
+			return true;
+		else if(isLeftOf(moving.getBounds()) && getDirection() == Direction.LEFT)
+			return true;
+		return false;
 	}
 }

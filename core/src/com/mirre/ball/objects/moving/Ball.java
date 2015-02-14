@@ -8,6 +8,7 @@ import com.mirre.ball.objects.Level;
 import com.mirre.ball.objects.blocks.Bounceable;
 import com.mirre.ball.objects.blocks.CollideableTile;
 import com.mirre.ball.objects.blocks.Gold;
+import com.mirre.ball.objects.blocks.Lava;
 import com.mirre.ball.objects.blocks.Stair;
 import com.mirre.ball.objects.core.PixelObject;
 import com.mirre.ball.screens.LevelEndScreen;
@@ -26,11 +27,11 @@ public class Ball extends BallController {
 	public void update(float deltaTime){
 		super.update(deltaTime);
 		
-		if(getState() == BallState.WON || getState() == BallState.SEEN){
+		if(getState() == BallState.WON || getState() == BallState.LOSS){
 			setEndDelay(getEndDelay() - 0.05F);
 			if(getEndDelay() <= 0){
 				CircleHeist game = ((CircleHeist) Level.getCurrentInstance().getGame());
-				if(getState() != BallState.SEEN && game.getCompletedLevels() < Level.getCurrentInstance().getLevelID() + 1)
+				if(getState() != BallState.LOSS && game.getCompletedLevels() < Level.getCurrentInstance().getLevelID() + 1)
 					game.setCompletedLevels(Level.getCurrentInstance().getLevelID() + 1);
 				game.setScreen(new LevelEndScreen(game, getState() == BallState.WON, Level.getCurrentInstance().getLevelID()));
 			}
@@ -38,7 +39,7 @@ public class Ball extends BallController {
 		}
 		
 		if(getStealthMeter() <= 0 && isStealth()){
-			texture = textureRight;
+			texture = getDirection() == Direction.LEFT ? textureLeft : textureRight;
 			setStealth(false);
 		}else if(getStealthMeter() < 10 && !isStealth()){
 			setStealthMeter(getStealthMeter() + 0.05F);
@@ -60,6 +61,11 @@ public class Ball extends BallController {
 	
 	@Override
 	public void onCollideX(PixelObject collideX, boolean yCollided) {
+		
+		//Lava
+		if(collideX instanceof Lava){
+			setState(BallState.LOSS);
+		}
 		
 		//Stairs
 		if(collideX instanceof Stair && !yCollided){
@@ -91,6 +97,13 @@ public class Ball extends BallController {
 	@Override
 	public void onCollideY(PixelObject collideY, boolean xCollided) {
 		
+		//Lava
+		if(collideY instanceof Lava){
+			setState(BallState.LOSS);
+			getAcceleration().x = 0;
+			getVelocity().y = -0.01F;
+			return;
+		}
 		//Stairs
 		if(collideY instanceof Stair && !xCollided){
 			setOnStairs(true);

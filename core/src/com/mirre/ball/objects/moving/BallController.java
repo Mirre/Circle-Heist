@@ -24,14 +24,14 @@ public abstract class BallController extends BallData {
 	}
 	
 	@Override
-	public void changeDirection() {
+	public void changeMovement() {
 		
-		if (getState() == BallState.WON || getState() == BallState.SEEN)
+		if (getState() == BallState.WON || getState() == BallState.LOSS)
 			return;
 
 		//Q-Press ; Stealth
 		if((Gdx.input.isKeyPressed(Keys.Q)) && isOnGround() && getState() == BallState.NOTHING && getStealthMeter() == 10){
-			texture = textureStealth; 
+			texture = getDirection() == Direction.LEFT ? textureStealthLeft : textureStealthRight; 
 			setStealth(true);
 		}else if(isStealth() && !(Gdx.input.isKeyPressed(Keys.Q))){
 			texture = textureRight;

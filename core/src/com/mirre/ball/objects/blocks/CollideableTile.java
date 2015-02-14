@@ -21,11 +21,6 @@ public class CollideableTile extends TextureObject implements Collideable {
 	public void onObjectCreation(Level level){
 		level.addCollideTile(this);
 	}
-	
-	@Override
-	public boolean isCollideable(){
-		return true;
-	}
 
 	@Override
 	public TextureRegion getTexture() {

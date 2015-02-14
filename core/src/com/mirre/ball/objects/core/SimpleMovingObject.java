@@ -18,7 +18,7 @@ public abstract class SimpleMovingObject extends MovingObject {
 		super(x, y, width, height, color);
 	}
 	
-	public abstract void changeDirection();
+	public abstract void changeMovement();
 	public abstract float getGravity();
 	public abstract float getStandardAcceleration();
 	public abstract float getMaxVelocity();
@@ -32,7 +32,7 @@ public abstract class SimpleMovingObject extends MovingObject {
 	@Override
 	public void update(float deltaTime) {
 		move(deltaTime);
-		changeDirection();
+		changeMovement();
 	}
 	
 	public void move(float deltaTime){

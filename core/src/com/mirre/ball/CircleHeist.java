@@ -52,5 +52,12 @@ public class CircleHeist extends Game {
 		int b = (int) (((((1 - color.a) * color.b) + (color.a * color.b)) * 255));
 		Gdx.app.log("Color", color.toString() + " is " + r + " " + g + " " + b);
 	}
+	
+	public static void rgbaToRGB(float r, float g, float b, float a){
+		int r1 = (int) (((((1 - a) * r) + (a * r)) * 255));
+		int g2 = (int) (((((1 - a) * g) + (a * g)) * 255));
+		int b3 = (int) (((((1 - a) * b) + (a * b)) * 255));
+		Gdx.app.log("Color", "Blabla" + " is " + r1 + " " + g2 + " " + b3);
+	}
 
 }

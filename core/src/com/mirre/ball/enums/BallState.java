@@ -4,6 +4,6 @@ public enum BallState {
 	NOTHING,
 	MOVING,
 	WON,
-	SEEN;
+	LOSS;
 	
 }

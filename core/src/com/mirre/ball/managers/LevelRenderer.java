@@ -60,7 +60,7 @@ public class LevelRenderer {
 				isCaching = true;
 			}
 			if(tile.canCache() && tile.hasTexture()){
-				getCache().add(((TextureObject)tile).getTexture(), x, y, tile.getBounds().getWidth(), tile.getBounds().getHeight());
+				getCache().add(((TextureObject)tile).getTexture(), x, y, (((TextureObject)tile).getTextureWidth()), (((TextureObject)tile).getTextureHeight()));
 				i++;
 			}else if(tile instanceof TextureObject){
 				addUncachedObject((TextureObject)tile);
@@ -116,7 +116,8 @@ public class LevelRenderer {
 			Bounceable.texture.getTexture().dispose();
 		Ball.textureLeft.getTexture().dispose();
 		Ball.textureRight.getTexture().dispose();
-		Ball.textureStealth.getTexture().dispose();
+		Ball.textureStealthLeft.getTexture().dispose();
+		Ball.textureStealthRight.getTexture().dispose();
 		Truck.texture.getTexture().dispose();
 	}
 	

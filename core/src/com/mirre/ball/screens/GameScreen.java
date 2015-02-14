@@ -33,7 +33,7 @@ public class GameScreen extends AbstractScreen {
 	public GameScreen(Game game, int level) {
 		super(game);
 		
-		CircleHeist.rgbaToRGB(Color.PINK);
+		CircleHeist.rgbaToRGB(0.1f, 0.1f, 0.1f, 1);
 		Gdx.input.setInputProcessor(getStage());
 		
 		getStage().setViewport(new ExtendViewport(24, 18, getStage().getCamera())); //24, 18

@@ -4,11 +4,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.mirre.ball.objects.blocks.Bounceable;
 import com.mirre.ball.objects.blocks.CollideableTile;
 import com.mirre.ball.objects.blocks.Gold;
+import com.mirre.ball.objects.blocks.Lava;
 import com.mirre.ball.objects.blocks.Stair;
 import com.mirre.ball.objects.blocks.Truck;
 import com.mirre.ball.objects.core.PixelObject;
 import com.mirre.ball.objects.moving.Ball;
-import com.mirre.ball.objects.moving.ChasingGuard;
+import com.mirre.ball.objects.moving.ChasingDrone;
 import com.mirre.ball.objects.moving.Guard;
 
 public enum ObjectColor {
@@ -60,10 +61,16 @@ public enum ObjectColor {
 			return new Stair(x,y, this);
 		}
 	},
-	CHASINGGUARD(Color.PINK) {
+	CHASINGDRONE(Color.PINK) {
 		@Override
 		public PixelObject getObject(int x, int y) {
-			return new ChasingGuard(x,y, this);
+			return new ChasingDrone(x,y, this);
+		}
+	},
+	LAVA(Color.PURPLE) {
+		@Override
+		public PixelObject getObject(int x, int y) {
+			return new Lava(x,y, this);
 		}
 	};
 	

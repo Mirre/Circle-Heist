@@ -26,7 +26,8 @@ public abstract class BallData extends SimpleMovingObject {
 	public TextureRegion texture = null;
 	public static TextureRegion textureLeft = null;
 	public static TextureRegion textureRight = null;
-	public static TextureRegion textureStealth = null;
+	public static TextureRegion textureStealthLeft = null;
+	public static TextureRegion textureStealthRight = null;
 	
 	public BallData(int x, int y, float width, float height, ObjectColor color) {
 		super(x, y, width, height, color);
@@ -115,9 +116,10 @@ public abstract class BallData extends SimpleMovingObject {
 	@Override
 	public TextureRegion getTexture() {
 		if(texture == null){
-			textureStealth = new TextureRegion(new Texture(Gdx.files.internal("data/lelStealth.png")), 0, 0, 66, 78);
-			textureLeft = new TextureRegion(new Texture(Gdx.files.internal("data/lelLeft.png")), 0, 0, 66, 78);
-			textureRight = new TextureRegion(new Texture(Gdx.files.internal("data/lelRight.png")), 0, 0, 66, 78);
+			textureStealthRight = new TextureRegion(new Texture(Gdx.files.internal("data/BallStealthRight.png")), 0, 0, 200, 200);
+			textureStealthLeft = new TextureRegion(new Texture(Gdx.files.internal("data/BallStealthLeft.png")), 0, 0, 200, 200);
+			textureLeft = new TextureRegion(new Texture(Gdx.files.internal("data/BallLeft.png")), 0, 0, 200, 200);
+			textureRight = new TextureRegion(new Texture(Gdx.files.internal("data/BallRight.png")), 0, 0, 200, 200);
 			texture = textureRight;
 		}
 		return texture;
