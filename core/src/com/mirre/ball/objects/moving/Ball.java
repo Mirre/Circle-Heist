@@ -55,7 +55,7 @@ public class Ball extends BallController {
 		
 		//Gold needed to Win = TotalGold - floored rot of TotalGold
 		// 2 = 3 - 1
-		if(getEscapeZone().getBounds().contains(getBounds()) && getGoldCollected() >= (int)(Gold.getAmountOfGold() - Math.floor(Math.sqrt(Gold.getAmountOfGold()))))
+		if(getEscapeZone().getBounds().contains(getBounds()) && getGoldCollected() >= Gold.getAmountOfGold())
 			setState(BallState.WON);
 
 		setStateTime(getStateTime() + deltaTime);

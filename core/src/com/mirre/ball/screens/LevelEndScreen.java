@@ -2,6 +2,7 @@ package com.mirre.ball.screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -24,6 +25,8 @@ public class LevelEndScreen extends  AbstractScreen {
 		
 		Gdx.input.setInputProcessor(getStage());
 		
+		boolean b = Gdx.app.getType() == ApplicationType.Android;
+		
 		getTable().setFillParent(true);
 		TextureRegion region = new TextureRegion(new Texture(Gdx.files.internal(won ? "data/winScreen.png" : "data/failScreen.png")));
 		TextureRegionDrawable drawable = new TextureRegionDrawable(region); 
@@ -31,23 +34,23 @@ public class LevelEndScreen extends  AbstractScreen {
 		getStage().addActor(getTable());
 		
 		TextButton nextLevel = new ChainedTextButton(won ? "Next Level" : "Retry")
-		.addFont(1.3F, 1.3F, Color.WHITE).styleUp(Color.DARK_GRAY)
-		.styleDown(Color.DARK_GRAY).styleChecked(Color.LIGHT_GRAY)
+		.addFont(b ? 4F : 1.3F, b ? 4F : 1.3F, Color.WHITE).styleUp(Color.DARK_GRAY)
+		.styleDown(Color.DARK_GRAY).styleChecked(Color.DARK_GRAY)
 		.styleOver(Color.RED).create();
 		nextLevel.addListener(new ClickListener(){
 			@Override
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button){
 				if(won){
 					if(Gdx.files.internal("data/level" + (levelID + 1) + ".png").exists())
-						getGame().setScreen(new GameScreen(getGame(), levelID + 1));
+						getGame().setScreen(new GameScreen(getGame(), "" + (levelID + 1)));
 				}else
-					getGame().setScreen(new GameScreen(getGame(), levelID));
+					getGame().setScreen(new GameScreen(getGame(), "" + levelID));
 			}
 		});
 		
 		TextButton mainMenu = new ChainedTextButton("Main Menu")
-		.addFont(1.3F, 1.3F, Color.WHITE).styleUp(Color.DARK_GRAY)
-		.styleDown(Color.DARK_GRAY).styleChecked(Color.LIGHT_GRAY)
+		.addFont(b ? 4F : 1.3F, b ? 4F : 1.3F, Color.WHITE).styleUp(Color.DARK_GRAY)
+		.styleDown(Color.DARK_GRAY).styleChecked(Color.DARK_GRAY)
 		.styleOver(Color.RED).create();
 		mainMenu.addListener(new ClickListener(){
 			@Override
@@ -57,9 +60,14 @@ public class LevelEndScreen extends  AbstractScreen {
 		});
 		
 		
+		if(b){
+			getTable().add(nextLevel).size(300, 150).padTop(150).row();
+			getTable().add(mainMenu).size(300, 150).space(30);
+		}else{
+			getTable().add(nextLevel).size(100, 50).row();
+			getTable().add(mainMenu).size(100, 50).space(10);
+		}
 		
-		getTable().add(nextLevel).size(100, 50).row();
-		getTable().add(mainMenu).size(100, 50).space(10);
 	}
 
 	@Override

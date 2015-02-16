@@ -1,10 +1,14 @@
 package com.mirre.ball.objects.moving;
 
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.mirre.ball.enums.BallState;
 import com.mirre.ball.enums.Direction;
 import com.mirre.ball.enums.ObjectColor;
+import com.mirre.ball.objects.Level;
+import com.mirre.ball.screens.GameScreen;
 
 public abstract class BallController extends BallData {
 
@@ -28,18 +32,46 @@ public abstract class BallController extends BallData {
 		
 		if (getState() == BallState.WON || getState() == BallState.LOSS)
 			return;
-
+		
+		boolean jump = false;
+		boolean climbDown = false;
+		boolean left = false;
+		boolean right = false;
+		boolean stealth = false;
+		
+		if(Gdx.app.getType() == ApplicationType.Android){
+			GameScreen screen = ((GameScreen)Level.getCurrentInstance().getGame().getScreen());
+			Button b = screen.getMoveButton();
+			Gdx.app.log("Test", "" + b.getClickListener().getTouchDownY());
+			if(b.isPressed()){
+				if(b.getClickListener().getTouchDownY() <= 1.5) //ClimbDown
+					climbDown = true;
+				if(b.getClickListener().getTouchDownX() >= 3.5) //Right
+					right = true;
+				else if(b.getClickListener().getTouchDownX() <= 1.5) //Left
+					left = true;
+			}
+			b = screen.getStealthButton();
+			if(b.isPressed()){
+				stealth = true;
+			}
+			b = screen.getJumpButton();
+			if(b.isPressed()){
+				jump = true;
+			}
+		}
+		
 		//Q-Press ; Stealth
-		if((Gdx.input.isKeyPressed(Keys.Q)) && isOnGround() && getState() == BallState.NOTHING && getStealthMeter() == 10){
+		if(((Gdx.input.isKeyPressed(Keys.Q))|| stealth) && isOnGround() && getState() == BallState.NOTHING && getStealthMeter() == 10){
 			texture = getDirection() == Direction.LEFT ? textureStealthLeft : textureStealthRight; 
 			setStealth(true);
-		}else if(isStealth() && !(Gdx.input.isKeyPressed(Keys.Q))){
+		}else if(isStealth() && (Gdx.app.getType() == ApplicationType.Android ? !stealth : !Gdx.input.isKeyPressed(Keys.Q))){
 			texture = textureRight;
 			setStealth(false);
 		}
 		
 		//W-Press ; Jump
-		if((Gdx.input.isKeyPressed(Keys.W))){
+		if((Gdx.input.isKeyPressed(Keys.W)) || jump){
 			texture = textureRight;
 			setStealth(false);
 			if(isOnStairs()){
@@ -50,12 +82,12 @@ public abstract class BallController extends BallData {
 			}
 		
 		//S-Press ; Climb down Stairs
-		}else if((Gdx.input.isKeyPressed(Keys.S)) && isOnStairs()){
+		}else if((Gdx.input.isKeyPressed(Keys.S) || climbDown) && isOnStairs()){
 			getVelocity().y = -5F;
 		}
 		
 		//A-Press ; Move Left
-		if(Gdx.input.isKeyPressed(Keys.A) ){
+		if(Gdx.input.isKeyPressed(Keys.A) || left){
 			texture = textureLeft; 
 			setStealth(false);
 			if(isOnGround()) 
@@ -64,7 +96,7 @@ public abstract class BallController extends BallData {
 		}
 		
 		//D-Press ; Move Right
-		else if(Gdx.input.isKeyPressed(Keys.D)){
+		else if(Gdx.input.isKeyPressed(Keys.D) || right){
 			texture = textureRight; 
 			setStealth(false);
 			if(isOnGround()) 
@@ -80,7 +112,5 @@ public abstract class BallController extends BallData {
 			}else 
 				getAcceleration().x = 0; //Activates dampening at Line 44 AdvancedMovingObject.java
 		}
-		
 	}
-	
 }

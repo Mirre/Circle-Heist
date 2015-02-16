@@ -15,12 +15,15 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mirre.ball.objects.Level;
 import com.mirre.ball.objects.blocks.Bounceable;
 import com.mirre.ball.objects.blocks.CollideableTile;
+import com.mirre.ball.objects.blocks.Lava;
+import com.mirre.ball.objects.blocks.Stair;
 import com.mirre.ball.objects.blocks.Truck;
 import com.mirre.ball.objects.core.SimpleMovingObject;
 import com.mirre.ball.objects.core.PixelObject;
 import com.mirre.ball.objects.core.TextureObject;
 import com.mirre.ball.objects.interfaces.Moveable;
 import com.mirre.ball.objects.moving.Ball;
+import com.mirre.ball.objects.moving.Guard;
 import com.mirre.ball.utils.BiValue;
 
 public class LevelRenderer {
@@ -111,14 +114,17 @@ public class LevelRenderer {
 	
 	public void dispose() {
 		getCache().dispose();
-		CollideableTile.texture.getTexture().dispose();
-		if(Bounceable.texture != null)
-			Bounceable.texture.getTexture().dispose();
-		Ball.textureLeft.getTexture().dispose();
-		Ball.textureRight.getTexture().dispose();
-		Ball.textureStealthLeft.getTexture().dispose();
-		Ball.textureStealthRight.getTexture().dispose();
-		Truck.texture.getTexture().dispose();
+		CollideableTile.texture = null;
+		Bounceable.texture = null;
+		Ball.textureLeft = null;
+		Ball.textureRight = null;
+		Ball.textureStealthLeft = null;
+		Ball.textureStealthRight = null;
+		Truck.texture = null;
+		Stair.texture = null;
+		Lava.texture = null;
+		Guard.textureLeft = null;
+		Guard.textureRight = null;
 	}
 	
 	public Level getLevel() {

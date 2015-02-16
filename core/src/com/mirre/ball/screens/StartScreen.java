@@ -1,5 +1,6 @@
 package com.mirre.ball.screens;
 
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -26,6 +27,8 @@ public class StartScreen extends AbstractScreen {
 		
 		Gdx.input.setInputProcessor(getStage());
 		
+		boolean b = Gdx.app.getType() == ApplicationType.Android;
+		
 		getTable().setFillParent(true);
 		TextureRegion region = new TextureRegion(new Texture(Gdx.files.internal("data/background.png")));
 		TextureRegionDrawable drawable = new TextureRegionDrawable(region); 
@@ -35,20 +38,21 @@ public class StartScreen extends AbstractScreen {
 		for(int i = 1 ; Gdx.files.internal("data/level" + i + ".png").exists() ; i++){
 			final int level = i;
 			TextButton textButton = new ChainedTextButton("" + i)
-			.addFont(1.3F, 1.3F, Color.WHITE).styleUp(Color.DARK_GRAY)
+			.addFont(b ? 4F : 1.3F, b ? 4F : 1.3F, Color.WHITE).styleUp(Color.DARK_GRAY)
 			.styleDown(Color.DARK_GRAY).styleChecked(Color.LIGHT_GRAY)
 			.styleOver(Color.RED).create();
-			getTable().add(textButton).size(100, 50).space(10);
+			if(b)
+				getTable().add(textButton).size(300, 150).space(30);
+			else
+				getTable().add(textButton).size(100, 50).space(10);
 			textButton.addListener(new ClickListener(){
 				@Override
 				public void touchUp(InputEvent event, float x, float y, int pointer, int button){
 					if(((CircleHeist) getGame()).getCompletedLevels() >= level)
-						getGame().setScreen(new GameScreen(getGame(), level));
+						getGame().setScreen(new GameScreen(getGame(), "" + level));
 				}
 			});
 		}
-		
-
 	}
 
 	@Override

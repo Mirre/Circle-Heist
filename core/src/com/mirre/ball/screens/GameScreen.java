@@ -2,6 +2,7 @@ package com.mirre.ball.screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -9,9 +10,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.mirre.ball.CircleHeist;
@@ -30,16 +33,21 @@ public class GameScreen extends AbstractScreen {
 	private LevelRenderer renderer;
 	private int levelID;
 	
-	public GameScreen(Game game, int level) {
+	private Button moveButton;
+	private Button stealthButton;
+	private Button jumpButton;
+	
+	public GameScreen(Game game, String level) {
 		super(game);
 		
+		boolean b = Gdx.app.getType() == ApplicationType.Android;
 		CircleHeist.rgbaToRGB(0.1f, 0.1f, 0.1f, 1);
 		Gdx.input.setInputProcessor(getStage());
 		
-		getStage().setViewport(new ExtendViewport(24, 18, getStage().getCamera())); //24, 18
+		getStage().setViewport(new ExtendViewport(b ? 16 : 24, b ? 12 : 18, getStage().getCamera())); //24, 18
 		
 	
-		ProgressBar bar = new ProgressBar(5, 1).setProgress(10);
+		ProgressBar bar = Gdx.app.getType() == ApplicationType.Android ? new ProgressBar(7, 1).setProgress(10) : new ProgressBar(5, 1).setProgress(10);
 		for(int i = 10 ; i != -1 ; i--){
 			TextureRegion region = new TextureRegion(new Texture(Gdx.files.internal("data/progressbar" + i + ".png")), 100, 50);
 			bar.addBarTextures(region);
@@ -51,11 +59,13 @@ public class GameScreen extends AbstractScreen {
 		LabelStyle textStyle = new LabelStyle(font, Color.RED);
 		
 		setLabelXYGold(new Label("X / Y", textStyle));
-		getLabelXYGold().setFontScaleX(getLabelXYGold().getFontScaleX()/10);
-		getLabelXYGold().setFontScaleY(getLabelXYGold().getFontScaleY()/10);
+		getLabelXYGold().setFontScaleX(getLabelXYGold().getFontScaleX()/(b ? 15 : 10));
+		getLabelXYGold().setFontScaleY(getLabelXYGold().getFontScaleY()/(b ? 15 : 10));
 		
 		TextureRegion region = new TextureRegion(new Texture(Gdx.files.internal("data/ui.png")));
 		TextureRegionDrawable drawable = new TextureRegionDrawable(region); 
+		
+	
 		
 		getTable().setBackground(drawable);
 		getTable().setFillParent(true);
@@ -63,10 +73,33 @@ public class GameScreen extends AbstractScreen {
 		getStage().addActor(getProgressBar());
 		getStage().addActor(getLabelXYGold());
 		
+		if(b){
+			TextureRegion asd = new TextureRegion(new Texture(Gdx.files.internal("data/ASD.png")));
+			TextureRegionDrawable asdDrawable = new TextureRegionDrawable(asd); 
+			setMoveButton(new Button(asdDrawable));
+			getMoveButton().addListener(new ClickListener());
+			
+			TextureRegion stealth = new TextureRegion(new Texture(Gdx.files.internal("data/StealthButton.png")));
+			TextureRegionDrawable stealthDrawable = new TextureRegionDrawable(stealth); 
+			setStealthButton(new Button(stealthDrawable));
+			getStealthButton().addListener(new ClickListener());
+			
+			TextureRegion jump = new TextureRegion(new Texture(Gdx.files.internal("data/JumpButton.png")));
+			TextureRegionDrawable jumpDrawable = new TextureRegionDrawable(jump); 
+			setJumpButton(new Button(jumpDrawable));
+			getJumpButton().addListener(new ClickListener());
+			
+			
+			getStage().addActor(getMoveButton());
+			getStage().addActor(getStealthButton());
+			getStage().addActor(getJumpButton());
+		}
 		
-		setLevel(new Level(game, level));
+		
+		setLevel(new Level(game, Integer.parseInt(level)));
 		setRenderer(new LevelRenderer(getLevel(), getStage()));
 		
+	
 	}
 
 	@Override
@@ -86,11 +119,22 @@ public class GameScreen extends AbstractScreen {
 		getTable().setBounds(getStage().getCamera().position.x - getStage().getCamera().viewportWidth/2, getStage().getCamera().position.y - getStage().getCamera().viewportHeight/2, getStage().getCamera().viewportWidth, getStage().getCamera().viewportHeight);
 		
 		getLabelXYGold().setX(getStage().getCamera().position.x + getStage().getCamera().viewportWidth/3);
-		getLabelXYGold().setY(getStage().getCamera().position.y - 2.2F);
-		getLabelXYGold().setText(getLevel().getBall().getGoldCollected() + " / " + (int)(Gold.getAmountOfGold() - Math.floor(Math.sqrt(Gold.getAmountOfGold()))));
+		getLabelXYGold().setY(getStage().getCamera().position.y - getStage().getCamera().viewportHeight/ 2.5F);
+		getLabelXYGold().setText(getLevel().getBall().getGoldCollected() + " / " + (Gold.getAmountOfGold()));
 				
-		getProgressBar().update(getStage().getCamera().position.x - getStage().getCamera().viewportWidth/8, getStage().getCamera().position.y - getStage().getCamera().viewportHeight/2);
+	
 
+		if(Gdx.app.getType() == ApplicationType.Android){
+			getLabelXYGold().setY(getStage().getCamera().position.y - getStage().getCamera().viewportHeight/ 2.5F);
+			getProgressBar().update(getStage().getCamera().position.x - getStage().getCamera().viewportWidth/4, getStage().getCamera().position.y - getStage().getCamera().viewportHeight/2);
+			getMoveButton().setBounds(getStage().getCamera().position.x - getStage().getCamera().viewportWidth/2, getStage().getCamera().position.y - getStage().getCamera().viewportHeight/2, 5, 5);
+			getStealthButton().setBounds(getStage().getCamera().position.x + getStage().getCamera().viewportWidth/3 - 0.5F, getStage().getCamera().position.y - getStage().getCamera().viewportHeight/2, 2, 2);
+			getJumpButton().setBounds(getStage().getCamera().position.x + getStage().getCamera().viewportWidth/6 - 0.5F, getStage().getCamera().position.y - getStage().getCamera().viewportHeight/2, 2, 2);
+		}else{
+			getLabelXYGold().setY(getStage().getCamera().position.y - getStage().getCamera().viewportHeight/8.18F);
+			getProgressBar().update(getStage().getCamera().position.x - getStage().getCamera().viewportWidth/8, getStage().getCamera().position.y - getStage().getCamera().viewportHeight/2);
+		}
+		
 		
 		getStage().act(delta / 10);
 		getStage().draw();
@@ -107,6 +151,7 @@ public class GameScreen extends AbstractScreen {
 		getRenderer().dispose();
 		getProgressBar().dispose();
 		getStage().dispose();
+		setLevel(null);
 	}
 
 	public Level getLevel() {
@@ -163,6 +208,30 @@ public class GameScreen extends AbstractScreen {
 
 	public void setLabelXYGold(Label labelXYGold) {
 		this.labelXYGold = labelXYGold;
+	}
+
+	public Button getMoveButton() {
+		return moveButton;
+	}
+
+	public void setMoveButton(Button moveButton) {
+		this.moveButton = moveButton;
+	}
+
+	public Button getStealthButton() {
+		return stealthButton;
+	}
+
+	public void setStealthButton(Button stealthButton) {
+		this.stealthButton = stealthButton;
+	}
+
+	public Button getJumpButton() {
+		return jumpButton;
+	}
+
+	public void setJumpButton(Button jumpButton) {
+		this.jumpButton = jumpButton;
 	}
 
 }
