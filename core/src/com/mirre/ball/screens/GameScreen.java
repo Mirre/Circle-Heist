@@ -87,7 +87,7 @@ public class GameScreen extends AbstractScreen {
 		
 		getLabelXYGold().setX(getStage().getCamera().position.x + getStage().getCamera().viewportWidth/3);
 		getLabelXYGold().setY(getStage().getCamera().position.y - 2.2F);
-		getLabelXYGold().setText(getLevel().getBall().getGoldCollected() + " / " + Gold.getAmountOfGold());
+		getLabelXYGold().setText(getLevel().getBall().getGoldCollected() + " / " + (int)(Gold.getAmountOfGold() - Math.floor(Math.sqrt(Gold.getAmountOfGold()))));
 				
 		getProgressBar().update(getStage().getCamera().position.x - getStage().getCamera().viewportWidth/8, getStage().getCamera().position.y - getStage().getCamera().viewportHeight/2);
 

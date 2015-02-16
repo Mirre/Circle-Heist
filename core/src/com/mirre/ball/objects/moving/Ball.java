@@ -31,6 +31,7 @@ public class Ball extends BallController {
 			setEndDelay(getEndDelay() - 0.05F);
 			if(getEndDelay() <= 0){
 				CircleHeist game = ((CircleHeist) Level.getCurrentInstance().getGame());
+				
 				if(getState() != BallState.LOSS && game.getCompletedLevels() < Level.getCurrentInstance().getLevelID() + 1)
 					game.setCompletedLevels(Level.getCurrentInstance().getLevelID() + 1);
 				game.setScreen(new LevelEndScreen(game, getState() == BallState.WON, Level.getCurrentInstance().getLevelID()));
@@ -52,8 +53,9 @@ public class Ball extends BallController {
 			setBounceDelay(getBounceDelay() <= 0 ? 0 : getBounceDelay()-0.04F);
 		}	
 		
-		
-		if(getEscapeZone().getBounds().contains(getBounds()) && getGoldCollected() >= Gold.getAmountOfGold())
+		//Gold needed to Win = TotalGold - floored rot of TotalGold
+		// 2 = 3 - 1
+		if(getEscapeZone().getBounds().contains(getBounds()) && getGoldCollected() >= (int)(Gold.getAmountOfGold() - Math.floor(Math.sqrt(Gold.getAmountOfGold()))))
 			setState(BallState.WON);
 
 		setStateTime(getStateTime() + deltaTime);
