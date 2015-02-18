@@ -12,13 +12,13 @@ import com.mirre.ball.objects.blocks.Gold;
 import com.mirre.ball.objects.blocks.Truck;
 import com.mirre.ball.objects.core.PixelObject;
 import com.mirre.ball.objects.interfaces.Moveable;
-import com.mirre.ball.objects.moving.Ball;
+import com.mirre.ball.objects.moving.Circle;
 import com.mirre.ball.utils.BiValue;
 
 public class Level {
 	
 	private static Level instance = null;
-	private Ball ball;
+	private Circle circle;
 	private Truck startLocation = null;
 	private int height;
 	private int width;
@@ -52,11 +52,11 @@ public class Level {
 	public void setStartLocation(Truck startLocation) {
 		this.startLocation = startLocation;
 	}
-	public Ball getBall() {
-		return ball;
+	public Circle getCircle() {
+		return circle;
 	}
-	public void setBall(Ball ball) {
-		this.ball = ball;
+	public void setCircle(Circle circle) {
+		this.circle = circle;
 	}
 	
 	public void update(float deltaTime) {

@@ -7,15 +7,14 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.mirre.ball.enums.BallState;
+import com.mirre.ball.enums.CircleState;
 import com.mirre.ball.enums.Direction;
 import com.mirre.ball.enums.ObjectColor;
 import com.mirre.ball.objects.Level;
-import com.mirre.ball.objects.core.SimpleMovingObject;
 import com.mirre.ball.objects.core.PixelObject;
+import com.mirre.ball.objects.core.SimpleMovingObject;
 import com.mirre.ball.objects.interfaces.Collideable;
 import com.mirre.ball.utils.BiValue;
-import com.mirre.ball.utils.MovementUtils;
 
 public class Guard extends SimpleMovingObject {
 
@@ -66,10 +65,10 @@ public class Guard extends SimpleMovingObject {
 	
 	@Override
 	public void update(float deltaTime) {
-		Ball b = Level.getCurrentInstance().getBall();
+		Circle b = Level.getCurrentInstance().getCircle();
 		
-		if(isFacing(b) && MovementUtils.inSightV3(b, this, new Rectangle(0,0,7,3).setCenter(getBounds().getCenter(new Vector2())), false) && !b.isStealth()){
-			b.setState(BallState.LOSS);
+		if(isFacing(b) && inSight(b, new Rectangle(0,0,7,3).setCenter(getBounds().getCenter(new Vector2())), false) && !b.isStealth()){
+			b.setState(CircleState.LOSS);
 		}
 		
 		if(getDirectionDelay() != 0F){

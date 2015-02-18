@@ -8,7 +8,7 @@ import com.mirre.ball.objects.blocks.Lava;
 import com.mirre.ball.objects.blocks.Stair;
 import com.mirre.ball.objects.blocks.Truck;
 import com.mirre.ball.objects.core.PixelObject;
-import com.mirre.ball.objects.moving.Ball;
+import com.mirre.ball.objects.moving.Circle;
 import com.mirre.ball.objects.moving.Drone;
 import com.mirre.ball.objects.moving.Guard;
 
@@ -43,10 +43,10 @@ public enum ObjectColor {
 			return new Truck(x,y, this);
 		}
 	},
-	BALL(Color.RED) {
+	CIRCLE(Color.RED) {
 		@Override
 		public PixelObject getObject(int x, int y) {
-			return new Ball(x,y, this);
+			return new Circle(x,y, this);
 		}
 	},
 	GUARD(Color.CYAN) {

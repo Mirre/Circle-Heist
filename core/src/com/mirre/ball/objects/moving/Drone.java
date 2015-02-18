@@ -10,13 +10,12 @@ import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.mirre.ball.enums.BallState;
+import com.mirre.ball.enums.CircleState;
 import com.mirre.ball.enums.Direction;
 import com.mirre.ball.enums.ObjectColor;
 import com.mirre.ball.objects.Level;
 import com.mirre.ball.objects.core.PixelObject;
 import com.mirre.ball.objects.core.SimpleMovingObject;
-import com.mirre.ball.utils.MovementUtils;
 
 public class Drone extends SimpleMovingObject {
 
@@ -37,16 +36,16 @@ public class Drone extends SimpleMovingObject {
 	@Override
 	public void update(float deltaTime) {
 		
-		Ball b = Level.getCurrentInstance().getBall();
+		Circle b = Level.getCurrentInstance().getCircle();
 		
 		Rectangle r = new Rectangle(getBounds()).setSize(0.2F, 0.2F);
 		if(b.getBounds().overlaps(r)){
-			b.setState(BallState.LOSS);
+			b.setState(CircleState.LOSS);
 			setCaught(true);
 			
 		}
 		
-		if(MovementUtils.inSightV3(b, this, new Rectangle(0,0,15,5).setCenter(getBounds().getCenter(new Vector2())), false) && !isChasing()){
+		if(inSight(b, new Rectangle(0,0,15,5).setCenter(getBounds().getCenter(new Vector2())), false) && !isChasing()){
 			setDirection(null);
 			setChasing(true);
 		}else if(isChasing() && getDirectionDelay() <= 0){ //Is chasing and Direction not changed within a short duration..
@@ -96,7 +95,7 @@ public class Drone extends SimpleMovingObject {
 	public void changeMovement() {
 			
 		if(isChasing() && !hasCaught()){
-			Ball b = Level.getCurrentInstance().getBall();
+			Circle b = Level.getCurrentInstance().getCircle();
 			Rectangle r = new Rectangle(getBounds());
 			Vector2 guard = r.getPosition(new Vector2());
 			Vector2 ball = b.getBounds().getPosition(new Vector2());
@@ -118,7 +117,7 @@ public class Drone extends SimpleMovingObject {
 			getAcceleration().sub(guard);
 		}
 		else if(hasCaught()){
-			Ball b = Level.getCurrentInstance().getBall();
+			Circle b = Level.getCurrentInstance().getCircle();
 			Rectangle r = new Rectangle(b.getBounds());
 			r.y = r.y + r.height;
 			setBounds(r);

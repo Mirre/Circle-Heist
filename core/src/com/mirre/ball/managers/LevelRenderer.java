@@ -18,11 +18,11 @@ import com.mirre.ball.objects.blocks.CollideableTile;
 import com.mirre.ball.objects.blocks.Lava;
 import com.mirre.ball.objects.blocks.Stair;
 import com.mirre.ball.objects.blocks.Truck;
-import com.mirre.ball.objects.core.SimpleMovingObject;
 import com.mirre.ball.objects.core.PixelObject;
+import com.mirre.ball.objects.core.SimpleMovingObject;
 import com.mirre.ball.objects.core.TextureObject;
 import com.mirre.ball.objects.interfaces.Moveable;
-import com.mirre.ball.objects.moving.Ball;
+import com.mirre.ball.objects.moving.Circle;
 import com.mirre.ball.objects.moving.Guard;
 import com.mirre.ball.utils.BiValue;
 
@@ -82,7 +82,7 @@ public class LevelRenderer {
 		
 		if(getCache() == null)
 			return;
-		getStage().getCamera().position.lerp(getLerpTarget().set(getLevel().getBall().getPosition().x, getLevel().getBall().getPosition().y, 0), 3F * deltaTime);
+		getStage().getCamera().position.lerp(getLerpTarget().set(getLevel().getCircle().getPosition().x, getLevel().getCircle().getPosition().y, 0), 3F * deltaTime);
 		getStage().getCamera().update();
 
 		
@@ -116,10 +116,10 @@ public class LevelRenderer {
 		getCache().dispose();
 		CollideableTile.texture.getTexture().dispose();
 		Bounceable.texture.getTexture().dispose();
-		Ball.textureLeft.getTexture().dispose();
-		Ball.textureRight.getTexture().dispose();
-		Ball.textureStealthLeft.getTexture().dispose();
-		Ball.textureStealthRight.getTexture().dispose();
+		Circle.textureLeft.getTexture().dispose();
+		Circle.textureRight.getTexture().dispose();
+		Circle.textureStealthLeft.getTexture().dispose();
+		Circle.textureStealthRight.getTexture().dispose();
 		Truck.texture.getTexture().dispose();
 		Stair.texture.getTexture().dispose();
 		Lava.texture.getTexture().dispose();

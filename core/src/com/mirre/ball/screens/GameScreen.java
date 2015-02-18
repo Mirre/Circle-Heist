@@ -1,14 +1,15 @@
 package com.mirre.ball.screens;
 
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -21,6 +22,7 @@ import com.mirre.ball.CircleHeist;
 import com.mirre.ball.managers.LevelRenderer;
 import com.mirre.ball.objects.Level;
 import com.mirre.ball.objects.blocks.Gold;
+import com.mirre.ball.objects.moving.CircleController;
 import com.mirre.ball.utils.ProgressBar;
 
 public class GameScreen extends AbstractScreen {
@@ -76,7 +78,14 @@ public class GameScreen extends AbstractScreen {
 			TextureRegion asd = new TextureRegion(new Texture(Gdx.files.internal("data/ASD.png")));
 			TextureRegionDrawable asdDrawable = new TextureRegionDrawable(asd); 
 			setMoveButton(new Button(asdDrawable));
-			getMoveButton().addListener(new ClickListener());
+			getMoveButton().addListener(new ClickListener(){
+				@Override
+				public void touchDragged(InputEvent event, float x, float y, int pointer){
+					super.touchDragged(event, x, y, pointer);
+					CircleController.movementButtonX = x;
+					CircleController.movementButtonY = y;
+				}
+			});
 			
 			TextureRegion stealth = new TextureRegion(new Texture(Gdx.files.internal("data/StealthButton.png")));
 			TextureRegionDrawable stealthDrawable = new TextureRegionDrawable(stealth); 
@@ -119,7 +128,7 @@ public class GameScreen extends AbstractScreen {
 		
 		getLabelXYGold().setX(getStage().getCamera().position.x + getStage().getCamera().viewportWidth/3);
 		getLabelXYGold().setY(getStage().getCamera().position.y - getStage().getCamera().viewportHeight/ 2.5F);
-		getLabelXYGold().setText(getLevel().getBall().getGoldCollected() + " / " + (Gold.getAmountOfGold()));
+		getLabelXYGold().setText(getLevel().getCircle().getGoldCollected() + " / " + (Gold.getAmountOfGold()));
 				
 	
 

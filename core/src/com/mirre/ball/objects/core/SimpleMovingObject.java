@@ -1,7 +1,10 @@
 package com.mirre.ball.objects.core;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.mirre.ball.enums.ObjectColor;
+import com.mirre.ball.objects.Level;
 import com.mirre.ball.objects.interfaces.Collideable;
 
 public abstract class SimpleMovingObject extends MovingObject {
@@ -121,4 +124,31 @@ public abstract class SimpleMovingObject extends MovingObject {
 		this.velocity = velocity;
 	}
 
+	public boolean inSight(SimpleMovingObject target, Rectangle sightBox, boolean facingCheck){
+		
+		if(sightBox.overlaps(target.getBounds())){
+			
+			Vector2 point1 = target.getBounds().getCenter(new Vector2());
+			Vector2 point2 = getBounds().getCenter(new Vector2());
+			
+			Vector2 vectorPointer = point2.cpy().sub(point1).nor().clamp(-0.4F, 0.4F);
+			Rectangle r = new Rectangle(getBounds());
+			
+			int i = 0;
+			while(r.overlaps(sightBox)){
+				r.setPosition(r.getPosition(new Vector2()).sub(vectorPointer));
+				Vector2 center = r.getCenter(new Vector2());
+				if(Level.getCurrentInstance().getCollideTile((int)center.x, (int)center.y) != null && ((target.isRightOf(r) && isLeftOf(target.getBounds())) || (target.isLeftOf(r) && isRightOf(target.getBounds())))){
+					Gdx.app.log("Null", "Set");
+					return false;
+				}if(i >= 100){
+					Gdx.app.log("Test", "Seen");
+					return true;
+				}
+				i++;
+			}
+			return true;
+		}
+		return false;
+	}
 }
