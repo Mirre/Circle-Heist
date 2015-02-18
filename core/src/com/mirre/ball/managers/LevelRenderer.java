@@ -114,17 +114,17 @@ public class LevelRenderer {
 	
 	public void dispose() {
 		getCache().dispose();
-		CollideableTile.texture = null;
-		Bounceable.texture = null;
-		Ball.textureLeft = null;
-		Ball.textureRight = null;
-		Ball.textureStealthLeft = null;
-		Ball.textureStealthRight = null;
-		Truck.texture = null;
-		Stair.texture = null;
-		Lava.texture = null;
-		Guard.textureLeft = null;
-		Guard.textureRight = null;
+		CollideableTile.texture.getTexture().dispose();
+		Bounceable.texture.getTexture().dispose();
+		Ball.textureLeft.getTexture().dispose();
+		Ball.textureRight.getTexture().dispose();
+		Ball.textureStealthLeft.getTexture().dispose();
+		Ball.textureStealthRight.getTexture().dispose();
+		Truck.texture.getTexture().dispose();
+		Stair.texture.getTexture().dispose();
+		Lava.texture.getTexture().dispose();
+		Guard.textureLeft.getTexture().dispose();
+		Guard.textureRight.getTexture().dispose();
 	}
 	
 	public Level getLevel() {

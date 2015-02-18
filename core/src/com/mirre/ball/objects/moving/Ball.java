@@ -27,6 +27,11 @@ public class Ball extends BallController {
 	public void update(float deltaTime){
 		super.update(deltaTime);
 		
+		//If you fall out of the map because of some bug or another reason the game will end and you lose.
+		if(getBounds().y < -Level.getCurrentInstance().getHeight()){
+			setState(BallState.LOSS);
+		}
+		
 		if(getState() == BallState.WON || getState() == BallState.LOSS){
 			setEndDelay(getEndDelay() - 0.05F);
 			if(getEndDelay() <= 0){

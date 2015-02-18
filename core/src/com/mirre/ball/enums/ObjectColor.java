@@ -9,7 +9,7 @@ import com.mirre.ball.objects.blocks.Stair;
 import com.mirre.ball.objects.blocks.Truck;
 import com.mirre.ball.objects.core.PixelObject;
 import com.mirre.ball.objects.moving.Ball;
-import com.mirre.ball.objects.moving.ChasingDrone;
+import com.mirre.ball.objects.moving.Drone;
 import com.mirre.ball.objects.moving.Guard;
 
 public enum ObjectColor {
@@ -61,10 +61,10 @@ public enum ObjectColor {
 			return new Stair(x,y, this);
 		}
 	},
-	CHASINGDRONE(Color.PINK) {
+	DRONE(Color.PINK) {
 		@Override
 		public PixelObject getObject(int x, int y) {
-			return new ChasingDrone(x,y, this);
+			return new Drone(x,y, this);
 		}
 	},
 	LAVA(Color.PURPLE) {

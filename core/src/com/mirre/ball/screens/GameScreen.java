@@ -45,7 +45,6 @@ public class GameScreen extends AbstractScreen {
 		Gdx.input.setInputProcessor(getStage());
 		
 		getStage().setViewport(new ExtendViewport(b ? 16 : 24, b ? 12 : 18, getStage().getCamera())); //24, 18
-		
 	
 		ProgressBar bar = Gdx.app.getType() == ApplicationType.Android ? new ProgressBar(7, 1).setProgress(10) : new ProgressBar(5, 1).setProgress(10);
 		for(int i = 10 ; i != -1 ; i--){
@@ -104,7 +103,7 @@ public class GameScreen extends AbstractScreen {
 
 	@Override
 	public void render(float delta) {
-		delta = Math.min(0.2F, delta); //Change the 0.2F if you feel lag.
+		delta = Math.min(0.1F, delta); //Change the 0.2F if you feel lag.
 		if(Gdx.input.isKeyJustPressed(Keys.ESCAPE)){
 			getGame().setScreen(new StartScreen(getGame()));
 			return;
