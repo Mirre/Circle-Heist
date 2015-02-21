@@ -11,6 +11,7 @@ import com.mirre.ball.objects.Level;
 import com.mirre.ball.objects.core.PixelObject;
 import com.mirre.ball.objects.core.SimpleMovingObject;
 import com.mirre.ball.screens.GameScreen;
+import com.mirre.ball.utils.Assets;
 
 public abstract class CircleData extends SimpleMovingObject {
 
@@ -24,10 +25,6 @@ public abstract class CircleData extends SimpleMovingObject {
 	private boolean onStairs = false;
 	
 	public TextureRegion texture = null;
-	public static TextureRegion textureLeft = null;
-	public static TextureRegion textureRight = null;
-	public static TextureRegion textureStealthLeft = null;
-	public static TextureRegion textureStealthRight = null;
 	
 	public CircleData(int x, int y, float width, float height, ObjectColor color) {
 		super(x, y, width, height, color);
@@ -116,10 +113,18 @@ public abstract class CircleData extends SimpleMovingObject {
 	@Override
 	public TextureRegion getTexture() {
 		if(texture == null){
-			textureStealthRight = new TextureRegion(new Texture(Gdx.files.internal("data/BallStealthRight.png")), 0, 0, 200, 200);
-			textureStealthLeft = new TextureRegion(new Texture(Gdx.files.internal("data/BallStealthLeft.png")), 0, 0, 200, 200);
-			textureLeft = new TextureRegion(new Texture(Gdx.files.internal("data/BallLeft.png")), 0, 0, 200, 200);
-			textureRight = new TextureRegion(new Texture(Gdx.files.internal("data/BallRight.png")), 0, 0, 200, 200);
+			Assets assets = Assets.getInstance();
+			
+			TextureRegion textureStealthRight = new TextureRegion(assets.getAssetManager().get("data/BallStealthRight.png", Texture.class), 0, 0, 200, 200);
+			TextureRegion textureStealthLeft = new TextureRegion(assets.getAssetManager().get("data/BallStealthLeft.png", Texture.class), 0, 0, 200, 200);
+			TextureRegion textureLeft = new TextureRegion(assets.getAssetManager().get("data/BallLeft.png", Texture.class), 0, 0, 200, 200);
+			TextureRegion textureRight = new TextureRegion(assets.getAssetManager().get("data/BallRight.png", Texture.class), 0, 0, 200, 200);
+
+			assets.addSavedRegion("data/BallStealthRight.png", textureStealthRight);
+			assets.addSavedRegion("data/BallStealthLeft.png", textureStealthLeft);
+			assets.addSavedRegion("data/BallLeft.png", textureLeft);
+			assets.addSavedRegion("data/BallRight.png", textureRight);
+			
 			texture = textureRight;
 		}
 		return texture;

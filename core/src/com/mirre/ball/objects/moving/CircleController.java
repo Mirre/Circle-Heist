@@ -9,6 +9,7 @@ import com.mirre.ball.enums.Direction;
 import com.mirre.ball.enums.ObjectColor;
 import com.mirre.ball.objects.Level;
 import com.mirre.ball.screens.GameScreen;
+import com.mirre.ball.utils.Assets;
 
 public abstract class CircleController extends CircleData {
 
@@ -64,16 +65,16 @@ public abstract class CircleController extends CircleData {
 		
 		//Q-Press ; Stealth
 		if(((Gdx.input.isKeyPressed(Keys.Q))|| stealth) && isOnGround() && getState() == CircleState.NOTHING && getStealthMeter() == 10){
-			texture = getDirection() == Direction.LEFT ? textureStealthLeft : textureStealthRight; 
+			texture = getDirection() == Direction.LEFT ? Assets.getInstance().getRegion("data/BallStealthLeft.png") : Assets.getInstance().getRegion("data/BallStealthRight.png"); 
 			setStealth(true);
 		}else if(isStealth() && (Gdx.app.getType() == ApplicationType.Android ? !stealth : !Gdx.input.isKeyPressed(Keys.Q))){
-			texture = textureRight;
+			texture = getDirection() == Direction.LEFT ? Assets.getInstance().getRegion("data/BallLeft.png") : Assets.getInstance().getRegion("data/BallRight.png");
 			setStealth(false);
 		}
 		
 		//W-Press ; Jump
 		if((Gdx.input.isKeyPressed(Keys.W)) || jump){
-			texture = textureRight;
+			texture = Assets.getInstance().getRegion("data/BallRight.png");
 			setStealth(false);
 			if(isOnStairs()){
 				getVelocity().y = 5F;
@@ -89,7 +90,7 @@ public abstract class CircleController extends CircleData {
 		
 		//A-Press ; Move Left
 		if(Gdx.input.isKeyPressed(Keys.A) || left){
-			texture = textureLeft; 
+			texture = Assets.getInstance().getRegion("data/BallLeft.png"); 
 			setStealth(false);
 			if(isOnGround()) 
 				setState(CircleState.MOVING);
@@ -98,7 +99,7 @@ public abstract class CircleController extends CircleData {
 		
 		//D-Press ; Move Right
 		else if(Gdx.input.isKeyPressed(Keys.D) || right){
-			texture = textureRight; 
+			texture = Assets.getInstance().getRegion("data/BallRight.png"); 
 			setStealth(false);
 			if(isOnGround()) 
 				setState(CircleState.MOVING);

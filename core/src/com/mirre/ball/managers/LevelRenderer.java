@@ -13,17 +13,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mirre.ball.objects.Level;
-import com.mirre.ball.objects.blocks.Bounceable;
-import com.mirre.ball.objects.blocks.CollideableTile;
-import com.mirre.ball.objects.blocks.Lava;
-import com.mirre.ball.objects.blocks.Stair;
-import com.mirre.ball.objects.blocks.Truck;
 import com.mirre.ball.objects.core.PixelObject;
 import com.mirre.ball.objects.core.SimpleMovingObject;
 import com.mirre.ball.objects.core.TextureObject;
 import com.mirre.ball.objects.interfaces.Moveable;
-import com.mirre.ball.objects.moving.Circle;
-import com.mirre.ball.objects.moving.Guard;
 import com.mirre.ball.utils.BiValue;
 
 public class LevelRenderer {
@@ -114,17 +107,6 @@ public class LevelRenderer {
 	
 	public void dispose() {
 		getCache().dispose();
-		CollideableTile.texture.getTexture().dispose();
-		Bounceable.texture.getTexture().dispose();
-		Circle.textureLeft.getTexture().dispose();
-		Circle.textureRight.getTexture().dispose();
-		Circle.textureStealthLeft.getTexture().dispose();
-		Circle.textureStealthRight.getTexture().dispose();
-		Truck.texture.getTexture().dispose();
-		Stair.texture.getTexture().dispose();
-		Lava.texture.getTexture().dispose();
-		Guard.textureLeft.getTexture().dispose();
-		Guard.textureRight.getTexture().dispose();
 	}
 	
 	public Level getLevel() {

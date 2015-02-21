@@ -2,7 +2,6 @@ package com.mirre.ball.objects.moving;
 
 import java.util.Random;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
@@ -14,12 +13,11 @@ import com.mirre.ball.objects.Level;
 import com.mirre.ball.objects.core.PixelObject;
 import com.mirre.ball.objects.core.SimpleMovingObject;
 import com.mirre.ball.objects.interfaces.Collideable;
+import com.mirre.ball.utils.Assets;
 import com.mirre.ball.utils.BiValue;
 
 public class Guard extends SimpleMovingObject {
 
-	public static TextureRegion textureLeft = null;
-	public static TextureRegion textureRight = null;
 	private float directionDelay = 0;
 	private float maxVelocity;
 	
@@ -79,14 +77,16 @@ public class Guard extends SimpleMovingObject {
 
 	@Override
 	public TextureRegion getTexture() {
-		if(textureRight == null || textureLeft == null){
-			textureRight = new TextureRegion(new Texture(Gdx.files.internal("data/guardRight.png")), 0, 0, 66, 78);
-			textureLeft = new TextureRegion(new Texture(Gdx.files.internal("data/guardLeft.png")), 0, 0, 66, 78);
+		Assets assets = Assets.getInstance();
+		if(!assets.containsKey("data/guardRight.png")){
+			assets.addSavedRegion("data/guardRight.png", new TextureRegion(assets.getAssetManager().get("data/guardRight.png", Texture.class), 0, 0, 66, 78));
+			assets.addSavedRegion("data/guardLeft.png", new TextureRegion(assets.getAssetManager().get("data/guardLeft.png", Texture.class), 0, 0, 66, 78));
 		}
+		
 		if(getDirection() == Direction.RIGHT)
-			return textureRight;
+			return assets.getRegion("data/guardRight.png");
 		else
-			return textureLeft;
+			return assets.getRegion("data/guardLeft.png");
 	}
 
 	public float getDirectionDelay() {

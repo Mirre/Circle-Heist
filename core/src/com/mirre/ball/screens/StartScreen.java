@@ -49,7 +49,7 @@ public class StartScreen extends AbstractScreen {
 				@Override
 				public void touchUp(InputEvent event, float x, float y, int pointer, int button){
 					if(((CircleHeist) getGame()).getCompletedLevels() >= level)
-						getGame().setScreen(new GameScreen(getGame(), "" + level));
+						getGame().setScreen(new GameScreen(getGame(), level));
 				}
 			});
 		}
@@ -85,6 +85,10 @@ public class StartScreen extends AbstractScreen {
 		this.table = table;
 	}
 	
+	@Override
+	public void dispose() {
+		getStage().clear();
+	}
 }
 
 

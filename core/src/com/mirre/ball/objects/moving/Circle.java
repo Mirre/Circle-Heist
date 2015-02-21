@@ -13,6 +13,7 @@ import com.mirre.ball.objects.blocks.Lava;
 import com.mirre.ball.objects.blocks.Stair;
 import com.mirre.ball.objects.core.PixelObject;
 import com.mirre.ball.screens.LevelEndScreen;
+import com.mirre.ball.utils.Assets;
 
 public class Circle extends CircleController {
 	
@@ -22,6 +23,8 @@ public class Circle extends CircleController {
 		setDirection(Direction.RIGHT);
 		setState(CircleState.NOTHING);
 	}
+	
+	
 	
 	@Override
 	public void update(float deltaTime){
@@ -45,7 +48,7 @@ public class Circle extends CircleController {
 		}
 		
 		if(getStealthMeter() <= 0 && isStealth()){
-			texture = getDirection() == Direction.LEFT ? textureLeft : textureRight;
+			texture = getDirection() == Direction.LEFT ? Assets.getInstance().getRegion("data/BallLeft.png") : Assets.getInstance().getRegion("data/BallRight.png");
 			setStealth(false);
 		}else if(getStealthMeter() < 10 && !isStealth()){
 			setStealthMeter(getStealthMeter() + 0.05F);

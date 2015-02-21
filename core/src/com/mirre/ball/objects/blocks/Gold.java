@@ -2,16 +2,15 @@ package com.mirre.ball.objects.blocks;
 
 import java.util.Random;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mirre.ball.enums.ObjectColor;
 import com.mirre.ball.objects.core.TextureObject;
 import com.mirre.ball.objects.interfaces.Collideable;
+import com.mirre.ball.utils.Assets;
 
 public class Gold extends TextureObject implements Collideable {
 
-	public TextureRegion texture = null;
 	private boolean collected = false;
 	private static int amountOfGold = 0;
 	private int typeOfGold;
@@ -21,13 +20,14 @@ public class Gold extends TextureObject implements Collideable {
 		addGold();
 		setTypeOfGold(new Random().nextInt(2) + 1);
 	}
-
+	
 	@Override
 	public TextureRegion getTexture() {
-		if(texture == null){
-			texture = new TextureRegion(new Texture(Gdx.files.internal("data/gold" + typeOfGold + ".png")), 0, 0, 250, 250);
+		Assets assets = Assets.getInstance();
+		if(!assets.containsKey("data/gold" + getTypeOfGold() + ".png")){
+			assets.addSavedRegion("data/gold" + getTypeOfGold() + ".png", new TextureRegion(assets.getAssetManager().get("data/gold" + getTypeOfGold() + ".png", Texture.class), 0, 0, 250, 250));
 		}
-		return texture;
+		return assets.getRegion("data/gold" + getTypeOfGold() + ".png");
 	}
 
 	@Override

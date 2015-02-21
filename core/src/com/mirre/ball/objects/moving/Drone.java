@@ -16,6 +16,7 @@ import com.mirre.ball.enums.ObjectColor;
 import com.mirre.ball.objects.Level;
 import com.mirre.ball.objects.core.PixelObject;
 import com.mirre.ball.objects.core.SimpleMovingObject;
+import com.mirre.ball.utils.Assets;
 
 public class Drone extends SimpleMovingObject {
 
@@ -174,9 +175,11 @@ public class Drone extends SimpleMovingObject {
 
 		if(animation == null){
 			List<TextureRegion> animationFrames = new ArrayList<TextureRegion>();
-			animationFrames.add(new TextureRegion(new Texture(Gdx.files.internal("data/helicopterDrone0.png")), 0, 0, 300, 200));
-			animationFrames.add(new TextureRegion(new Texture(Gdx.files.internal("data/helicopterDrone1.png")), 0, 0, 300, 200));
-			animationFrames.add(new TextureRegion(new Texture(Gdx.files.internal("data/helicopterDrone2.png")), 0, 0, 300, 200));
+			
+			Assets assets = Assets.getInstance();
+			animationFrames.add(new TextureRegion(assets.getAssetManager().get("data/helicopterDrone0.png", Texture.class), 0, 0, 300, 200));
+			animationFrames.add(new TextureRegion(assets.getAssetManager().get("data/helicopterDrone1.png", Texture.class), 0, 0, 300, 200));
+			animationFrames.add(new TextureRegion(assets.getAssetManager().get("data/helicopterDrone2.png", Texture.class), 0, 0, 300, 200));
 			animation = new Animation(0.05F, animationFrames.toArray(new TextureRegion[animationFrames.size()])); 
 			animation.setPlayMode(PlayMode.LOOP);
 		}

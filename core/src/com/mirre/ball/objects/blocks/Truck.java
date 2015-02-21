@@ -6,10 +6,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mirre.ball.enums.ObjectColor;
 import com.mirre.ball.objects.Level;
 import com.mirre.ball.objects.core.TextureObject;
+import com.mirre.ball.utils.Assets;
 
 public class Truck extends TextureObject {
 
-	public static TextureRegion texture = null;
 	
 	public Truck(int x, int y, ObjectColor color) {
 		super(x, y, 5, 3, color);
@@ -17,9 +17,11 @@ public class Truck extends TextureObject {
 
 	@Override
 	public TextureRegion getTexture() {
-		if(texture == null)
-			texture = new TextureRegion(new Texture(Gdx.files.internal("data/truck.png")), 0, 0, 652, 322);
-		return texture;
+		Assets assets = Assets.getInstance();
+		if(!assets.containsKey("data/truck.png")){
+			assets.addSavedRegion("data/truck.png", new TextureRegion(assets.getAssetManager().get("data/truck.png", Texture.class), 0, 0, 652, 322));
+		}
+		return assets.getRegion("data/truck.png");
 	}
 
 	@Override

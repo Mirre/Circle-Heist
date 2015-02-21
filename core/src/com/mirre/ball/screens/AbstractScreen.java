@@ -1,5 +1,6 @@
 package com.mirre.ball.screens;
 
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -43,7 +44,8 @@ public abstract class AbstractScreen implements Screen {
 
 	@Override
 	public void hide() {
-		Gdx.app.log("Hide", "Test");
+		if(Gdx.app.getType() == ApplicationType.Android)
+			dispose();
 	}
 
 	@Override

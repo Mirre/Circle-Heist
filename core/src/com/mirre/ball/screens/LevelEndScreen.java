@@ -42,9 +42,9 @@ public class LevelEndScreen extends  AbstractScreen {
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button){
 				if(won){
 					if(Gdx.files.internal("data/level" + (levelID + 1) + ".png").exists())
-						getGame().setScreen(new GameScreen(getGame(), "" + (levelID + 1)));
+						getGame().setScreen(new GameScreen(getGame(), (levelID + 1)));
 				}else
-					getGame().setScreen(new GameScreen(getGame(), "" + levelID));
+					getGame().setScreen(new GameScreen(getGame(), levelID));
 			}
 		});
 		
@@ -79,6 +79,11 @@ public class LevelEndScreen extends  AbstractScreen {
 		getStage().draw();
 	}
 
+	@Override
+	public void dispose() {
+		getStage().clear();
+	}
+	
 	@Override
 	public void resize(int width, int height) {
 		getStage().getViewport().update(width, height, true);

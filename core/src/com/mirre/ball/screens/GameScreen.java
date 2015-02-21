@@ -33,14 +33,15 @@ public class GameScreen extends AbstractScreen {
 	private Label labelXYGold;
 	private Level level;
 	private LevelRenderer renderer;
-	private int levelID;
 	
 	private Button moveButton;
 	private Button stealthButton;
 	private Button jumpButton;
 	
-	public GameScreen(Game game, String level) {
+	public GameScreen(Game game, int levelID) {
 		super(game);
+		
+		
 		
 		boolean b = Gdx.app.getType() == ApplicationType.Android;
 		CircleHeist.rgbaToRGB(0.1f, 0.1f, 0.1f, 1);
@@ -102,9 +103,7 @@ public class GameScreen extends AbstractScreen {
 			getStage().addActor(getStealthButton());
 			getStage().addActor(getJumpButton());
 		}
-		
-		
-		setLevel(new Level(game, Integer.parseInt(level)));
+		setLevel(new Level(getGame(), levelID));
 		setRenderer(new LevelRenderer(getLevel(), getStage()));
 		
 	
@@ -119,7 +118,8 @@ public class GameScreen extends AbstractScreen {
 		}
 		
 	
-		getLevel().update(delta);
+		if(!CircleHeist.isPaused())
+			getLevel().update(delta);
 		Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		getRenderer().render(delta);
@@ -148,6 +148,15 @@ public class GameScreen extends AbstractScreen {
 		getStage().draw();
 	}
 
+	@Override
+	public void pause() {
+		CircleHeist.setPaused(true);
+	}
+	
+	@Override
+	public void resume() {
+		CircleHeist.setPaused(false);
+	}
 	
 	@Override
 	public void resize(int width, int height) {
@@ -156,10 +165,11 @@ public class GameScreen extends AbstractScreen {
 	
 	@Override
 	public void dispose() {
-		getRenderer().dispose();
+		Gdx.app.log("Test", "");
+		getLabelXYGold().getStyle().font.dispose();
 		getProgressBar().dispose();
-		getStage().dispose();
-		setLevel(null);
+		getStage().clear();
+		//getStage().dispose();
 	}
 
 	public Level getLevel() {
@@ -176,14 +186,6 @@ public class GameScreen extends AbstractScreen {
 
 	public void setRenderer(LevelRenderer renderer) {
 		this.renderer = renderer;
-	}
-
-	public int getLevelID() {
-		return levelID;
-	}
-
-	public void setLevelID(int levelID) {
-		this.levelID = levelID;
 	}
 
 	public Stage getStage() {
