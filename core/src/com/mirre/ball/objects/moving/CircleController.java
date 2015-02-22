@@ -7,18 +7,18 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.mirre.ball.enums.CircleState;
 import com.mirre.ball.enums.Direction;
 import com.mirre.ball.enums.ObjectColor;
-import com.mirre.ball.objects.Level;
+import com.mirre.ball.handlers.Level;
 import com.mirre.ball.screens.GameScreen;
 
 public abstract class CircleController extends CircleData {
 
 	public static float movementButtonX, movementButtonY = 0;
 	
-	public CircleController(int x, int y, float width, float height, ObjectColor color) {
+	CircleController(int x, int y, float width, float height, ObjectColor color) {
 		super(x, y, width, height, color);
 	}
 	
-	public void direction(Direction dir){
+	private void direction(Direction dir){
 		if(Direction.UP == dir){
 			getVelocity().y = 10f;
 			setOnGround(false);
@@ -67,7 +67,7 @@ public abstract class CircleController extends CircleData {
 			texture = getDirection() == Direction.LEFT ? textureStealthLeft : textureStealthRight; 
 			setStealth(true);
 		}else if(isStealth() && (Gdx.app.getType() == ApplicationType.Android ? !stealth : !Gdx.input.isKeyPressed(Keys.Q))){
-			texture = textureRight;
+			texture = getDirection() == Direction.LEFT ? textureStealthLeft : textureStealthRight;
 			setStealth(false);
 		}
 		

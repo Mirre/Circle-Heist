@@ -1,18 +1,17 @@
 package com.mirre.ball.objects.moving;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mirre.ball.CircleHeist;
 import com.mirre.ball.enums.CircleState;
 import com.mirre.ball.enums.ObjectColor;
-import com.mirre.ball.objects.Level;
+import com.mirre.ball.handlers.Level;
 import com.mirre.ball.objects.core.PixelObject;
 import com.mirre.ball.objects.core.SimpleMovingObject;
 import com.mirre.ball.screens.GameScreen;
 
-public abstract class CircleData extends SimpleMovingObject {
+abstract class CircleData extends SimpleMovingObject {
 
 	private CircleState state;
 	private float stateTime = 0;
@@ -23,16 +22,15 @@ public abstract class CircleData extends SimpleMovingObject {
 	private boolean stealth = false;
 	private boolean onStairs = false;
 	
-	public TextureRegion texture = null;
-	public static TextureRegion textureLeft = null;
-	public static TextureRegion textureRight = null;
-	public static TextureRegion textureStealthLeft = null;
-	public static TextureRegion textureStealthRight = null;
+	TextureRegion textureLeft = null;
+	TextureRegion textureRight = null;
+	TextureRegion textureStealthLeft = null;
+	TextureRegion textureStealthRight = null;
 	
-	public CircleData(int x, int y, float width, float height, ObjectColor color) {
+	CircleData(int x, int y, float width, float height, ObjectColor color) {
 		super(x, y, width, height, color);
 	}
-
+	
 	@Override
 	public float getGravity() {
 		return 20f;
@@ -116,10 +114,10 @@ public abstract class CircleData extends SimpleMovingObject {
 	@Override
 	public TextureRegion getTexture() {
 		if(texture == null){
-			textureStealthRight = new TextureRegion(new Texture(Gdx.files.internal("data/BallStealthRight.png")), 0, 0, 200, 200);
-			textureStealthLeft = new TextureRegion(new Texture(Gdx.files.internal("data/BallStealthLeft.png")), 0, 0, 200, 200);
-			textureLeft = new TextureRegion(new Texture(Gdx.files.internal("data/BallLeft.png")), 0, 0, 200, 200);
-			textureRight = new TextureRegion(new Texture(Gdx.files.internal("data/BallRight.png")), 0, 0, 200, 200);
+			textureStealthRight = new TextureRegion(getType().getTexture(0), 0, 0, 200, 200);
+			textureStealthLeft = new TextureRegion(getType().getTexture(1), 0, 0, 200, 200);
+			textureLeft = new TextureRegion(getType().getTexture(2), 0, 0, 200, 200);
+			textureRight = new TextureRegion(getType().getTexture(3), 0, 0, 200, 200);
 			texture = textureRight;
 		}
 		return texture;

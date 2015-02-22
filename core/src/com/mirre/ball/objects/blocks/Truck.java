@@ -1,24 +1,21 @@
 package com.mirre.ball.objects.blocks;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mirre.ball.enums.ObjectColor;
-import com.mirre.ball.objects.Level;
+import com.mirre.ball.handlers.Level;
 import com.mirre.ball.objects.core.TextureObject;
 
 public class Truck extends TextureObject {
-
-	public static TextureRegion texture = null;
 	
 	public Truck(int x, int y, ObjectColor color) {
 		super(x, y, 5, 3, color);
 	}
-
+	
 	@Override
 	public TextureRegion getTexture() {
 		if(texture == null)
-			texture = new TextureRegion(new Texture(Gdx.files.internal("data/truck.png")), 0, 0, 652, 322);
+			texture = new TextureRegion(getType().getTexture(0), 0, 0, 652, 322);
 		return texture;
 	}
 

@@ -52,7 +52,7 @@ public class ProgressBar extends Actor {
 		return barTextures;
 	}
 	
-	public TextureRegion getBarTexture(int i) {
+	private TextureRegion getBarTexture(int i) {
 		return barTextures.get(i);
 	}
 
@@ -62,10 +62,5 @@ public class ProgressBar extends Actor {
 		}
 		return this;
 	}
-
-	public void dispose(){
-		for(TextureRegion region : barTextures){
-			region.getTexture().dispose();
-		}
-	}
+	
 }

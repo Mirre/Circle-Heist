@@ -93,3 +93,14 @@ public class ChainedTextButton {
 		this.text = text;
 	}
 }
+
+
+//BitmapFont font = new BitmapFont();
+//font.setScale(2F, 2F);
+
+//LabelStyle labelStyle = new LabelStyle(font, Color.OLIVE);
+//Label heading = new Label("Circle's Heist", labelStyle);
+//heading.setX(getStage().getWidth()/2 - heading.getWidth()/2);
+//heading.setY(getStage().getHeight()/3 * 2);
+
+//getStage().addActor(heading);

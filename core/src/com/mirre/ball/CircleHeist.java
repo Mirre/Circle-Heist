@@ -4,14 +4,11 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mirre.ball.screens.StartScreen;
 
 public class CircleHeist extends Game {
 	
 	private int completedLevels;
-	private SpriteBatch batch;
-
 	
 	@Override
 	public void create(){
@@ -36,14 +33,6 @@ public class CircleHeist extends Game {
 
 	public void setCompletedLevels(int completedLevels) {
 		this.completedLevels = completedLevels;
-	}
-
-	public SpriteBatch getBatch() {
-		return batch;
-	}
-
-	public void setBatch(SpriteBatch batch) {
-		this.batch = batch;
 	}
 	
 	public static void rgbaToRGB(Color color){

@@ -17,39 +17,50 @@ import com.mirre.ball.utils.ChainedTextButton;
 
 public class LevelEndScreen extends  AbstractScreen {
 
-	private Stage stage = new Stage();
-	private Table table = new Table();
+	private Stage stage;
+	private Table table;
+	
+	private boolean won;
+	private int levelID;
 	
 	public LevelEndScreen(Game game, final boolean won, final int levelID){
 		super(game);
+		this.levelID = levelID;
+		this.won = won;
+	}
+
+	@Override
+	public void show() {
+		this.stage = new Stage();
+		this.table = new Table();
 		
 		Gdx.input.setInputProcessor(getStage());
 		
 		boolean b = Gdx.app.getType() == ApplicationType.Android;
 		
 		getTable().setFillParent(true);
-		TextureRegion region = new TextureRegion(new Texture(Gdx.files.internal(won ? "data/winScreen.png" : "data/failScreen.png")));
+		TextureRegion region = new TextureRegion(new Texture(Gdx.files.internal(isWon() ? "data/winScreen.png" : "data/failScreen.png")));
 		TextureRegionDrawable drawable = new TextureRegionDrawable(region); 
 		getTable().setBackground(drawable);
 		getStage().addActor(getTable());
 		
-		TextButton nextLevel = new ChainedTextButton(won ? "Next Level" : "Retry")
-		.addFont(b ? 4F : 1.3F, b ? 4F : 1.3F, Color.WHITE).styleUp(Color.DARK_GRAY)
+		TextButton nextLevel = new ChainedTextButton(isWon() ? "Next Level" : "Retry")
+		.addFont(b ? getStage().getWidth()/400 : 1.3F, b ? getStage().getHeight()/200 : 1.3F, Color.WHITE).styleUp(Color.DARK_GRAY)
 		.styleDown(Color.DARK_GRAY).styleChecked(Color.DARK_GRAY)
 		.styleOver(Color.RED).create();
 		nextLevel.addListener(new ClickListener(){
 			@Override
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button){
-				if(won){
-					if(Gdx.files.internal("data/level" + (levelID + 1) + ".png").exists())
-						getGame().setScreen(new GameScreen(getGame(), "" + (levelID + 1)));
+				if(isWon()){
+					if(Gdx.files.internal("data/level" + (getLevelID() + 1) + ".png").exists())
+						getGame().setScreen(new GameScreen(getGame(), "" + (getLevelID() + 1)));
 				}else
-					getGame().setScreen(new GameScreen(getGame(), "" + levelID));
+					getGame().setScreen(new GameScreen(getGame(), "" + getLevelID()));
 			}
 		});
 		
 		TextButton mainMenu = new ChainedTextButton("Main Menu")
-		.addFont(b ? 4F : 1.3F, b ? 4F : 1.3F, Color.WHITE).styleUp(Color.DARK_GRAY)
+		.addFont(b ? getStage().getWidth()/400 : 1.3F, b ? getStage().getHeight()/200 : 1.3F, Color.WHITE).styleUp(Color.DARK_GRAY)
 		.styleDown(Color.DARK_GRAY).styleChecked(Color.DARK_GRAY)
 		.styleOver(Color.RED).create();
 		mainMenu.addListener(new ClickListener(){
@@ -61,15 +72,15 @@ public class LevelEndScreen extends  AbstractScreen {
 		
 		
 		if(b){
-			getTable().add(nextLevel).size(300, 150).padTop(150).row();
-			getTable().add(mainMenu).size(300, 150).space(30);
+			getTable().add(nextLevel).size(getStage().getWidth()/5, getStage().getHeight()/7).padTop(150).row();
+			getTable().add(mainMenu).size(getStage().getWidth()/5, getStage().getHeight()/7).space(30);
 		}else{
 			getTable().add(nextLevel).size(100, 50).row();
 			getTable().add(mainMenu).size(100, 50).space(10);
 		}
 		
 	}
-
+	
 	@Override
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0.5f, 0.5f, 0.5f, 1); //Changes background color.
@@ -84,21 +95,25 @@ public class LevelEndScreen extends  AbstractScreen {
 		getStage().getViewport().update(width, height, true);
 	}
 
+	@Override
+	public void hide () {
+		getStage().dispose();
+	}
 
 	public Stage getStage() {
 		return stage;
-	}
-
-	public void setStage(Stage stage) {
-		this.stage = stage;
 	}
 
 	public Table getTable() {
 		return table;
 	}
 
-	public void setTable(Table table) {
-		this.table = table;
+	public boolean isWon() {
+		return won;
 	}
 
+	public int getLevelID() {
+		return levelID;
+	}
+	
 }

@@ -18,12 +18,18 @@ import com.mirre.ball.utils.ChainedTextButton;
 
 public class StartScreen extends AbstractScreen {
 
-	private Stage stage = new Stage();
-	private Table table = new Table();
+	private Stage stage;
+	private Table table;
 
 
 	public StartScreen(Game game){
 		super(game);
+	}
+
+	@Override
+	public void show() {
+		this.stage = new Stage();
+		this.table = new Table();
 		
 		Gdx.input.setInputProcessor(getStage());
 		
@@ -38,11 +44,11 @@ public class StartScreen extends AbstractScreen {
 		for(int i = 1 ; Gdx.files.internal("data/level" + i + ".png").exists() ; i++){
 			final int level = i;
 			TextButton textButton = new ChainedTextButton("" + i)
-			.addFont(b ? 4F : 1.3F, b ? 4F : 1.3F, Color.WHITE).styleUp(Color.DARK_GRAY)
-			.styleDown(Color.DARK_GRAY).styleChecked(Color.LIGHT_GRAY)
+			.addFont(b ? getStage().getWidth()/400 : 1.3F, b ? getStage().getHeight()/200 : 1.3F, Color.WHITE).styleUp(Color.DARK_GRAY)
+			.styleDown(Color.DARK_GRAY).styleChecked(Color.DARK_GRAY)
 			.styleOver(Color.RED).create();
 			if(b)
-				getTable().add(textButton).size(300, 150).space(30);
+				getTable().add(textButton).size(getStage().getWidth()/6, getStage().getHeight()/6).space(30);
 			else
 				getTable().add(textButton).size(100, 50).space(10);
 			textButton.addListener(new ClickListener(){
@@ -54,7 +60,7 @@ public class StartScreen extends AbstractScreen {
 			});
 		}
 	}
-
+	
 	@Override
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0.5f, 0.5f, 0.5f, 1); //Changes background color.
@@ -68,32 +74,19 @@ public class StartScreen extends AbstractScreen {
 	public void resize(int width, int height) {
 		getStage().getViewport().update(width, height, true);
 	}
+	
+	@Override
+	public void hide () {
+		getStage().dispose();
+	}
 
 	public Stage getStage() {
 		return stage;
 	}
 
-	public void setStage(Stage stage) {
-		this.stage = stage;
-	}
-
 	public Table getTable() {
 		return table;
-	}
-
-	public void setTable(Table table) {
-		this.table = table;
 	}
 	
 }
 
-
-//BitmapFont font = new BitmapFont();
-//font.setScale(2F, 2F);
-
-//LabelStyle labelStyle = new LabelStyle(font, Color.OLIVE);
-//Label heading = new Label("Circle's Heist", labelStyle);
-//heading.setX(getStage().getWidth()/2 - heading.getWidth()/2);
-//heading.setY(getStage().getHeight()/3 * 2);
-
-//getStage().addActor(heading);

@@ -1,6 +1,6 @@
 package com.mirre.ball.objects.interfaces;
 
-public interface Moveable {
+public interface Moveable extends Textured {
 
 	public abstract void update(float deltaTime);
 	

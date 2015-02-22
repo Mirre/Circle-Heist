@@ -5,13 +5,13 @@ import com.mirre.ball.CircleHeist;
 import com.mirre.ball.enums.CircleState;
 import com.mirre.ball.enums.Direction;
 import com.mirre.ball.enums.ObjectColor;
-import com.mirre.ball.objects.Level;
+import com.mirre.ball.handlers.Level;
 import com.mirre.ball.objects.blocks.Bounceable;
 import com.mirre.ball.objects.blocks.CollideableTile;
 import com.mirre.ball.objects.blocks.Gold;
 import com.mirre.ball.objects.blocks.Lava;
 import com.mirre.ball.objects.blocks.Stair;
-import com.mirre.ball.objects.core.PixelObject;
+import com.mirre.ball.objects.interfaces.LevelObject;
 import com.mirre.ball.screens.LevelEndScreen;
 
 public class Circle extends CircleController {
@@ -67,7 +67,7 @@ public class Circle extends CircleController {
 	}
 	
 	@Override
-	public void onCollideX(PixelObject collideX, boolean yCollided) {
+	public void onCollideX(LevelObject collideX, boolean yCollided) {
 		
 		//Lava
 		if(collideX instanceof Lava){
@@ -102,7 +102,7 @@ public class Circle extends CircleController {
 	}
 
 	@Override
-	public void onCollideY(PixelObject collideY, boolean xCollided) {
+	public void onCollideY(LevelObject collideY, boolean xCollided) {
 		
 		//Lava
 		if(collideY instanceof Lava){
@@ -148,7 +148,7 @@ public class Circle extends CircleController {
 	}
 	
 	@Override
-	public void onCollideXY(PixelObject collideX, PixelObject collideY) {
+	public void onCollideXY(LevelObject collideX, LevelObject collideY) {
 		
 		//Stairs
 		if(collideX instanceof Stair || collideY instanceof Stair){

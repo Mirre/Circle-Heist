@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -13,19 +12,21 @@ import com.badlogic.gdx.math.Vector2;
 import com.mirre.ball.enums.CircleState;
 import com.mirre.ball.enums.Direction;
 import com.mirre.ball.enums.ObjectColor;
-import com.mirre.ball.objects.Level;
-import com.mirre.ball.objects.core.PixelObject;
+import com.mirre.ball.handlers.Level;
 import com.mirre.ball.objects.core.SimpleMovingObject;
+import com.mirre.ball.objects.interfaces.LevelObject;
 
 public class Drone extends SimpleMovingObject {
 
 	private boolean chasing = false;
 	private boolean caught = false;
 	
-	private static Animation animation = null;
+	private Animation animation = null;
 	private float directionDelay = 0;
 	private float stateTime = 0;
 
+	private Rectangle sightBox = new Rectangle(0,0,15,8);
+	
 	
 	public Drone(int x, int y, ObjectColor color) {
 		super(x, y, 1F, 1F, color);
@@ -38,14 +39,16 @@ public class Drone extends SimpleMovingObject {
 		
 		Circle b = Level.getCurrentInstance().getCircle();
 		
-		Rectangle r = new Rectangle(getBounds()).setSize(0.2F, 0.2F);
+		Rectangle r = new Rectangle(getBounds()).setSize(0.2F, 0.5F);
 		if(b.getBounds().overlaps(r)){
 			b.setState(CircleState.LOSS);
 			setCaught(true);
 			
 		}
 		
-		if(inSight(b, new Rectangle(0,0,15,5).setCenter(getBounds().getCenter(new Vector2())), false) && !isChasing()){
+		sightBox.setCenter(getBounds().getCenter(new Vector2()));
+		
+		if(inSight(b, sightBox, false) && !isChasing()){
 			setDirection(null);
 			setChasing(true);
 		}else if(isChasing() && getDirectionDelay() <= 0){ //Is chasing and Direction not changed within a short duration..
@@ -136,7 +139,7 @@ public class Drone extends SimpleMovingObject {
 
 	@Override
 	public float getMaxVelocity() {
-		return 8F;
+		return 8.5F;
 	}
 
 	@Override
@@ -145,12 +148,12 @@ public class Drone extends SimpleMovingObject {
 	}
 
 	@Override
-	public void onCollideXY(PixelObject collideX, PixelObject collideY) {
+	public void onCollideXY(LevelObject collideX, LevelObject collideY) {
 		
 	}
 
 	@Override
-	public void onCollideX(PixelObject collideX, boolean yCollided) {
+	public void onCollideX(LevelObject collideX, boolean yCollided) {
 		if(collideX.isCollideable())
 			getAcceleration().x = getDirection().getDir();
 		if(isChasing() && !hasCaught() && getDirectionDelay() <= 0){
@@ -159,7 +162,7 @@ public class Drone extends SimpleMovingObject {
 	}
 
 	@Override
-	public void onCollideY(PixelObject collideY, boolean xCollided) {
+	public void onCollideY(LevelObject collideY, boolean xCollided) {
 		if(collideY.isCollideable())
 			getVelocity().y = 0;
 	}
@@ -172,18 +175,18 @@ public class Drone extends SimpleMovingObject {
 	@Override
 	public TextureRegion getTexture() {
 
-		if(animation == null){
+		if(getAnimation() == null){
 			List<TextureRegion> animationFrames = new ArrayList<TextureRegion>();
-			animationFrames.add(new TextureRegion(new Texture(Gdx.files.internal("data/helicopterDrone0.png")), 0, 0, 300, 200));
-			animationFrames.add(new TextureRegion(new Texture(Gdx.files.internal("data/helicopterDrone1.png")), 0, 0, 300, 200));
-			animationFrames.add(new TextureRegion(new Texture(Gdx.files.internal("data/helicopterDrone2.png")), 0, 0, 300, 200));
+			animationFrames.add(new TextureRegion(getType().getTexture(0), 0, 0, 300, 200));
+			animationFrames.add(new TextureRegion(getType().getTexture(1), 0, 0, 300, 200));
+			animationFrames.add(new TextureRegion(getType().getTexture(2), 0, 0, 300, 200));
 			animation = new Animation(0.05F, animationFrames.toArray(new TextureRegion[animationFrames.size()])); 
 			animation.setPlayMode(PlayMode.LOOP);
 		}
 		
 		setStateTime(getStateTime() + Gdx.graphics.getDeltaTime());
 		
-		return animation.getKeyFrame(getStateTime());
+		return getAnimation().getKeyFrame(getStateTime());
 	}
 
 	public boolean isChasing() {
@@ -202,12 +205,8 @@ public class Drone extends SimpleMovingObject {
 		this.directionDelay = directionDelay;
 	}
 
-	public static Animation getAnimation() {
+	public Animation getAnimation() {
 		return animation;
-	}
-
-	public static void setAnimation(Animation animation) {
-		Drone.animation = animation;
 	}
 
 	public float getStateTime() {
@@ -218,11 +217,11 @@ public class Drone extends SimpleMovingObject {
 		this.stateTime = stateTime;
 	}
 
-	public boolean hasCaught() {
+	private boolean hasCaught() {
 		return caught;
 	}
 
-	public void setCaught(boolean caught) {
+	private void setCaught(boolean caught) {
 		this.caught = caught;
 	}
 

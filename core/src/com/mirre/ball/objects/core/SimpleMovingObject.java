@@ -4,21 +4,25 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.mirre.ball.enums.ObjectColor;
-import com.mirre.ball.objects.Level;
+import com.mirre.ball.handlers.Level;
 import com.mirre.ball.objects.interfaces.Collideable;
+import com.mirre.ball.objects.interfaces.LevelObject;
+import com.mirre.ball.objects.interfaces.Moveable;
 
-public abstract class SimpleMovingObject extends MovingObject {
+public abstract class SimpleMovingObject extends MovingObject implements Moveable {
 
 	private Vector2 position = new Vector2();
 	private Vector2 acceleration = new Vector2();
 	private Vector2 velocity = new Vector2();
-	
-	public SimpleMovingObject(int x, int y, ObjectColor color) {
-		super(x, y, color);
-	}
 
 	public SimpleMovingObject(int x, int y, float width, float height, ObjectColor color) {
 		super(x, y, width, height, color);
+	}
+	
+	@Override
+	public void onObjectCreation(Level level) {
+		level.addMovingObject(this);
+		Gdx.app.log("Create", "Moving");
 	}
 	
 	public abstract void changeMovement();
@@ -26,9 +30,9 @@ public abstract class SimpleMovingObject extends MovingObject {
 	public abstract float getStandardAcceleration();
 	public abstract float getMaxVelocity();
 	public abstract float getDampening();
-	public abstract void onCollideXY(PixelObject collideX, PixelObject collideY);
-	public abstract void onCollideX(PixelObject collideX, boolean yCollided);
-	public abstract void onCollideY(PixelObject collideY, boolean xCollided);
+	public abstract void onCollideXY(LevelObject collideX, LevelObject collideY);
+	public abstract void onCollideX(LevelObject collideX, boolean yCollided);
+	public abstract void onCollideY(LevelObject collideY, boolean xCollided);
 	public abstract void onNoCollide();
 	
 	
@@ -58,9 +62,9 @@ public abstract class SimpleMovingObject extends MovingObject {
 	public void attemptMove() {
 		getBounds().x += getVelocity().x;
 		fetchBoundaries();
-		PixelObject pixX = getClosest();
+		LevelObject pixX = getClosest();
 		boolean x = pixX != null;
-		for(PixelObject pix : getBoundaries()){
+		for(LevelObject pix : getBoundaries()){
 			if(pix.getBounds().overlaps(getBounds())){
 				Collideable coll = (Collideable) pix;
 				if(getVelocity().x < 0 && !coll.passThroughAble())
@@ -74,7 +78,7 @@ public abstract class SimpleMovingObject extends MovingObject {
 			
 		getBounds().y += getVelocity().y;
 		fetchBoundaries();
-		PixelObject pixY = getClosest();
+		LevelObject pixY = getClosest();
 		boolean y = pixY != null;
 		if(y){
 			Collideable coll = (Collideable) pixY;
@@ -139,11 +143,9 @@ public abstract class SimpleMovingObject extends MovingObject {
 				r.setPosition(r.getPosition(new Vector2()).sub(vectorPointer));
 				Vector2 center = r.getCenter(new Vector2());
 				if(Level.getCurrentInstance().getCollideTile((int)center.x, (int)center.y) != null && ((target.isRightOf(r) && isLeftOf(target.getBounds())) || (target.isLeftOf(r) && isRightOf(target.getBounds())))){
-					Gdx.app.log("Null", "Set");
 					return false;
 				}if(i >= 100){
-					Gdx.app.log("Test", "Seen");
-					return true;
+					return false;
 				}
 				i++;
 			}

@@ -4,11 +4,11 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 
-public abstract class AbstractScreen implements Screen {
+abstract class AbstractScreen implements Screen {
 	
 	private Game game;
 
-	public AbstractScreen(Game game){
+	AbstractScreen(Game game){
 		setGame(game);
 	}
 
@@ -18,11 +18,6 @@ public abstract class AbstractScreen implements Screen {
 
 	public void setGame(Game game) {
 		this.game = game;
-	}
-
-	
-	public boolean levelExists(int i){
-		return Gdx.files.internal("data/level" + i + ".png").exists();
 	}
 
 	@Override

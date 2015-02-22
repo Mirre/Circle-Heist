@@ -4,40 +4,30 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.mirre.ball.enums.Direction;
 import com.mirre.ball.enums.ObjectColor;
-import com.mirre.ball.objects.Level;
+import com.mirre.ball.handlers.Level;
 import com.mirre.ball.objects.interfaces.Collideable;
-import com.mirre.ball.objects.interfaces.Moveable;
+import com.mirre.ball.objects.interfaces.LevelObject;
 import com.mirre.ball.utils.BiValue;
 
-public abstract class MovingObject extends TextureObject implements Moveable {
+abstract class MovingObject extends TextureObject {
 	
 	
 	private Direction direction;
-	private List<PixelObject> boundaries = new ArrayList<PixelObject>();
+	private List<LevelObject> boundaries = new ArrayList<LevelObject>();
 	private boolean onGround = true;
 	
-	public MovingObject(int x, int y, float width, float height, ObjectColor color) {
+	MovingObject(int x, int y, float width, float height, ObjectColor color) {
 		super(x, y, width, height, color);
 	}
-
-	public MovingObject(int x, int y, ObjectColor color) {
-		super(x, y, color);
-	}
-
-	@Override
-	public void onObjectCreation(Level level) {
-		level.addMovingObject(this);
-		Gdx.app.log("Create", "Moving");
-	}
 	
-	public PixelObject getClosest(){
-		PixelObject closest = null;
-		for(PixelObject p : getBoundaries()){
+	
+	public LevelObject getClosest(){
+		LevelObject closest = null;
+		for(LevelObject p : getBoundaries()){
 			if(p.getBounds().overlaps(getBounds())){
 				if(closest == null)
 					closest = p;
@@ -55,7 +45,7 @@ public abstract class MovingObject extends TextureObject implements Moveable {
 	}	
 	
 	
-	public void fetchBoundaries() {
+	void fetchBoundaries() {
 		
 		int bottomLeftX = (int)getBounds().getX(); //Left side of Ball, Checks below Ball also
 		int bottomLeftY = (int)Math.floor(getBounds().getY()); //Left side of Ball, Checks below Ball also
@@ -66,18 +56,18 @@ public abstract class MovingObject extends TextureObject implements Moveable {
 		int topLeftX = (int)getBounds().getX(); //Left side of Ball, Checks above Ball also
 		int topLeftY = (int)(getBounds().getY() + getBounds().getHeight()); //Left side of Ball, Checks above Ball also
 		
-		HashMap<BiValue<Integer,Integer>,PixelObject> tiles = Level.getCurrentInstance().getPixelObjects();
+		HashMap<BiValue<Integer,Integer>,LevelObject> tiles = Level.getCurrentInstance().getPixelObjects();
 		
-		PixelObject bottomLeft = tiles.get(new BiValue<Integer,Integer>(bottomLeftX, bottomLeftY));
-		PixelObject bottomRight = tiles.get(new BiValue<Integer,Integer>(bottomRightX, bottomRightY));
-		PixelObject topRight = tiles.get(new BiValue<Integer,Integer>(topRightX, topRightY));
-		PixelObject topLeft = tiles.get(new BiValue<Integer,Integer>(topLeftX, topLeftY));
+		LevelObject bottomLeft = tiles.get(new BiValue<Integer,Integer>(bottomLeftX, bottomLeftY));
+		LevelObject bottomRight = tiles.get(new BiValue<Integer,Integer>(bottomRightX, bottomRightY));
+		LevelObject topRight = tiles.get(new BiValue<Integer,Integer>(topRightX, topRightY));
+		LevelObject topLeft = tiles.get(new BiValue<Integer,Integer>(topLeftX, topLeftY));
 		
-		PixelObject[] tileArray = new PixelObject[]{ bottomRight, bottomLeft, topRight, topLeft };
+		LevelObject[] tileArray = new LevelObject[]{ bottomRight, bottomLeft, topRight, topLeft };
 		
 		//On Collide Add
 		clearBoundaries();
-		for(PixelObject p : tileArray){
+		for(LevelObject p : tileArray){
 			if(p != null){
 				if(p.isCollideable() && p.hasTexture()){
 					addBoundary(p);
@@ -93,15 +83,15 @@ public abstract class MovingObject extends TextureObject implements Moveable {
 
 	}
 
-	public void clearBoundaries() {
+	private void clearBoundaries() {
 		boundaries.clear();
 	}	
 	
-	public List<PixelObject> getBoundaries() {
+	public List<LevelObject> getBoundaries() {
 		return boundaries;
 	}
 
-	public void addBoundary(PixelObject pixel) {
+	private void addBoundary(LevelObject pixel) {
 		boundaries.add(pixel);
 	}
 
