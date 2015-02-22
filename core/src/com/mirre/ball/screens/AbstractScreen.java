@@ -20,11 +20,6 @@ abstract class AbstractScreen implements Screen {
 		this.game = game;
 	}
 
-	@Override
-	public void show() {
-		Gdx.app.log("Show", "Test");
-	}
-
 
 	@Override
 	public void pause() {
@@ -34,11 +29,6 @@ abstract class AbstractScreen implements Screen {
 	@Override
 	public void resume() {
 		Gdx.app.log("Resume", "Test");
-	}
-
-	@Override
-	public void hide() {
-		Gdx.app.log("Hide", "Test");
 	}
 
 	@Override

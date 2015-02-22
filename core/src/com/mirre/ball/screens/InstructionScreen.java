@@ -1,8 +1,8 @@
 package com.mirre.ball.screens;
 
-import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -13,72 +13,50 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.mirre.ball.CircleHeist;
 import com.mirre.ball.utils.ChainedTextButton;
 
-public class StartScreen extends AbstractScreen {
+public class InstructionScreen extends AbstractScreen {
 
 	private Stage stage;
 	private Table table;
-
-
-	public StartScreen(Game game){
+	
+	InstructionScreen(Game game) {
 		super(game);
 	}
-
+	
 	@Override
 	public void show() {
 		this.stage = new Stage();
 		this.table = new Table();
 		
-		Gdx.input.setInputProcessor(getStage());
-		
 		boolean b = Gdx.app.getType() == ApplicationType.Android;
 		
+		Gdx.input.setInputProcessor(getStage());
 		getTable().setFillParent(true);
-		TextureRegion region = new TextureRegion(new Texture(Gdx.files.internal("data/background.png")));
+		TextureRegion region = new TextureRegion(new Texture(Gdx.files.internal("data/instructions.png")));
 		TextureRegionDrawable drawable = new TextureRegionDrawable(region); 
 		getTable().setBackground(drawable);
 		getStage().addActor(getTable());
 		
-		for(int i = 1 ; Gdx.files.internal("data/level" + i + ".png").exists() ; i++){
-			final int level = i;
-			TextButton textButton = new ChainedTextButton("" + i)
-			.addFont(b ? getStage().getWidth()/400 : 1.3F, b ? getStage().getHeight()/200 : 1.3F, Color.WHITE).styleUp(Color.DARK_GRAY)
-			.styleDown(Color.DARK_GRAY).styleChecked(Color.DARK_GRAY)
-			.styleOver(Color.RED).create();
-			if(b)
-				getTable().add(textButton).size(getStage().getWidth()/6, getStage().getHeight()/6).space(30);
-			else
-				getTable().add(textButton).size(100, 50).space(10);
-			textButton.addListener(new ClickListener(){
-				@Override
-				public void touchUp(InputEvent event, float x, float y, int pointer, int button){
-					if(((CircleHeist) getGame()).getCompletedLevels() >= level)
-						getGame().setScreen(new GameScreen(getGame(), "" + level));
-				}
-			});
-		}
-		
-		TextButton instructions = new ChainedTextButton("Instructions")
+		TextButton mainMenu = new ChainedTextButton("Main Menu")
 		.addFont(b ? getStage().getWidth()/400 : 1.3F, b ? getStage().getHeight()/200 : 1.3F, Color.WHITE).styleUp(Color.DARK_GRAY)
 		.styleDown(Color.DARK_GRAY).styleChecked(Color.DARK_GRAY)
 		.styleOver(Color.RED).create();
-		instructions.addListener(new ClickListener(){
+		mainMenu.addListener(new ClickListener(){
 			@Override
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button){
-				getGame().setScreen(new InstructionScreen(getGame()));
+				getGame().setScreen(new StartScreen(getGame()));
 			}
 		});
 		
 		
 		if(b){
-			getTable().add(instructions).size(getStage().getWidth()/5, getStage().getHeight()/7).space(30);
+			getTable().add(mainMenu).size(getStage().getWidth()/5, getStage().getHeight()/7).padTop(getStage().getHeight() - getStage().getHeight()/7).padLeft(getStage().getWidth() - ((getStage().getWidth()/5)*1.5F));
 		}else{
-			getTable().add(instructions).size(100, 50).space(10);
+			getTable().add(mainMenu).size(100, 50).padTop(getStage().getHeight() - 50).padLeft(getStage().getWidth() - 150);
 		}
 	}
-	
+
 	@Override
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0.5f, 0.5f, 0.5f, 1); //Changes background color.
@@ -87,14 +65,14 @@ public class StartScreen extends AbstractScreen {
 		getStage().act(delta);
 		getStage().draw();
 	}
-	
-	@Override	
-	public void resize(int width, int height) {
-		getStage().getViewport().update(width, height, true);
-	}
-	
+
 	@Override
-	public void hide () {
+	public void resize(int width, int height) {
+		
+	}
+
+	@Override
+	public void hide() {
 		getStage().dispose();
 	}
 
@@ -105,6 +83,5 @@ public class StartScreen extends AbstractScreen {
 	public Table getTable() {
 		return table;
 	}
-	
-}
 
+}

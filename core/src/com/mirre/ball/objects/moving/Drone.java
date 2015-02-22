@@ -39,7 +39,7 @@ public class Drone extends SimpleMovingObject {
 		
 		Circle b = Level.getCurrentInstance().getCircle();
 		
-		Rectangle r = new Rectangle(getBounds()).setSize(0.2F, 0.5F);
+		Rectangle r = new Rectangle(getBounds()).setSize(0.4F, 0.4F);
 		if(b.getBounds().overlaps(r)){
 			b.setState(CircleState.LOSS);
 			setCaught(true);
