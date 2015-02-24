@@ -43,7 +43,7 @@ public class GameScreen extends AbstractScreen {
 	private Button jumpButton;
 	
 	private List<Texture> progressBars = new ArrayList<Texture>();
-	private Texture ui, asdButton, jButton, sButton;
+	private Texture ui, asdButton, jButton, sButton = null;
 	private BitmapFont font;
 	
 	private boolean paused = false;
@@ -67,11 +67,22 @@ public class GameScreen extends AbstractScreen {
 	}
 	
 	public void disposeTextures(){
-		ui.dispose();
-		asdButton.dispose();
-		jButton.dispose();
-		sButton.dispose();
-		font.dispose();
+		if(ui != null){
+			ui.dispose();
+			ui = null;
+		}if(asdButton != null){
+			asdButton.dispose();
+			asdButton = null;
+		}if(jButton != null){
+			jButton.dispose();
+			jButton = null;
+		}if(sButton != null){
+			sButton.dispose();
+			sButton = null;
+		}if(font != null){
+			font.dispose();
+			font = null;
+		}
 		for(Texture t : progressBars){
 			t.dispose();
 		}
@@ -83,7 +94,10 @@ public class GameScreen extends AbstractScreen {
 		
 		this.stage = new Stage();
 		this.table = new Table();
+		
+		disposeTextures();
 		createTextures();
+		
 		
 		boolean b = Gdx.app.getType() == ApplicationType.Android;
 		
