@@ -21,10 +21,13 @@ public class CircleHeist extends Game {
 	public void dispose(){
 		super.dispose();
 		
+		save();
+	}
+	
+	public void save(){
 		Preferences pref = Gdx.app.getPreferences("LevelInfo");
 		pref.putInteger("LevelsCompleted", getCompletedLevels());
 		pref.flush();
-		
 	}
 
 	public int getCompletedLevels() {

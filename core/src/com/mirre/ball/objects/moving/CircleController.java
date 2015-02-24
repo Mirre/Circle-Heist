@@ -8,7 +8,9 @@ import com.mirre.ball.enums.CircleState;
 import com.mirre.ball.enums.Direction;
 import com.mirre.ball.enums.ObjectColor;
 import com.mirre.ball.handlers.Level;
+import com.mirre.ball.objects.blocks.Stair;
 import com.mirre.ball.screens.GameScreen;
+import com.mirre.ball.utils.BiValue;
 
 public abstract class CircleController extends CircleData {
 
@@ -67,7 +69,7 @@ public abstract class CircleController extends CircleData {
 			texture = getDirection() == Direction.LEFT ? textureStealthLeft : textureStealthRight; 
 			setStealth(true);
 		}else if(isStealth() && (Gdx.app.getType() == ApplicationType.Android ? !stealth : !Gdx.input.isKeyPressed(Keys.Q))){
-			texture = getDirection() == Direction.LEFT ? textureStealthLeft : textureStealthRight;
+			texture = getDirection() == Direction.LEFT ? textureLeft : textureRight;
 			setStealth(false);
 		}
 		
@@ -76,14 +78,27 @@ public abstract class CircleController extends CircleData {
 			texture = textureRight;
 			setStealth(false);
 			if(isOnStairs()){
-				getVelocity().y = 5F;
+				if(Level.getCurrentInstance().getPixelObjects()
+					.get(new BiValue<Integer,Integer>(((int)getBounds().getX()),
+					((int) Math.floor(getBounds().getY()+1)))) instanceof Stair &&
+					Level.getCurrentInstance().getPixelObjects()
+					.get(new BiValue<Integer,Integer>(((int)(getBounds().getX()+getBounds().getWidth())),
+					((int) Math.floor(getBounds().getY()+1)))) instanceof Stair)
+					getVelocity().y = 5F;
+				
 			}else if(isOnGround()){
 				setState(CircleState.MOVING);
 				direction(Direction.UP);
 			}
 		
 		//S-Press ; Climb down Stairs
-		}else if((Gdx.input.isKeyPressed(Keys.S) || climbDown) && isOnStairs()){
+		}else if((Gdx.input.isKeyPressed(Keys.S) || climbDown) && isOnStairs() 
+				&& Level.getCurrentInstance().getPixelObjects()
+				.get(new BiValue<Integer,Integer>(((int)getBounds().getX()),
+				((int) Math.ceil(getBounds().getY()-1)))) instanceof Stair &&
+				Level.getCurrentInstance().getPixelObjects()
+				.get(new BiValue<Integer,Integer>(((int)(getBounds().getX()+getBounds().getWidth())),
+				((int) Math.ceil(getBounds().getY()-1)))) instanceof Stair){
 			getVelocity().y = -5F;
 		}
 		

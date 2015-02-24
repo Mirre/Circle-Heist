@@ -21,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.mirre.ball.CircleHeist;
 import com.mirre.ball.handlers.Level;
 import com.mirre.ball.handlers.LevelRenderer;
 import com.mirre.ball.objects.blocks.Gold;
@@ -54,6 +55,7 @@ public class GameScreen extends AbstractScreen {
 	}
 	
 	private void createTextures(){
+		progressBars.clear();
 		for(int i = 10 ; i != -1 ; i--){
 			Texture region = new Texture(Gdx.files.internal("data/progressbar" + i + ".png"));
 			progressBars.add(region);
@@ -175,13 +177,14 @@ public class GameScreen extends AbstractScreen {
 	
 	@Override
 	public void resize(int width, int height) {
+		Gdx.app.log("Test", "Reziese");
 		getStage().getViewport().update(width, height);
 	}
 	
 	@Override
 	public void hide() {
 		Gdx.app.log("Test", "Hide");
-		disposeTextures();
+		//disposeTextures();
 		getRenderer().dispose();
 		getStage().dispose();
 	}
@@ -190,6 +193,7 @@ public class GameScreen extends AbstractScreen {
 	public void pause() {
 		Gdx.app.log("Test", "Pause");
 		setPaused(true);
+		((CircleHeist)getGame()).save();
 	}
 
 	@Override

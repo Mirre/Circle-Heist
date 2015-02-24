@@ -75,13 +75,7 @@ public class Circle extends CircleController {
 		}
 		
 		//Stairs
-		if(collideX instanceof Stair && !yCollided){
-			setOnStairs(true);
-			setOnGround(true);
-			getVelocity().y = 0;
-			getAcceleration().y = 0;
-		}else if(isOnStairs() && !yCollided)
-			setOnStairs(false);
+
 		
 		//Gold
 		if(collideX instanceof Gold && !((Gold)collideX).isCollected()){
@@ -112,12 +106,7 @@ public class Circle extends CircleController {
 			return;
 		}
 		//Stairs
-		if(collideY instanceof Stair && !xCollided){
-			setOnStairs(true);
-			setOnGround(true);
-			getVelocity().y = 0;
-		}else if(isOnStairs() && !xCollided)
-			setOnStairs(false);
+
 		
 		//Gold
 		if(collideY instanceof Gold && !((Gold)collideY).isCollected()){
@@ -150,8 +139,10 @@ public class Circle extends CircleController {
 	@Override
 	public void onCollideXY(LevelObject collideX, LevelObject collideY) {
 		
+		if(collideX.equals(collideY))
+			Gdx.app.log("Test", "Test");
 		//Stairs
-		if(collideX instanceof Stair || collideY instanceof Stair){
+		if(collideX instanceof Stair && collideY instanceof Stair){
 			setOnStairs(true);
 			setOnGround(true);
 			getVelocity().y = 0;
