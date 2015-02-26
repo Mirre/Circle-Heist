@@ -32,7 +32,6 @@ public class LevelRenderer {
 		stage.getCamera().position.set(level.getStartLocation().getBounds().getPosition(new Vector2()), 0);
 	}
 	
-	
 	public void render(float deltaTime) {
 		
 		if(getLevel().getCache() == null)
